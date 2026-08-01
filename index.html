@@ -36,7 +36,7 @@
 
         /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         ::-webkit-scrollbar-track {
             background: #1a1a1a;
@@ -60,7 +60,10 @@
             backdrop-filter: blur(16px);
             z-index: 1100;
             border-bottom: 1px solid rgba(10, 158, 64, 0.15);
-            transition: background 0.4s ease;
+            transition: background 0.4s ease, transform 0.3s ease;
+        }
+        nav.hidden {
+            transform: translateY(-100%);
         }
         body.light-mode nav {
             background: rgba(245, 245, 245, 0.92);
@@ -93,7 +96,7 @@
             color: #e8e8e8;
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: 0.25s;
             position: relative;
             padding-bottom: 4px;
@@ -164,6 +167,61 @@
             display: block;
         }
 
+        /* ===== SECTION PROGRESS INDICATOR ===== */
+        .section-progress {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1090;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+        .section-progress .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        body.light-mode .section-progress .dot {
+            background: rgba(0, 0, 0, 0.15);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .section-progress .dot.active {
+            background: #0a9e40;
+            border-color: #0a9e40;
+            transform: scale(1.3);
+            box-shadow: 0 0 20px rgba(10, 158, 64, 0.5);
+        }
+        .section-progress .dot .tooltip {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .section-progress .dot:hover .tooltip {
+            opacity: 1;
+        }
+        body.light-mode .section-progress .dot .tooltip {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1a1a1a;
+        }
+
         /* ===== THEME TOGGLE ===== */
         .theme-toggle {
             background: rgba(255, 255, 255, 0.08);
@@ -189,6 +247,40 @@
             transform: rotate(20deg);
         }
 
+        /* ===== BACK TO HOME BUTTON ===== */
+        .back-to-home {
+            position: fixed;
+            bottom: 100px;
+            left: 30px;
+            z-index: 1080;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(10, 158, 64, 0.9);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 20px rgba(10, 158, 64, 0.3);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+        .back-to-home.visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .back-to-home:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(10, 158, 64, 0.5);
+        }
+
         /* ===== HERO SECTION ===== */
         section {
             width: 100%;
@@ -196,6 +288,23 @@
             display: flex;
             align-items: center;
             padding: 90px 5% 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(10, 158, 64, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        section.visible::before {
+            opacity: 1;
         }
         .main-container {
             max-width: 1300px;
@@ -205,6 +314,8 @@
             justify-content: space-between;
             gap: 3rem;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
         }
         .image {
             flex: 1;
@@ -479,12 +590,15 @@
             padding: 40px 6% 80px;
             display: none;
             border-top: 2px solid #0a9e40;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
         body.light-mode .info-panel {
             background: rgba(245, 245, 245, 0.96);
         }
         .info-panel.active {
             display: block;
+            opacity: 1;
             animation: fadeSlideIn 0.4s ease;
         }
         @keyframes fadeSlideIn {
@@ -533,6 +647,10 @@
             border-radius: 30px;
             border: 2px solid #0a9e40;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s;
+        }
+        .about-grid .about-image img:hover {
+            transform: scale(1.02);
         }
         .about-text {
             flex: 1;
@@ -541,6 +659,7 @@
             background: rgba(255, 255, 255, 0.03);
             padding: 32px;
             border-radius: 24px;
+            transition: all 0.4s;
         }
         body.light-mode .about-text {
             background: rgba(0, 0, 0, 0.03);
@@ -569,23 +688,28 @@
             padding: 28px 24px;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: 0.35s;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             text-align: center;
+            cursor: default;
         }
         body.light-mode .skill-card {
             background: rgba(0, 0, 0, 0.04);
             border-color: rgba(0, 0, 0, 0.06);
         }
         .skill-card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-8px) scale(1.02);
             border-color: #0a9e40;
-            box-shadow: 0 12px 40px rgba(10, 158, 64, 0.1);
+            box-shadow: 0 16px 50px rgba(10, 158, 64, 0.12);
         }
         .skill-card .icon {
             font-size: 3rem;
             color: #0a9e40;
             margin-bottom: 14px;
             display: block;
+            transition: transform 0.4s;
+        }
+        .skill-card:hover .icon {
+            transform: scale(1.1) rotate(-5deg);
         }
         .skill-card h3 {
             font-size: 1.2rem;
@@ -610,7 +734,7 @@
             padding: 28px 24px;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: 0.35s;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             text-align: center;
         }
         body.light-mode .service-card {
@@ -618,15 +742,19 @@
             border-color: rgba(0, 0, 0, 0.06);
         }
         .service-card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-8px) scale(1.02);
             border-color: #0a9e40;
-            box-shadow: 0 12px 40px rgba(10, 158, 64, 0.1);
+            box-shadow: 0 16px 50px rgba(10, 158, 64, 0.12);
         }
         .service-card .icon {
             font-size: 3rem;
             color: #0a9e40;
             margin-bottom: 14px;
             display: block;
+            transition: transform 0.4s;
+        }
+        .service-card:hover .icon {
+            transform: scale(1.1) rotate(-5deg);
         }
         .service-card h3 {
             font-size: 1.2rem;
@@ -651,7 +779,7 @@
             overflow: hidden;
             aspect-ratio: 1/1;
             background: #1a1a1a;
-            transition: all 0.4s;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             cursor: pointer;
             position: relative;
         }
@@ -659,8 +787,8 @@
             background: #e0e0e0;
         }
         .gallery-item:hover {
-            transform: scale(1.03);
-            box-shadow: 0 12px 40px rgba(10, 158, 64, 0.25);
+            transform: scale(1.04);
+            box-shadow: 0 16px 50px rgba(10, 158, 64, 0.25);
         }
         .gallery-item img {
             width: 100%;
@@ -719,7 +847,7 @@
             border-radius: 24px;
             padding: 32px;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: 0.35s;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             position: relative;
         }
         body.light-mode .testimonial-card {
@@ -727,9 +855,9 @@
             border-color: rgba(0, 0, 0, 0.06);
         }
         .testimonial-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px);
             border-color: #0a9e40;
-            box-shadow: 0 12px 40px rgba(10, 158, 64, 0.08);
+            box-shadow: 0 16px 50px rgba(10, 158, 64, 0.08);
         }
         .testimonial-card .stars {
             color: #fbbf24;
@@ -759,6 +887,10 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #0a9e40;
+            transition: transform 0.4s;
+        }
+        .testimonial-card:hover .author img {
+            transform: scale(1.05);
         }
         .testimonial-card .author .name {
             font-weight: 700;
@@ -777,6 +909,10 @@
             font-size: 0.75rem;
             font-weight: 600;
             margin-top: 14px;
+            transition: all 0.3s;
+        }
+        .testimonial-card:hover .result-tag {
+            background: rgba(10, 158, 64, 0.25);
         }
 
         /* ===== CONTACT ===== */
@@ -787,9 +923,14 @@
             background: rgba(255, 255, 255, 0.04);
             padding: 40px;
             border-radius: 32px;
+            transition: all 0.4s;
         }
         body.light-mode .contact-details {
             background: rgba(0, 0, 0, 0.04);
+        }
+        .contact-details:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 50px rgba(10, 158, 64, 0.08);
         }
         .contact-details img {
             width: 120px;
@@ -797,6 +938,10 @@
             border-radius: 50%;
             margin-bottom: 20px;
             border: 3px solid #0a9e40;
+            transition: transform 0.4s;
+        }
+        .contact-details img:hover {
+            transform: scale(1.05);
         }
         .contact-details .contact-item {
             display: flex;
@@ -810,6 +955,10 @@
             color: #0a9e40;
             width: 24px;
             font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+        .contact-details .contact-item:hover i {
+            transform: scale(1.2);
         }
         .contact-details .contact-item a {
             color: #0a9e40;
@@ -876,13 +1025,13 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: 0 4px 25px rgba(10, 158, 64, 0.5);
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             border: none;
             color: white;
             font-size: 1.8rem;
         }
         .chat-bubble .icon-wrapper:hover {
-            transform: scale(1.08);
+            transform: scale(1.08) rotate(-5deg);
             box-shadow: 0 8px 40px rgba(10, 158, 64, 0.7);
         }
         .chat-window {
@@ -901,6 +1050,7 @@
             flex-direction: column;
             overflow: hidden;
             backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
         }
         body.light-mode .chat-window {
             background: rgba(245, 245, 245, 0.98);
@@ -908,6 +1058,17 @@
         }
         .chat-window.open {
             display: flex;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .chat-header {
             padding: 14px 20px;
@@ -930,6 +1091,7 @@
         }
         .chat-header .close-chat:hover {
             opacity: 1;
+            transform: rotate(90deg);
         }
         .quick-actions {
             padding: 10px 16px;
@@ -946,17 +1108,18 @@
             background: rgba(10, 158, 64, 0.12);
             border: 1px solid rgba(10, 158, 64, 0.2);
             color: #0a9e40;
-            padding: 4px 14px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.7rem;
             cursor: pointer;
-            transition: 0.25s;
+            transition: all 0.25s;
             font-family: inherit;
             font-weight: 500;
         }
         .quick-actions button:hover {
             background: rgba(10, 158, 64, 0.25);
             border-color: #0a9e40;
+            transform: scale(1.05);
         }
         .chat-messages {
             flex: 1;
@@ -1020,7 +1183,7 @@
             text-decoration: none;
             font-size: 0.8rem;
             font-weight: 500;
-            transition: 0.2s;
+            transition: all 0.2s;
         }
         .chat-message .action-btn:hover {
             background: #0b8a38;
@@ -1040,10 +1203,11 @@
             font-size: 0.8rem;
             text-decoration: none;
             border: 1px solid rgba(10, 158, 64, 0.2);
-            transition: 0.2s;
+            transition: all 0.2s;
         }
         .chat-message .contact-row a:hover {
             background: rgba(10, 158, 64, 0.25);
+            transform: scale(1.05);
         }
         .chat-input-area {
             display: flex;
@@ -1067,6 +1231,7 @@
             font-size: 0.9rem;
             outline: none;
             font-family: inherit;
+            transition: border-color 0.3s;
         }
         body.light-mode .chat-input-area input {
             border-color: rgba(0, 0, 0, 0.08);
@@ -1087,7 +1252,7 @@
             border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s;
             min-width: 48px;
             display: flex;
             align-items: center;
@@ -1096,6 +1261,7 @@
         }
         .chat-input-area button:hover:not(:disabled) {
             background: #0b8a38;
+            transform: scale(1.05);
         }
         .chat-input-area button:disabled {
             opacity: 0.5;
@@ -1136,7 +1302,7 @@
             cursor: pointer;
             font-size: 1.1rem;
             box-shadow: 0 4px 20px rgba(10, 158, 64, 0.3);
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
@@ -1224,6 +1390,16 @@
             .testimonial-grid {
                 grid-template-columns: 1fr;
             }
+            .section-progress {
+                display: none;
+            }
+            .back-to-home {
+                left: 15px;
+                bottom: 85px;
+                width: 42px;
+                height: 42px;
+                font-size: 1rem;
+            }
         }
         @media (max-width: 550px) {
             .logo {
@@ -1278,12 +1454,46 @@
         .lb-data .lb-number {
             font-family: 'Inter', sans-serif;
         }
+
+        /* ===== LAZY LOAD PLACEHOLDER ===== */
+        .lazy-placeholder {
+            background: linear-gradient(135deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+            background-size: 200% 200%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -200% -200%;
+            }
+            100% {
+                background-position: 200% 200%;
+            }
+        }
+        body.light-mode .lazy-placeholder {
+            background: linear-gradient(135deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+        }
     </style>
     <!-- Lightbox JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js">
     </script>
 </head>
 <body>
+
+    <!-- ===== SECTION PROGRESS INDICATOR ===== -->
+    <div class="section-progress" id="sectionProgress">
+        <div class="dot active" data-section="home"><span class="tooltip">Home</span></div>
+        <div class="dot" data-section="about"><span class="tooltip">About</span></div>
+        <div class="dot" data-section="skills"><span class="tooltip">Skills</span></div>
+        <div class="dot" data-section="services"><span class="tooltip">Services</span></div>
+        <div class="dot" data-section="gallery"><span class="tooltip">Gallery</span></div>
+        <div class="dot" data-section="testimonials"><span class="tooltip">Testimonials</span></div>
+        <div class="dot" data-section="contact"><span class="tooltip">Contact</span></div>
+    </div>
+
+    <!-- ===== BACK TO HOME BUTTON ===== -->
+    <button class="back-to-home" id="backToHome" aria-label="Back to Home">
+        <i class="fas fa-home"></i>
+    </button>
 
     <!-- ===== NAVIGATION ===== -->
     <nav>
@@ -1321,11 +1531,11 @@
     </nav>
 
     <!-- ===== HERO SECTION ===== -->
-    <section id="home-section">
+    <section id="home-section" data-section="home">
         <div class="main-container">
             <div class="image" data-aos="zoom-in" data-aos-duration="1300">
                 <div class="profile-ring"></div>
-                <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn James Pontino" />
+                <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn James Pontino" loading="lazy" />
                 <div class="status-badge">
                     <span class="dot"></span>
                     Open to opportunities
@@ -1359,7 +1569,6 @@
                         <i class="fas fa-star"></i> See Testimonials
                     </a>
                 </div>
-                <!-- Stats -->
                 <div class="stats-bar" data-aos="fade-up" data-aos-delay="700">
                     <div class="stat-item">
                         <span class="number" data-count="10">0</span>
@@ -1379,12 +1588,12 @@
     </section>
 
     <!-- ===== ABOUT PANEL ===== -->
-    <div id="about-panel" class="info-panel">
+    <div id="about-panel" class="info-panel" data-section="about">
         <div class="panel-container">
             <h2>About Me</h2>
             <div class="about-grid">
                 <div class="about-image">
-                    <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn portrait" />
+                    <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn portrait" loading="lazy" />
                 </div>
                 <div class="about-text">
                     <p><span class="highlight">Flynn James Q. Pontino</span> — a hands-on sales leader who believes in growing people, not just pipelines. With over a decade in B2B outbound, I've built and mentored high-performing teams that consistently exceed targets through coaching, accountability, and a human-first approach.</p>
@@ -1401,36 +1610,36 @@
     </div>
 
     <!-- ===== SKILLS PANEL ===== -->
-    <div id="skills-panel" class="info-panel">
+    <div id="skills-panel" class="info-panel" data-section="skills">
         <div class="panel-container">
             <h2>Core Competencies</h2>
             <div class="skills-grid">
-                <div class="skill-card">
+                <div class="skill-card" data-aos="flip-up">
                     <span class="icon"><i class="fas fa-phone-volume"></i></span>
                     <h3>High-Volume Outbound</h3>
                     <p><strong>10+ years</strong> cold calling (100-150 daily), appointment setting, lead generation, and pipeline management. Proven ability to book 40+ appointments/month.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card" data-aos="flip-up" data-aos-delay="100">
                     <span class="icon"><i class="fas fa-chart-pie"></i></span>
                     <h3>CRM &amp; Sales Tech Stack</h3>
                     <p>HubSpot CRM, LinkedIn Sales Navigator, ZoomInfo, Lusha, Outreach.io. Multi-channel sequencing expert with 22% conversion improvement.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card" data-aos="flip-up" data-aos-delay="200">
                     <span class="icon"><i class="fas fa-bullseye"></i></span>
                     <h3>Strategic Qualification</h3>
                     <p>BANT / MEDDIC frameworks, market intelligence analytics, and regional messaging nuance. Increased opportunity-to-close rates by 15%.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card" data-aos="flip-up" data-aos-delay="300">
                     <span class="icon"><i class="fas fa-users"></i></span>
                     <h3>Team Leadership</h3>
                     <p>Coached 12+ SDRs, reduced ramp time from 8 to 5 weeks, and fostered high-performance cultures with 120%+ quota attainment.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card" data-aos="flip-up" data-aos-delay="400">
                     <span class="icon"><i class="fas fa-globe"></i></span>
                     <h3>Global Market Expertise</h3>
                     <p>Deep experience across APAC, US, UK, and AU markets with nuanced regional messaging strategies.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card" data-aos="flip-up" data-aos-delay="500">
                     <span class="icon"><i class="fas fa-certificate"></i></span>
                     <h3>Lean Six Sigma</h3>
                     <p>SSWB and LSSWB certified with a focus on continuous improvement and process optimization.</p>
@@ -1440,21 +1649,21 @@
     </div>
 
     <!-- ===== SERVICES PANEL ===== -->
-    <div id="services-panel" class="info-panel">
+    <div id="services-panel" class="info-panel" data-section="services">
         <div class="panel-container">
             <h2>What I Offer</h2>
             <div class="services-grid">
-                <div class="service-card">
+                <div class="service-card" data-aos="zoom-in">
                     <span class="icon"><i class="fas fa-rocket"></i></span>
                     <h3>End-to-End Pipeline Generation</h3>
                     <p>Build qualified opportunities from prospecting to SQL conversion. Deliver 30+ qualified meetings/month with 120% quota attainment.</p>
                 </div>
-                <div class="service-card">
+                <div class="service-card" data-aos="zoom-in" data-aos-delay="100">
                     <span class="icon"><i class="fas fa-chart-line"></i></span>
                     <h3>Sales Development Consulting</h3>
                     <p>Custom multi-channel cadences, objection handling playbooks, and CRM optimization. Boosted reply rates by 12% and open rates by 22%.</p>
                 </div>
-                <div class="service-card">
+                <div class="service-card" data-aos="zoom-in" data-aos-delay="200">
                     <span class="icon"><i class="fas fa-users-cog"></i></span>
                     <h3>Team Mentorship &amp; Ramp-up</h3>
                     <p>Reduce ramp time from 8 weeks to 5 weeks with data-centric training, role-play frameworks, and weekly intelligence sessions.</p>
@@ -1464,14 +1673,14 @@
     </div>
 
     <!-- ===== GALLERY PANEL ===== -->
-    <div id="gallery-panel" class="info-panel">
+    <div id="gallery-panel" class="info-panel" data-section="gallery">
         <div class="panel-container">
             <h2>Behind the Scenes</h2>
             <p style="opacity:0.7;margin-bottom:20px;">A glimpse into my professional journey — real moments, real results.</p>
             <div class="gallery-grid">
-                <div class="gallery-item">
+                <div class="gallery-item" data-aos="fade-up">
                     <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176185a9.jpg" data-lightbox="gallery" data-title="Professional Headshot - 2024">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176185a9.jpg" alt="Professional Headshot" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176185a9.jpg" alt="Professional Headshot" loading="lazy" />
                         <div class="badge">2024</div>
                         <div class="overlay">
                             <span>📸 Professional Headshot</span>
@@ -1479,9 +1688,9 @@
                         </div>
                     </a>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
                     <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" data-lightbox="gallery" data-title="Award Ceremony - Top Performer Recognition">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" alt="Award Ceremony" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" alt="Award Ceremony" loading="lazy" />
                         <div class="badge">🏆 Award</div>
                         <div class="overlay">
                             <span>🏆 Top Performer Award</span>
@@ -1489,9 +1698,9 @@
                         </div>
                     </a>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
                     <a href="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" data-lightbox="gallery" data-title="Global Team Collaboration">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" alt="Global Team" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" alt="Global Team" loading="lazy" />
                         <div class="badge">🌍 Global</div>
                         <div class="overlay">
                             <span>🌍 Global Team</span>
@@ -1499,9 +1708,9 @@
                         </div>
                     </a>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
                     <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176a1e85.jpg" data-lightbox="gallery" data-title="Sales Presentation - Strategic Pitch">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176a1e85.jpg" alt="Sales Presentation" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176a1e85.jpg" alt="Sales Presentation" loading="lazy" />
                         <div class="badge">📊 Strategy</div>
                         <div class="overlay">
                             <span>📊 Sales Presentation</span>
@@ -1509,9 +1718,9 @@
                         </div>
                     </a>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="400">
                     <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176b5147.jpg" data-lightbox="gallery" data-title="Client Meeting - Building Trust">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176b5147.jpg" alt="Client Meeting" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176b5147.jpg" alt="Client Meeting" loading="lazy" />
                         <div class="badge">🤝 Trust</div>
                         <div class="overlay">
                             <span>🤝 Client Meeting</span>
@@ -1519,9 +1728,9 @@
                         </div>
                     </a>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="500">
                     <a href="https://images.cdn-files-a.com/uploads/6358148/2000_6297717695d8d.jpg" data-lightbox="gallery" data-title="Performance Dashboard - Data-Driven Sales">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_6297717695d8d.jpg" alt="Performance Dashboard" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_6297717695d8d.jpg" alt="Performance Dashboard" loading="lazy" />
                         <div class="badge">📈 Results</div>
                         <div class="overlay">
                             <span>📈 Performance Dashboard</span>
@@ -1529,9 +1738,9 @@
                         </div>
                     </a>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="600">
                     <a href="https://images.cdn-files-a.com/uploads/6358148/2000_629771767e967.jpg" data-lightbox="gallery" data-title="Team Collaboration - Mentoring Session">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_629771767e967.jpg" alt="Team Collaboration" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_629771767e967.jpg" alt="Team Collaboration" loading="lazy" />
                         <div class="badge">👥 Mentorship</div>
                         <div class="overlay">
                             <span>👥 Team Collaboration</span>
@@ -1539,9 +1748,9 @@
                         </div>
                     </a>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="700">
                     <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176ba76e.jpg" data-lightbox="gallery" data-title="Strategic Planning - Revenue Growth">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176ba76e.jpg" alt="Strategic Planning" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176ba76e.jpg" alt="Strategic Planning" loading="lazy" />
                         <div class="badge">📋 Planning</div>
                         <div class="overlay">
                             <span>📋 Strategic Planning</span>
@@ -1554,7 +1763,7 @@
     </div>
 
     <!-- ===== TESTIMONIALS PANEL ===== -->
-    <div id="testimonials-panel" class="info-panel">
+    <div id="testimonials-panel" class="info-panel" data-section="testimonials">
         <div class="panel-container">
             <h2>What People Say</h2>
             <p style="opacity:0.7;margin-bottom:20px;">Real feedback from real clients and colleagues.</p>
@@ -1563,7 +1772,7 @@
                     <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                     <p class="quote-text">Working with <span class="highlight-name">Flynn</span> has been an absolute game-changer. He didn't just bring us leads — he brought us a complete sales methodology. Within three months, our qualified pipeline grew by 40% and we closed deals we'd been chasing for over a year. He's the kind of person who makes everyone around him better.</p>
                     <div class="author">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/400_64fdaf32ca5e7.jpg" alt="Van Ng" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/400_64fdaf32ca5e7.jpg" alt="Van Ng" loading="lazy" />
                         <div>
                             <div class="name">Van Ng</div>
                             <div class="role">Account Manager - AVERPS</div>
@@ -1576,7 +1785,7 @@
                     <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                     <p class="quote-text">I've worked with many SDRs over the years, but <span class="highlight-name">Flynn</span> stands out. His strategic approach to multi-channel outreach completely transformed our sales motion. He didn't just hit his numbers — he redefined what was possible. Our conversion rates jumped 22% after he restructured our cadence. An absolute pleasure to work with.</p>
                     <div class="author">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/400_64fdb337e961e.jpg" alt="Shann Wong" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/400_64fdb337e961e.jpg" alt="Shann Wong" loading="lazy" />
                         <div>
                             <div class="name">Shann Wong</div>
                             <div class="role">Sales Director - Yellow Pages Singapore</div>
@@ -1589,7 +1798,7 @@
                     <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                     <p class="quote-text"><span class="highlight-name">Flynn</span> is the kind of sales professional every leader dreams of having on their team. His dedication to mentoring our junior SDRs was beyond anything I expected. He took raw talent and turned it into a high-performing team that exceeded quota by 120%. He doesn't just sell — he builds sales cultures.</p>
                     <div class="author">
-                        <img src="https://media.licdn.com/dms/image/v2/D4E03AQE0CKw1VyHB8g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1663775428654?e=1787184000&v=beta&t=zUoQAtgldt2ZSgPPtm1N_SBYrrbsxWZg9V5Zif9HpDI" alt="Toby Whittaker" />
+                        <img src="https://media.licdn.com/dms/image/v2/D4E03AQE0CKw1VyHB8g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1663775428654?e=1787184000&v=beta&t=zUoQAtgldt2ZSgPPtm1N_SBYrrbsxWZg9V5Zif9HpDI" alt="Toby Whittaker" loading="lazy" />
                         <div>
                             <div class="name">Toby Whittaker</div>
                             <div class="role">Head of Sales - Seek Marketing Partners</div>
@@ -1602,11 +1811,11 @@
     </div>
 
     <!-- ===== CONTACT PANEL ===== -->
-    <div id="contact-panel" class="info-panel">
+    <div id="contact-panel" class="info-panel" data-section="contact">
         <div class="panel-container">
             <h2>Let's Connect</h2>
-            <div class="contact-details">
-                <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn James" />
+            <div class="contact-details" data-aos="zoom-in">
+                <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn James" loading="lazy" />
                 <div class="contact-item">
                     <i class="fas fa-envelope"></i>
                     <a href="mailto:va.flynnjames@gmail.com">va.flynnjames@gmail.com</a>
@@ -1648,13 +1857,13 @@
 
     <!-- ===== FLOATING ACTIONS ===== -->
     <div class="floating-actions" id="floatingActions">
-        <button class="fab visible" id="fabCv" title="Download CV">
+        <button class="fab" id="fabCv" title="Download CV">
             <i class="fas fa-file-pdf"></i>
         </button>
-        <button class="fab visible" id="fabEmail" title="Email Me">
+        <button class="fab" id="fabEmail" title="Email Me">
             <i class="fas fa-envelope"></i>
         </button>
-        <button class="fab visible" id="fabPhone" title="Call Me">
+        <button class="fab" id="fabPhone" title="Call Me">
             <i class="fas fa-phone"></i>
         </button>
     </div>
@@ -1674,14 +1883,16 @@
             <button class="close-chat" id="closeChat">&times;</button>
         </div>
         <div class="quick-actions" id="quickActions">
-            <button data-question="Tell me about Flynn's experience">📋 Experience</button>
-            <button data-question="What skills does Flynn have?">🛠️ Skills</button>
-            <button data-question="What services does Flynn offer?">💼 Services</button>
-            <button data-question="How can I contact Flynn?">📞 Contact</button>
-            <button data-question="Download CV">📄 CV</button>
+            <button data-section="about">📋 About Me</button>
+            <button data-section="skills">🛠️ Skills</button>
+            <button data-section="services">💼 Services</button>
+            <button data-section="contact">📞 Contact</button>
+            <button data-section="gallery">🖼️ Gallery</button>
+            <button data-section="testimonials">⭐ Testimonials</button>
+            <button data-action="cv">📄 Download CV</button>
         </div>
         <div class="chat-messages" id="chatMessages">
-            <div class="chat-message bot">👋 Hello! I'm Flynn's AI assistant. Ask me about his experience, skills, services, or how to get in touch.</div>
+            <div class="chat-message bot">👋 Hello! I'm Flynn's AI assistant. Click any button below to navigate to that section, or type your question below.</div>
         </div>
         <div class="chat-input-area">
             <input type="text" id="chatInput" placeholder="Ask something..." />
@@ -1699,7 +1910,12 @@
         // ========================================
         // ===== INIT AOS =====
         // ========================================
-        AOS.init({ duration: 800, once: true, offset: 60 });
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 60,
+            easing: 'ease-out-cubic'
+        });
 
         // ========================================
         // ===== TYPEWRITER =====
@@ -1785,42 +2001,100 @@
         // ========================================
         // ===== PANEL TOGGLE =====
         // ========================================
+        function closeAllPanels() {
+            document.querySelectorAll('.info-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        }
+
+        function openPanel(section) {
+            closeAllPanels();
+            if (section === 'home') {
+                document.getElementById('home-section').scrollIntoView({ behavior: 'smooth' });
+                document.querySelector('.nav-link[data-section="home"]').classList.add('active');
+                return;
+            }
+            const panel = document.getElementById(section + '-panel');
+            if (panel) {
+                panel.classList.add('active');
+                document.querySelector(`.nav-link[data-section="${section}"]`)?.classList.add('active');
+                // Update progress dots
+                document.querySelectorAll('.section-progress .dot').forEach(d => {
+                    d.classList.toggle('active', d.dataset.section === section);
+                });
+                if (section === 'testimonials') {
+                    animateStats();
+                }
+            }
+            document.getElementById('mobileDropdown').style.transform = 'translateY(-120%)';
+            // Close chat window when opening a panel
+            document.getElementById('chatWindow').classList.remove('open');
+        }
+
+        // Nav links
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const section = this.dataset.section;
-                document.querySelectorAll('.info-panel').forEach(p => p.classList.remove('active'));
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-                if (section === 'home') {
-                    document.getElementById('home-section').scrollIntoView({ behavior: 'smooth' });
-                    return;
-                }
-                const panel = document.getElementById(section + '-panel');
-                if (panel) {
-                    panel.classList.add('active');
-                    if (section === 'testimonials') {
-                        animateStats();
-                    }
-                }
-                document.getElementById('mobileDropdown').style.transform = 'translateY(-120%)';
+                openPanel(section);
             });
         });
 
-        // Mobile menu
-        document.getElementById('hamburgerBtn').addEventListener('click', () => {
-            document.getElementById('mobileDropdown').style.transform = 'translateY(0%)';
-        });
-        document.getElementById('cancelBtn').addEventListener('click', () => {
-            document.getElementById('mobileDropdown').style.transform = 'translateY(-120%)';
+        // Section progress dots
+        document.querySelectorAll('.section-progress .dot').forEach(dot => {
+            dot.addEventListener('click', function() {
+                const section = this.dataset.section;
+                if (section === 'home') {
+                    document.getElementById('home-section').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    openPanel(section);
+                }
+            });
         });
 
-        // Close panels on hero click
-        document.getElementById('home-section').addEventListener('click', (e) => {
-            if (!e.target.closest('.info-panel') && !e.target.closest('.nav-link') && !e.target.closest('.cta-group') &&
-                !e.target.closest('.social-links')) {
-                document.querySelectorAll('.info-panel').forEach(p => p.classList.remove('active'));
+        // Back to Home button
+        const backToHome = document.getElementById('backToHome');
+        backToHome.addEventListener('click', () => {
+            closeAllPanels();
+            document.getElementById('home-section').scrollIntoView({ behavior: 'smooth' });
+            document.querySelector('.nav-link[data-section="home"]').classList.add('active');
+            document.querySelectorAll('.section-progress .dot').forEach(d => {
+                d.classList.toggle('active', d.dataset.section === 'home');
+            });
+        });
+
+        // ========================================
+        // ===== SCROLL-BASED INTERACTIONS =====
+        // ========================================
+        let lastScrollY = 0;
+        const nav = document.querySelector('nav');
+        const heroSection = document.getElementById('home-section');
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+
+            // Hide/show nav on scroll down/up
+            if (currentScrollY > 100 && currentScrollY > lastScrollY) {
+                nav.classList.add('hidden');
+            } else {
+                nav.classList.remove('hidden');
             }
+            lastScrollY = currentScrollY;
+
+            // Back to Home button visibility (after second section)
+            const heroHeight = heroSection.offsetHeight;
+            if (currentScrollY > heroHeight * 0.7) {
+                backToHome.classList.add('visible');
+            } else {
+                backToHome.classList.remove('visible');
+            }
+
+            // Section visibility for background effects
+            document.querySelectorAll('section, .info-panel.active').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    el.classList.add('visible');
+                }
+            });
         });
 
         // ========================================
@@ -1837,7 +2111,6 @@
         });
 
         // Show floating actions on scroll
-        let lastScroll = 0;
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
             const fabButtons = document.querySelectorAll('.floating-actions .fab');
@@ -1848,7 +2121,6 @@
             } else {
                 fabButtons.forEach(btn => btn.classList.remove('visible'));
             }
-            lastScroll = currentScroll;
         });
 
         // ========================================
@@ -2028,60 +2300,6 @@
             }
         }
 
-        // Fallback Responses
-        function getFallbackReply(message) {
-            const lower = message.toLowerCase();
-
-            if (lower.includes('cv') || lower.includes('resume')) {
-                return {
-                    reply: "You can download Flynn's CV here:",
-                    extra: { actions: [{ label: '📄 Download CV', url: 'https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing' }] }
-                };
-            }
-            if (lower.includes('contact') || lower.includes('email') || lower.includes('phone') || lower.includes(
-                'linkedin')) {
-                return {
-                    reply: "You can reach Flynn through these channels:",
-                    extra: {
-                        contact: [
-                            { label: '📧 Email', url: 'mailto:va.flynnjames@gmail.com', icon: 'fas fa-envelope' },
-                            { label: '📞 Phone', url: 'tel:+639306359306', icon: 'fas fa-phone' },
-                            { label: '💼 LinkedIn', url: 'https://linkedin.com/in/fjpontino', icon: 'fab fa-linkedin' }
-                        ]
-                    }
-                };
-            }
-            if (lower.includes('experience') || lower.includes('background') || lower.includes('work')) {
-                return {
-                    reply: "Flynn has over 10 years of experience in B2B sales, lead generation, and outbound telemarketing across APAC, US, UK, and AU markets.",
-                    extra: null
-                };
-            }
-            if (lower.includes('skill') || lower.includes('tools') || lower.includes('technology')) {
-                return {
-                    reply: "Flynn's core skills include high-volume cold calling, CRM management (HubSpot, Pipedrive), LinkedIn Sales Navigator, ZoomInfo, Lusha, and Outreach.io.",
-                    extra: null
-                };
-            }
-            if (lower.includes('service') || lower.includes('offer') || lower.includes('help')) {
-                return {
-                    reply: "Flynn offers end-to-end pipeline generation, sales development consulting, and team mentorship.",
-                    extra: null
-                };
-            }
-
-            return {
-                reply: "I couldn't find that in the portfolio. Please use the contact form for more details.",
-                extra: {
-                    actions: [
-                        { label: '📋 Experience', value: 'Tell me about Flynn\'s experience' },
-                        { label: '🛠️ Skills', value: 'What skills does Flynn have?' },
-                        { label: '📞 Contact', value: 'How can I contact Flynn?' }
-                    ]
-                }
-            };
-        }
-
         // Handle Send
         async function handleSend() {
             const msg = chatInput.value.trim();
@@ -2103,9 +2321,8 @@
                 let extra = null;
 
                 if (!reply) {
-                    const fallback = getFallbackReply(msg);
-                    reply = fallback.reply;
-                    extra = fallback.extra;
+                    reply =
+                    "I couldn't find that in the portfolio. Please use the contact form for more details.";
                     setStatus('AI Ready (Local)', true);
                 } else {
                     // Check if reply contains contact info
@@ -2133,9 +2350,8 @@
 
             } catch (error) {
                 hideTyping();
-                const fallback = getFallbackReply(msg);
-                addMessage(fallback.reply, 'bot', fallback.extra);
-                conversationHistory.push({ role: 'assistant', content: fallback.reply });
+                addMessage("I'm having trouble connecting. Please use the contact form for more details.", 'bot');
+                conversationHistory.push({ role: 'assistant', content: "I'm having trouble connecting." });
                 setStatus('AI Ready (Fallback)', true);
             }
 
@@ -2149,17 +2365,38 @@
             }
         }
 
-        // Event Listeners
-        document.querySelectorAll('.quick-actions button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const question = btn.dataset.question;
-                if (question) {
-                    chatInput.value = question;
-                    handleSend();
-                }
+        // Quick action buttons - navigate to sections
+        document.querySelectorAll('#quickActions button[data-section]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const section = this.dataset.section;
+                // Close chat
+                chatWindow.classList.remove('open');
+                // Navigate to section
+                openPanel(section);
+                // Add a message confirming navigation
+                const sectionNames = {
+                    about: 'About Me',
+                    skills: 'Skills',
+                    services: 'Services',
+                    gallery: 'Gallery',
+                    testimonials: 'Testimonials',
+                    contact: 'Contact'
+                };
+                // Reopen chat with confirmation
+                setTimeout(() => {
+                    chatWindow.classList.add('open');
+                    addMessage(`✅ Navigating to the **${sectionNames[section] || section}** section.`, 'bot');
+                }, 600);
             });
         });
 
+        // Download CV action
+        document.querySelector('#quickActions button[data-action="cv"]')?.addEventListener('click', function() {
+            window.open('https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing', '_blank');
+            addMessage("📄 Opening Flynn's CV for download...", 'bot');
+        });
+
+        // Chat toggle
         chatToggle.addEventListener('click', () => {
             chatWindow.classList.toggle('open');
             if (chatWindow.classList.contains('open')) {
@@ -2192,12 +2429,30 @@
         console.log('🔑 API Key: ' + (GEMINI_API_KEY ? '✓ Configured' : '✗ Missing'));
         console.log('💡 Press Ctrl+K to open/close chat');
         console.log('🌓 Toggle theme with the sun/moon icon');
+        console.log('⬆️ Back to Home button appears after scrolling past the hero section');
 
         // ========================================
         // ===== INITIAL STATS ANIMATION =====
         // ========================================
-        // Trigger stats on load after a delay
         setTimeout(animateStats, 1500);
+
+        // ========================================
+        // ===== KEYBOARD NAVIGATION =====
+        // ========================================
+        document.addEventListener('keydown', (e) => {
+            // Alt+1-7 for sections
+            const sections = ['home', 'about', 'skills', 'services', 'gallery', 'testimonials', 'contact'];
+            if (e.altKey && e.key >= '1' && e.key <= '7') {
+                e.preventDefault();
+                const idx = parseInt(e.key) - 1;
+                openPanel(sections[idx]);
+                if (idx === 0) {
+                    document.getElementById('home-section').scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+
+        console.log('⌨️ Keyboard shortcuts: Alt+1-7 to navigate sections');
     </script>
 </body>
 </html>
