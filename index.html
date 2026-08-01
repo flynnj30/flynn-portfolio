@@ -66,7 +66,6 @@
             background: #e0e0e0;
         }
 
-        /* ===== NAVIGATION ===== */
         nav {
             width: 100%;
             height: var(--nav-height);
@@ -99,7 +98,6 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 clamp(16px, 5vw, 40px);
-            position: relative;
         }
         .logo {
             font-size: clamp(1.1rem, 2.5vw, 1.4rem);
@@ -109,7 +107,6 @@
             white-space: nowrap;
             z-index: 2;
             position: relative;
-            overflow: hidden;
         }
         .logo span {
             color: var(--green);
@@ -194,7 +191,6 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            height: 100dvh;
             background: rgba(10, 10, 10, 0.98);
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
@@ -225,7 +221,7 @@
             display: block;
         }
 
-        /* THEME TOGGLE */
+        /* SINGLE THEME TOGGLE - ONLY ONE */
         .theme-toggle {
             background: rgba(255, 255, 255, 0.06);
             border: none;
@@ -236,7 +232,7 @@
             cursor: pointer;
             font-size: 1.1rem;
             transition: all 0.4s ease;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(10px);
@@ -255,7 +251,6 @@
             box-shadow: 0 0 30px rgba(10, 158, 64, 0.3);
         }
 
-        /* SECTION PROGRESS */
         .section-progress {
             position: fixed;
             right: clamp(10px, 2vw, 25px);
@@ -313,7 +308,6 @@
             color: #1a1a1a;
         }
 
-        /* BACK TO TOP */
         .back-to-top {
             position: fixed;
             bottom: 110px;
@@ -371,7 +365,6 @@
             box-shadow: 0 4px 30px rgba(10, 158, 64, 0.25);
         }
 
-        /* SHORTCUTS HINT */
         .shortcuts-hint {
             position: fixed;
             bottom: 30px;
@@ -405,7 +398,6 @@
             font-size: 0.6rem;
         }
 
-        /* SCROLL CONTAINER */
         .scroll-container {
             height: 100vh;
             height: 100dvh;
@@ -419,7 +411,6 @@
             width: 0;
         }
 
-        /* SECTION WRAPPER */
         .section-wrapper {
             min-height: 100vh;
             min-height: 100dvh;
@@ -463,7 +454,6 @@
             transform: translateY(0);
         }
 
-        /* HERO */
         #section-home .hero-grid {
             transition: all 0.8s ease;
         }
@@ -764,7 +754,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* SECTION TITLES */
         .section-title {
             font-size: clamp(1.6rem, 3.5vw, 2.4rem);
             font-weight: 800;
@@ -785,7 +774,6 @@
             flex-shrink: 0;
         }
 
-        /* ABOUT */
         .about-grid {
             display: flex;
             flex-wrap: wrap;
@@ -832,7 +820,6 @@
             opacity: 0.8;
         }
 
-        /* SKILLS & SERVICES */
         .skills-grid,
         .services-grid {
             display: grid;
@@ -889,7 +876,6 @@
             line-height: 1.6;
         }
 
-        /* GALLERY */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -945,7 +931,6 @@
             pointer-events: none;
         }
 
-        /* TESTIMONIALS */
         .testimonial-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -992,7 +977,6 @@
             margin-top: 12px;
         }
 
-        /* CERTIFICATIONS */
         .cert-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1039,7 +1023,6 @@
             font-weight: 600;
         }
 
-        /* CONTACT */
         .contact-details {
             text-align: center;
             max-width: 600px;
@@ -1073,7 +1056,6 @@
         .contact-details .contact-item a { color: var(--green); font-weight: 600; text-decoration: none; }
         .contact-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px; }
 
-        /* ACTION HUB */
         .action-hub {
             position: fixed;
             bottom: 25px;
@@ -1143,7 +1125,6 @@
         }
         .action-hub .hub-item:hover .tooltip { opacity: 1; }
 
-        /* CHAT */
         .chat-window {
             position: fixed;
             bottom: 100px;
@@ -1226,7 +1207,6 @@
             cursor: pointer;
         }
 
-        /* NOTIFICATION TOAST */
         .notification-toast {
             position: fixed;
             top: 85px;
@@ -1251,7 +1231,6 @@
         .notification-toast .toast-message { font-size: 0.75rem; opacity: 0.8; line-height: 1.4; }
         .notification-toast .toast-close { background: none; border: none; color: rgba(255, 255, 255, 0.4); cursor: pointer; font-size: 1rem; }
 
-        /* PARTICLES CANVAS */
         #particleCanvas {
             position: fixed;
             top: 0;
@@ -1262,7 +1241,6 @@
             z-index: 0;
         }
 
-        /* RESPONSIVE */
         @media (max-width: 900px) {
             .nav-container .links { display: none; }
             .hamburg { display: block; }
@@ -1293,7 +1271,6 @@
 
     <canvas id="particleCanvas"></canvas>
 
-    <!-- SECTION PROGRESS -->
     <div class="section-progress" id="sectionProgress">
         <div class="dot active" data-index="0"><span class="tooltip">Home</span></div>
         <div class="dot" data-index="1"><span class="tooltip">About</span></div>
@@ -1305,12 +1282,10 @@
         <div class="dot" data-index="7"><span class="tooltip">Contact</span></div>
     </div>
 
-    <!-- BACK TO TOP -->
     <button class="back-to-top" id="backToTop" aria-label="Back to Top">
         <i class="fas fa-arrow-up arrow-icon"></i>
     </button>
 
-    <!-- NOTIFICATION TOAST -->
     <div class="notification-toast" id="notificationToast">
         <span class="toast-icon">💡</span>
         <div class="toast-content">
@@ -1320,12 +1295,10 @@
         <button class="toast-close" id="toastClose">&times;</button>
     </div>
 
-    <!-- SHORTCUTS HINT -->
     <div class="shortcuts-hint" id="shortcutsHint">
         <kbd>Alt</kbd> + <kbd>1</kbd>–<kbd>8</kbd> to navigate &nbsp;·&nbsp; <kbd>Ctrl</kbd> + <kbd>K</kbd> for chat
     </div>
 
-    <!-- NAVIGATION -->
     <nav>
         <div class="nav-container">
             <div class="logo" id="logoBtn">Flynn James <span>Pontino</span></div>
@@ -1338,6 +1311,7 @@
                 <a href="#" data-index="5" class="nav-link">Testimonials</a>
                 <a href="#" data-index="6" class="nav-link">Certifications</a>
                 <a href="#" data-index="7" class="nav-link">Contact</a>
+                <!-- ONLY ONE THEME TOGGLE - IN DESKTOP NAV -->
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <i class="fas fa-moon" id="themeIcon"></i>
                 </button>
@@ -1355,17 +1329,13 @@
                 <a href="#" data-index="5">Testimonials</a>
                 <a href="#" data-index="6">Certifications</a>
                 <a href="#" data-index="7">Contact</a>
-                <button class="theme-toggle" id="mobileThemeToggle" aria-label="Toggle theme" style="margin:0 auto;">
-                    <i class="fas fa-moon"></i>
-                </button>
+                <!-- NO THEME TOGGLE HERE - REMOVED DUPLICATE -->
             </div>
         </div>
     </nav>
 
-    <!-- SCROLL CONTAINER -->
     <div class="scroll-container" id="scrollContainer">
 
-        <!-- HOME -->
         <section class="section-wrapper active" data-index="0" id="section-home">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1373,8 +1343,7 @@
                     <div class="hero-image">
                         <div class="profile-ring"></div>
                         <div class="profile-ring-2"></div>
-                        <img src="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" alt="Flynn James Pontino - Strategic Growth Leader" loading="eager" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                        <div style="display:none; width:100%; max-width:370px; aspect-ratio:1/1; border-radius:50%; background:linear-gradient(135deg, #0a9e40, #1a1a1a); align-items:center; justify-content:center; color:#0a9e40; font-size:4rem; font-weight:900; border:3px solid #0a9e40;">FJ</div>
+                        <img src="https://media.licdn.com/dms/image/v2/D5603AQGW5lje8ZgUJQ/profile-displayphoto-shrink_400_400/B56ZZxrW.6HAAg-/0/1745663914785?e=1787184000&v=beta&t=ou_jssXKZ_nnshn4Z37ZILkR_ANxao24X-LkcTAEpt0" alt="Flynn James Pontino - Strategic Growth Leader" loading="eager" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22370%22 height=%22370%22><rect fill=%22%231a1a1a%22 width=%22370%22 height=%22370%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%230a9e40%22 font-size=%2220%22 font-family=%22Inter,sans-serif%22>FJ</text></svg>'" />
                         <div class="status-badge"><span class="dot"></span> Open to opportunities</div>
                         <a href="https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing" target="_blank" rel="noopener" class="check-cv-btn"><i class="fas fa-file-pdf"></i> Check My CV</a>
                     </div>
@@ -1403,14 +1372,13 @@
             </div>
         </section>
 
-        <!-- ABOUT -->
         <section class="section-wrapper" data-index="1" id="section-about">
             <div class="bg-glow"></div>
             <div class="section-content">
                 <h2 class="section-title">About Me</h2>
                 <div class="about-grid">
                     <div class="about-image">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176185a9.jpg" alt="Flynn James Pontino portrait" loading="lazy" onerror="this.src='https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg'" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176185a9.jpg" alt="Flynn James Pontino portrait" loading="lazy" onerror="this.src='https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg'" />
                     </div>
                     <div class="about-text">
                         <p><span class="highlight">Flynn James Q. Pontino</span> — a hands-on sales leader who believes in growing people, not just pipelines. With over a decade in B2B outbound, I've built and mentored high-performing teams that consistently exceed targets through coaching, accountability, and a human-first approach.</p>
@@ -1422,7 +1390,6 @@
             </div>
         </section>
 
-        <!-- SKILLS -->
         <section class="section-wrapper" data-index="2" id="section-skills">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1438,7 +1405,6 @@
             </div>
         </section>
 
-        <!-- SERVICES -->
         <section class="section-wrapper" data-index="3" id="section-services">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1451,14 +1417,13 @@
             </div>
         </section>
 
-        <!-- GALLERY -->
         <section class="section-wrapper" data-index="4" id="section-gallery">
             <div class="bg-glow"></div>
             <div class="section-content">
                 <h2 class="section-title">Behind the Scenes</h2>
                 <p style="opacity:0.7;margin-bottom:20px;text-align:center;">A glimpse into my professional journey — real moments, real results.</p>
                 <div class="gallery-grid">
-                    <div class="gallery-item"><a href="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" data-lightbox="gallery" data-title="Professional Headshot"><img src="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" alt="Professional Headshot" loading="lazy" /><div class="badge">2026</div><div class="overlay"><span>📸 Professional Headshot</span></div></a></div>
+                    <div class="gallery-item"><a href="https://media.licdn.com/dms/image/v2/D5603AQGW5lje8ZgUJQ/profile-displayphoto-shrink_400_400/B56ZZxrW.6HAAg-/0/1745663914785?e=1787184000&v=beta&t=ou_jssXKZ_nnshn4Z37ZILkR_ANxao24X-LkcTAEpt0" data-lightbox="gallery" data-title="Professional Headshot"><img src="https://media.licdn.com/dms/image/v2/D5603AQGW5lje8ZgUJQ/profile-displayphoto-shrink_400_400/B56ZZxrW.6HAAg-/0/1745663914785?e=1787184000&v=beta&t=ou_jssXKZ_nnshn4Z37ZILkR_ANxao24X-LkcTAEpt0" alt="Professional Headshot" loading="lazy" /><div class="badge">2026</div><div class="overlay"><span>📸 Professional Headshot</span></div></a></div>
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" data-lightbox="gallery" data-title="Award Ceremony"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" alt="Award Ceremony" loading="lazy" /><div class="badge">🏆 Award</div><div class="overlay"><span>🏆 Top Performer Award</span></div></a></div>
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" data-lightbox="gallery" data-title="Global Team"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" alt="Global Team" loading="lazy" /><div class="badge">🌍 Global</div><div class="overlay"><span>🌍 Global Team</span></div></a></div>
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176a1e85.jpg" data-lightbox="gallery" data-title="Sales Presentation"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176a1e85.jpg" alt="Sales Presentation" loading="lazy" /><div class="badge">📊 Strategy</div><div class="overlay"><span>📊 Sales Presentation</span></div></a></div>
@@ -1470,7 +1435,6 @@
             </div>
         </section>
 
-        <!-- TESTIMONIALS -->
         <section class="section-wrapper" data-index="5" id="section-testimonials">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1492,14 +1456,13 @@
                     <div class="testimonial-card">
                         <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                         <p class="quote-text">He mentored our junior SDRs and built a team that consistently hits 120% of quota. He's the kind of leader who lifts everyone around him.</p>
-                        <div class="author"><img src="https://img.sanishtech.com/u/cba45034f0e40c0da854486bcea4407b.jpg" alt="Toby Whittaker" loading="lazy" /><div><div class="name">Toby Whittaker</div><div class="role">Head of Sales - Seek Marketing</div></div></div>
+                        <div class="author"><img src="https://media.licdn.com/dms/image/v2/D4E03AQE0CKw1VyHB8g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1663775428654?e=1787184000&v=beta&t=zUoQAtgldt2ZSgPPtm1N_SBYrrbsxWZg9V5Zif9HpDI" alt="Toby Whittaker" loading="lazy" onerror="this.src='https://media.licdn.com/dms/image/v2/D4E03AQE0CKw1VyHB8g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1663775428654?e=1787184000&v=beta&t=zUoQAtgldt2ZSgPPtm1N_SBYrrbsxWZg9V5Zif9HpDI'" /><div><div class="name">Toby Whittaker</div><div class="role">Head of Sales - Seek Marketing</div></div></div>
                         <span class="result-tag">🏆 120% Quota Attainment</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- CERTIFICATIONS -->
         <section class="section-wrapper" data-index="6" id="section-certifications">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1531,13 +1494,12 @@
             </div>
         </section>
 
-        <!-- CONTACT -->
         <section class="section-wrapper" data-index="7" id="section-contact">
             <div class="bg-glow"></div>
             <div class="section-content">
                 <h2 class="section-title">Let's Connect</h2>
                 <div class="contact-details">
-                    <img src="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" alt="Flynn James" loading="lazy" />
+                    <img src="https://media.licdn.com/dms/image/v2/D5603AQGW5lje8ZgUJQ/profile-displayphoto-shrink_400_400/B56ZZxrW.6HAAg-/0/1745663914785?e=1787184000&v=beta&t=ou_jssXKZ_nnshn4Z37ZILkR_ANxao24X-LkcTAEpt0" alt="Flynn James" loading="lazy" />
                     <div class="contact-item"><i class="fas fa-envelope"></i><a href="mailto:va.flynnjames@gmail.com">va.flynnjames@gmail.com</a></div>
                     <div class="contact-item"><i class="fas fa-phone"></i><a href="tel:+639306359306">+63 930 635 9306</a></div>
                     <div class="contact-item"><i class="fab fa-whatsapp"></i><a href="https://wa.me/639306359306">WhatsApp</a></div>
@@ -1554,7 +1516,6 @@
         </section>
     </div>
 
-    <!-- ACTION HUB -->
     <div class="action-hub" id="actionHub">
         <div class="hub-items" id="hubItems">
             <button class="hub-item" data-action="cv"><i class="fas fa-file-pdf"></i><span class="tooltip">Download CV</span></button>
@@ -1565,7 +1526,6 @@
         <button class="hub-toggle" id="hubToggle" aria-label="Toggle actions"><i class="fas fa-plus"></i></button>
     </div>
 
-    <!-- CHAT WINDOW -->
     <div class="chat-window" id="chatWindow">
         <div class="chat-header"><span><i class="fas fa-robot"></i> Flynn's AI Navigator</span><button class="close-chat" id="closeChat">&times;</button></div>
         <div class="chat-actions">
@@ -1579,10 +1539,9 @@
         <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type a message..." /><button id="sendChatMsg"><i class="fas fa-paper-plane"></i></button></div>
     </div>
 
-    <!-- Lightbox JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
     <script>
-        // ===== GREEN FIRE PARTICLES =====
+        // ===== PARTICLES =====
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -1671,16 +1630,20 @@
         }
         setTimeout(typeEffect, 400);
 
-        // ===== THEME TOGGLE =====
+        // ===== THEME TOGGLE - SINGLE INSTANCE =====
         let isDarkMode = true;
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
 
-        function toggleTheme() { isDarkMode = !isDarkMode;
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
             document.body.classList.toggle('light-mode', !isDarkMode);
-            const icons = document.querySelectorAll('#themeIcon, #mobileThemeToggle i');
-            icons.forEach(icon => { icon.className = isDarkMode ? 'fas fa-moon' : 'fas fa-sun'; });
-            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light'); }
-        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-        document.getElementById('mobileThemeToggle').addEventListener('click', toggleTheme);
+            themeIcon.className = isDarkMode ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+
         if (localStorage.getItem('theme') === 'light') toggleTheme();
 
         // ===== STATS COUNTER =====
@@ -1781,9 +1744,9 @@
         const toastMessage = document.getElementById('toastMessage');
         const toastCloseBtn = document.getElementById('toastClose');
         const funnyNotifications = [
-            { title: "💡 Did you know?", message: "Flynn books 40+ qualified meetings monthly — that's a meeting every working hour!" },
+            { title: "💡 Did you know?", message: "Flynn books 40+ qualified meetings monthly — that's basically a meeting every working hour!" },
             { title: "📞 Ring Ring!", message: "150 cold calls daily? Flynn treats rejection like a gym workout — every 'no' builds stronger sales muscles." },
-            { title: "🚀 Pipeline Magic", message: "Flynn doesn't just fill your pipeline — he makes it rain opportunities." },
+            { title: "🚀 Pipeline Magic", message: "Flynn doesn't just fill your pipeline — he makes it rain opportunities. Some say he dreams in CRM dashboards." },
             { title: "🧠 Sales Wisdom", message: "Flynn believes sales isn't about selling — it's about solving. He listens first, pitches second." },
             { title: "🏆 Fun Fact", message: "Flynn reduced SDR ramp time from 8 weeks to 5. That's 3 extra weeks of productivity!" },
             { title: "🌍 Global Reach", message: "APAC, US, UK, AU — Flynn works across time zones so smoothly, even the sun asks for tips." },
@@ -1880,7 +1843,7 @@
                 const idx = parseInt(link.dataset.index); if (!isNaN(idx)) scrollToSection(idx); }); });
 
         updateActiveSection(0);
-        console.log('✅ Portfolio Ready — All images updated to sanishtech URLs');
+        console.log('✅ Portfolio Ready — Single theme toggle, no duplicates');
     </script>
 </body>
 </html>
