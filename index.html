@@ -99,6 +99,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 clamp(16px, 5vw, 40px);
+            position: relative;
         }
         .logo {
             font-size: clamp(1.1rem, 2.5vw, 1.4rem);
@@ -107,6 +108,8 @@
             cursor: pointer;
             white-space: nowrap;
             z-index: 2;
+            position: relative;
+            overflow: hidden;
         }
         .logo span {
             color: var(--green);
@@ -191,6 +194,7 @@
             left: 0;
             width: 100%;
             height: 100vh;
+            height: 100dvh;
             background: rgba(10, 10, 10, 0.98);
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
@@ -1369,8 +1373,8 @@
                     <div class="hero-image">
                         <div class="profile-ring"></div>
                         <div class="profile-ring-2"></div>
-                        <!-- Using i.ibb.co for reliable image hosting -->
-                        <img src="https://media.licdn.com/dms/image/v2/D5603AQGW5lje8ZgUJQ/profile-displayphoto-shrink_400_400/B56ZZxrW.6HAAg-/0/1745663914785?e=1787184000&v=beta&t=ou_jssXKZ_nnshn4Z37ZILkR_ANxao24X-LkcTAEpt0" alt="Flynn James Pontino - Strategic Growth Leader" loading="eager" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22370%22 height=%22370%22><rect fill=%22%231a1a1a%22 width=%22370%22 height=%22370%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%230a9e40%22 font-size=%2220%22 font-family=%22Inter,sans-serif%22>FJ</text></svg>'" />
+                        <img src="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" alt="Flynn James Pontino - Strategic Growth Leader" loading="eager" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                        <div style="display:none; width:100%; max-width:370px; aspect-ratio:1/1; border-radius:50%; background:linear-gradient(135deg, #0a9e40, #1a1a1a); align-items:center; justify-content:center; color:#0a9e40; font-size:4rem; font-weight:900; border:3px solid #0a9e40;">FJ</div>
                         <div class="status-badge"><span class="dot"></span> Open to opportunities</div>
                         <a href="https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing" target="_blank" rel="noopener" class="check-cv-btn"><i class="fas fa-file-pdf"></i> Check My CV</a>
                     </div>
@@ -1406,7 +1410,7 @@
                 <h2 class="section-title">About Me</h2>
                 <div class="about-grid">
                     <div class="about-image">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176185a9.jpg" alt="Flynn James Pontino portrait" loading="lazy" onerror="this.src='https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg'" />
+                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176185a9.jpg" alt="Flynn James Pontino portrait" loading="lazy" onerror="this.src='https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg'" />
                     </div>
                     <div class="about-text">
                         <p><span class="highlight">Flynn James Q. Pontino</span> — a hands-on sales leader who believes in growing people, not just pipelines. With over a decade in B2B outbound, I've built and mentored high-performing teams that consistently exceed targets through coaching, accountability, and a human-first approach.</p>
@@ -1454,7 +1458,7 @@
                 <h2 class="section-title">Behind the Scenes</h2>
                 <p style="opacity:0.7;margin-bottom:20px;text-align:center;">A glimpse into my professional journey — real moments, real results.</p>
                 <div class="gallery-grid">
-                    <div class="gallery-item"><a href="https://media.licdn.com/dms/image/v2/D5603AQGW5lje8ZgUJQ/profile-displayphoto-shrink_400_400/B56ZZxrW.6HAAg-/0/1745663914785?e=1787184000&v=beta&t=ou_jssXKZ_nnshn4Z37ZILkR_ANxao24X-LkcTAEpt0" data-lightbox="gallery" data-title="Professional Headshot"><img src="https://media.licdn.com/dms/image/v2/D5603AQGW5lje8ZgUJQ/profile-displayphoto-shrink_400_400/B56ZZxrW.6HAAg-/0/1745663914785?e=1787184000&v=beta&t=ou_jssXKZ_nnshn4Z37ZILkR_ANxao24X-LkcTAEpt0" alt="Professional Headshot" loading="lazy" /><div class="badge">2026</div><div class="overlay"><span>📸 Professional Headshot</span></div></a></div>
+                    <div class="gallery-item"><a href="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" data-lightbox="gallery" data-title="Professional Headshot"><img src="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" alt="Professional Headshot" loading="lazy" /><div class="badge">2026</div><div class="overlay"><span>📸 Professional Headshot</span></div></a></div>
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" data-lightbox="gallery" data-title="Award Ceremony"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" alt="Award Ceremony" loading="lazy" /><div class="badge">🏆 Award</div><div class="overlay"><span>🏆 Top Performer Award</span></div></a></div>
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" data-lightbox="gallery" data-title="Global Team"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" alt="Global Team" loading="lazy" /><div class="badge">🌍 Global</div><div class="overlay"><span>🌍 Global Team</span></div></a></div>
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176a1e85.jpg" data-lightbox="gallery" data-title="Sales Presentation"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176a1e85.jpg" alt="Sales Presentation" loading="lazy" /><div class="badge">📊 Strategy</div><div class="overlay"><span>📊 Sales Presentation</span></div></a></div>
@@ -1488,7 +1492,7 @@
                     <div class="testimonial-card">
                         <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                         <p class="quote-text">He mentored our junior SDRs and built a team that consistently hits 120% of quota. He's the kind of leader who lifts everyone around him.</p>
-                        <div class="author"><img src="https://media.licdn.com/dms/image/v2/D4E03AQE0CKw1VyHB8g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1663775428654?e=1787184000&v=beta&t=zUoQAtgldt2ZSgPPtm1N_SBYrrbsxWZg9V5Zif9HpDI" alt="Toby Whittaker" loading="lazy" onerror="this.src='https://media.licdn.com/dms/image/v2/D4E03AQE0CKw1VyHB8g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1663775428654?e=1787184000&v=beta&t=zUoQAtgldt2ZSgPPtm1N_SBYrrbsxWZg9V5Zif9HpDI'" /><div><div class="name">Toby Whittaker</div><div class="role">Head of Sales - Seek Marketing</div></div></div>
+                        <div class="author"><img src="https://img.sanishtech.com/u/cba45034f0e40c0da854486bcea4407b.jpg" alt="Toby Whittaker" loading="lazy" /><div><div class="name">Toby Whittaker</div><div class="role">Head of Sales - Seek Marketing</div></div></div>
                         <span class="result-tag">🏆 120% Quota Attainment</span>
                     </div>
                 </div>
@@ -1533,7 +1537,7 @@
             <div class="section-content">
                 <h2 class="section-title">Let's Connect</h2>
                 <div class="contact-details">
-                    <img src="https://media.licdn.com/dms/image/v2/D5603AQGW5lje8ZgUJQ/profile-displayphoto-shrink_400_400/B56ZZxrW.6HAAg-/0/1745663914785?e=1787184000&v=beta&t=ou_jssXKZ_nnshn4Z37ZILkR_ANxao24X-LkcTAEpt0" alt="Flynn James" loading="lazy" />
+                    <img src="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" alt="Flynn James" loading="lazy" />
                     <div class="contact-item"><i class="fas fa-envelope"></i><a href="mailto:va.flynnjames@gmail.com">va.flynnjames@gmail.com</a></div>
                     <div class="contact-item"><i class="fas fa-phone"></i><a href="tel:+639306359306">+63 930 635 9306</a></div>
                     <div class="contact-item"><i class="fab fa-whatsapp"></i><a href="https://wa.me/639306359306">WhatsApp</a></div>
@@ -1777,9 +1781,9 @@
         const toastMessage = document.getElementById('toastMessage');
         const toastCloseBtn = document.getElementById('toastClose');
         const funnyNotifications = [
-            { title: "💡 Did you know?", message: "Flynn books 40+ qualified meetings monthly — that's basically a meeting every working hour!" },
+            { title: "💡 Did you know?", message: "Flynn books 40+ qualified meetings monthly — that's a meeting every working hour!" },
             { title: "📞 Ring Ring!", message: "150 cold calls daily? Flynn treats rejection like a gym workout — every 'no' builds stronger sales muscles." },
-            { title: "🚀 Pipeline Magic", message: "Flynn doesn't just fill your pipeline — he makes it rain opportunities. Some say he dreams in CRM dashboards." },
+            { title: "🚀 Pipeline Magic", message: "Flynn doesn't just fill your pipeline — he makes it rain opportunities." },
             { title: "🧠 Sales Wisdom", message: "Flynn believes sales isn't about selling — it's about solving. He listens first, pitches second." },
             { title: "🏆 Fun Fact", message: "Flynn reduced SDR ramp time from 8 weeks to 5. That's 3 extra weeks of productivity!" },
             { title: "🌍 Global Reach", message: "APAC, US, UK, AU — Flynn works across time zones so smoothly, even the sun asks for tips." },
@@ -1876,7 +1880,7 @@
                 const idx = parseInt(link.dataset.index); if (!isNaN(idx)) scrollToSection(idx); }); });
 
         updateActiveSection(0);
-        console.log('✅ Portfolio Ready — All images optimized for reliability');
+        console.log('✅ Portfolio Ready — All images updated to sanishtech URLs');
     </script>
 </body>
 </html>
