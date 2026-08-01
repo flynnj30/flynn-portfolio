@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <title>Flynn James Pontino | Strategic Growth Leader</title>
+    <!-- Favicon -->
+    <link rel="icon" href="https://i.ibb.co/zT4GWZHh/logo-for-my-portfolio.png" type="image/png" />
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <!-- AOS -->
@@ -34,19 +36,43 @@
             scroll-behavior: smooth;
         }
 
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 6px;
+        /* ===== FULL PAGE SECTIONS ===== */
+        .section-wrapper {
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 80px 5% 60px;
+            scroll-snap-align: start;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s ease;
         }
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
+        .section-wrapper .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 80%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(ellipse at center, rgba(10, 158, 64, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #0a9e40;
-            border-radius: 4px;
+        .section-wrapper.visible .bg-glow {
+            opacity: 1;
         }
-        body.light-mode ::-webkit-scrollbar-track {
-            background: #e0e0e0;
+
+        /* ===== SCROLL SNAP CONTAINER ===== */
+        .scroll-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+        .scroll-container::-webkit-scrollbar {
+            display: none;
         }
 
         /* ===== NAVIGATION ===== */
@@ -89,7 +115,7 @@
         }
         .links {
             display: flex;
-            gap: 2rem;
+            gap: 1.8rem;
             align-items: center;
         }
         .links a {
@@ -183,32 +209,32 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             cursor: pointer;
             transition: all 0.4s ease;
             position: relative;
         }
         body.light-mode .section-progress .dot {
-            background: rgba(0, 0, 0, 0.15);
-            border-color: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+            border-color: rgba(0, 0, 0, 0.08);
         }
         .section-progress .dot.active {
             background: #0a9e40;
             border-color: #0a9e40;
             transform: scale(1.3);
-            box-shadow: 0 0 20px rgba(10, 158, 64, 0.5);
+            box-shadow: 0 0 20px rgba(10, 158, 64, 0.4);
         }
         .section-progress .dot .tooltip {
             position: absolute;
             right: 20px;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             color: #fff;
-            padding: 4px 12px;
+            padding: 3px 12px;
             border-radius: 6px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             white-space: nowrap;
             opacity: 0;
             pointer-events: none;
@@ -281,56 +307,37 @@
             box-shadow: 0 8px 30px rgba(10, 158, 64, 0.5);
         }
 
-        /* ===== HERO SECTION ===== */
-        section {
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 90px 5% 60px;
-            position: relative;
-            overflow: hidden;
-        }
-        section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(ellipse at center, rgba(10, 158, 64, 0.03) 0%, transparent 70%);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-        section.visible::before {
-            opacity: 1;
-        }
-        .main-container {
+        /* ===== SECTION CONTENT ===== */
+        .section-content {
             max-width: 1300px;
             margin: 0 auto;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Hero */
+        .hero-grid {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 3rem;
             flex-wrap: wrap;
-            position: relative;
-            z-index: 2;
         }
-        .image {
+        .hero-image {
             flex: 1;
             min-width: 260px;
             display: flex;
             justify-content: center;
             position: relative;
         }
-        .image .profile-ring {
+        .hero-image .profile-ring {
             position: absolute;
             width: 100%;
             max-width: 400px;
             aspect-ratio: 1/1;
             border-radius: 50%;
-            border: 2px solid rgba(10, 158, 64, 0.15);
+            border: 2px solid rgba(10, 158, 64, 0.12);
             animation: spin 20s linear infinite;
         }
         @keyframes spin {
@@ -338,21 +345,21 @@
                 transform: rotate(360deg);
             }
         }
-        .image img {
+        .hero-image img {
             width: 100%;
             max-width: 370px;
             aspect-ratio: 1/1;
             object-fit: cover;
             border-radius: 50%;
-            box-shadow: 0 0 60px rgba(10, 158, 64, 0.25);
+            box-shadow: 0 0 60px rgba(10, 158, 64, 0.2);
             border: 3px solid #0a9e40;
             transition: transform 0.4s;
             position: relative;
             z-index: 2;
         }
-        .image img:hover {
+        .hero-image img:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 80px rgba(10, 158, 64, 0.4);
+            box-shadow: 0 0 80px rgba(10, 158, 64, 0.35);
         }
         .status-badge {
             position: absolute;
@@ -414,11 +421,11 @@
             background: #0b8a38;
             box-shadow: 0 6px 30px rgba(10, 158, 64, 0.6);
         }
-        .content {
+        .hero-content {
             flex: 1.2;
             min-width: 280px;
         }
-        .content .greeting {
+        .hero-content .greeting {
             font-size: 0.9rem;
             color: #0a9e40;
             font-weight: 600;
@@ -426,12 +433,12 @@
             text-transform: uppercase;
             margin-bottom: 8px;
         }
-        .content h1 {
+        .hero-content h1 {
             font-size: clamp(2.2rem, 5.5vw, 3.2rem);
             font-weight: 900;
             line-height: 1.1;
         }
-        .content h1 span {
+        .hero-content h1 span {
             color: #0a9e40;
         }
         .typewriter {
@@ -455,14 +462,14 @@
                 opacity: 0;
             }
         }
-        .content .bio {
+        .hero-content .bio {
             font-size: clamp(0.95rem, 2vw, 1.1rem);
             line-height: 1.8;
             margin: 18px 0 24px;
             opacity: 0.85;
             max-width: 580px;
         }
-        .content .bio strong {
+        .hero-content .bio strong {
             color: #0a9e40;
         }
         .social-links {
@@ -547,7 +554,7 @@
             transform: translateY(-2px);
         }
 
-        /* ===== STATS BAR ===== */
+        /* Stats */
         .stats-bar {
             display: flex;
             gap: 2.5rem;
@@ -576,46 +583,8 @@
             letter-spacing: 0.5px;
         }
 
-        /* ===== INFO PANELS ===== */
-        .info-panel {
-            position: fixed;
-            top: 70px;
-            left: 0;
-            width: 100%;
-            height: calc(100% - 70px);
-            background: rgba(10, 10, 10, 0.96);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            overflow-y: auto;
-            padding: 40px 6% 80px;
-            display: none;
-            border-top: 2px solid #0a9e40;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        body.light-mode .info-panel {
-            background: rgba(245, 245, 245, 0.96);
-        }
-        .info-panel.active {
-            display: block;
-            opacity: 1;
-            animation: fadeSlideIn 0.4s ease;
-        }
-        @keyframes fadeSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .panel-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .info-panel h2 {
+        /* Section Titles */
+        .section-title {
             font-size: 2.4rem;
             font-weight: 800;
             color: #0a9e40;
@@ -624,7 +593,7 @@
             align-items: center;
             gap: 16px;
         }
-        .info-panel h2::before {
+        .section-title::before {
             content: '';
             width: 5px;
             height: 40px;
@@ -632,7 +601,7 @@
             border-radius: 4px;
         }
 
-        /* ===== ABOUT ===== */
+        /* About */
         .about-grid {
             display: flex;
             flex-wrap: wrap;
@@ -676,7 +645,7 @@
             opacity: 0.8;
         }
 
-        /* ===== SKILLS ===== */
+        /* Skills */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -722,7 +691,7 @@
             line-height: 1.6;
         }
 
-        /* ===== SERVICES ===== */
+        /* Services */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -767,7 +736,7 @@
             line-height: 1.6;
         }
 
-        /* ===== GALLERY ===== */
+        /* Gallery */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -835,7 +804,7 @@
             backdrop-filter: blur(4px);
         }
 
-        /* ===== TESTIMONIALS ===== */
+        /* Testimonials */
         .testimonial-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -915,7 +884,7 @@
             background: rgba(10, 158, 64, 0.25);
         }
 
-        /* ===== CONTACT ===== */
+        /* Contact */
         .contact-details {
             text-align: center;
             max-width: 650px;
@@ -1034,13 +1003,14 @@
             transform: scale(1.08) rotate(-5deg);
             box-shadow: 0 8px 40px rgba(10, 158, 64, 0.7);
         }
+
         .chat-window {
             position: fixed;
             bottom: 110px;
             right: 30px;
-            width: 400px;
+            width: 420px;
             max-width: calc(100vw - 40px);
-            max-height: 580px;
+            max-height: 620px;
             background: rgba(16, 16, 16, 0.98);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 24px;
@@ -1074,7 +1044,7 @@
             padding: 14px 20px;
             background: #0a9e40;
             color: #fff;
-            font-weight: 600;
+            font-weight: 700;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -1093,18 +1063,41 @@
             opacity: 1;
             transform: rotate(90deg);
         }
-        .quick-actions {
-            padding: 10px 16px;
+        .chat-header .chat-badge {
+            font-size: 0.65rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .chat-actions {
+            padding: 12px 16px;
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             flex-shrink: 0;
         }
-        body.light-mode .quick-actions {
+        body.light-mode .chat-actions {
             border-bottom-color: rgba(0, 0, 0, 0.06);
         }
-        .quick-actions button {
+        .chat-actions .action-group {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+        .chat-actions .action-group-label {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.4;
+            width: 100%;
+            margin-bottom: 2px;
+        }
+        .chat-actions button {
             background: rgba(10, 158, 64, 0.12);
             border: 1px solid rgba(10, 158, 64, 0.2);
             color: #0a9e40;
@@ -1115,12 +1108,19 @@
             transition: all 0.25s;
             font-family: inherit;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-        .quick-actions button:hover {
+        .chat-actions button:hover {
             background: rgba(10, 158, 64, 0.25);
             border-color: #0a9e40;
             transform: scale(1.05);
         }
+        .chat-actions button .icon {
+            font-size: 0.65rem;
+        }
+
         .chat-messages {
             flex: 1;
             padding: 16px 20px;
@@ -1128,13 +1128,13 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            min-height: 180px;
-            max-height: 340px;
+            min-height: 120px;
+            max-height: 260px;
         }
         .chat-message {
             padding: 10px 16px;
             border-radius: 18px;
-            max-width: 88%;
+            max-width: 92%;
             font-size: 0.9rem;
             line-height: 1.5;
             animation: msgIn 0.3s ease;
@@ -1189,26 +1189,7 @@
             background: #0b8a38;
             transform: scale(1.02);
         }
-        .chat-message .contact-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .chat-message .contact-row a {
-            background: rgba(10, 158, 64, 0.15);
-            color: #0a9e40;
-            padding: 4px 14px;
-            border-radius: 16px;
-            font-size: 0.8rem;
-            text-decoration: none;
-            border: 1px solid rgba(10, 158, 64, 0.2);
-            transition: all 0.2s;
-        }
-        .chat-message .contact-row a:hover {
-            background: rgba(10, 158, 64, 0.25);
-            transform: scale(1.05);
-        }
+
         .chat-input-area {
             display: flex;
             gap: 8px;
@@ -1266,8 +1247,9 @@
         .chat-input-area button:disabled {
             opacity: 0.5;
         }
+
         .chat-status {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             padding: 4px 12px;
             text-align: center;
             color: #666;
@@ -1321,6 +1303,45 @@
             box-shadow: 0 8px 30px rgba(10, 158, 64, 0.5);
         }
 
+        /* ===== KEYBOARD SHORTCUTS HINT ===== */
+        .shortcuts-hint {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+            opacity: 0;
+        }
+        .shortcuts-hint.visible {
+            opacity: 1;
+        }
+        body.light-mode .shortcuts-hint {
+            background: rgba(255, 255, 255, 0.8);
+            color: rgba(0, 0, 0, 0.4);
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+        .shortcuts-hint kbd {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1px 8px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-family: inherit;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        body.light-mode .shortcuts-hint kbd {
+            background: rgba(0, 0, 0, 0.05);
+            color: rgba(0, 0, 0, 0.5);
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 900px) {
             .nav-container .links {
@@ -1329,21 +1350,23 @@
             .hamburg {
                 display: block;
             }
-            .main-container {
+            .hero-grid {
                 flex-direction: column-reverse;
                 text-align: center;
             }
             .social-links {
                 justify-content: center;
             }
-            .content .bio {
+            .hero-content .bio {
                 max-width: 100%;
             }
-            .content {
+            .hero-content {
                 text-align: center;
             }
-            .info-panel {
-                padding: 30px 5% 100px;
+            .section-wrapper {
+                padding: 80px 5% 100px;
+                min-height: auto;
+                padding-top: 100px;
             }
             .about-grid {
                 flex-direction: column;
@@ -1359,10 +1382,10 @@
                 right: 10px;
                 width: calc(100vw - 40px);
                 bottom: 100px;
-                max-height: 500px;
+                max-height: 520px;
             }
             .chat-messages {
-                max-height: 280px;
+                max-height: 220px;
             }
             .check-cv-btn {
                 position: relative;
@@ -1371,7 +1394,7 @@
                 margin-top: 15px;
                 display: inline-flex;
             }
-            .image {
+            .hero-image {
                 flex-direction: column;
                 align-items: center;
             }
@@ -1400,12 +1423,16 @@
                 height: 42px;
                 font-size: 1rem;
             }
+            .chat-actions button {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
         }
         @media (max-width: 550px) {
             .logo {
                 font-size: 1.1rem;
             }
-            .image img {
+            .hero-image img {
                 max-width: 240px;
             }
             .btn-primary,
@@ -1423,7 +1450,7 @@
             .service-card h3 {
                 font-size: 1.1rem;
             }
-            .info-panel h2 {
+            .section-title {
                 font-size: 1.8rem;
             }
             .chat-bubble .icon-wrapper {
@@ -1444,6 +1471,16 @@
             .stat-item .number {
                 font-size: 1.4rem;
             }
+            .chat-window {
+                max-height: 480px;
+            }
+            .chat-messages {
+                max-height: 180px;
+            }
+            .chat-actions button {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
         }
 
         /* ===== LIGHTBOX OVERRIDES ===== */
@@ -1455,22 +1492,38 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* ===== LAZY LOAD PLACEHOLDER ===== */
-        .lazy-placeholder {
-            background: linear-gradient(135deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
-            background-size: 200% 200%;
-            animation: shimmer 1.5s infinite;
+        /* ===== SCROLL CONTAINER OVERFLOW ===== */
+        .scroll-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
         }
-        @keyframes shimmer {
-            0% {
-                background-position: -200% -200%;
-            }
-            100% {
-                background-position: 200% 200%;
-            }
+        .scroll-container::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
         }
-        body.light-mode .lazy-placeholder {
-            background: linear-gradient(135deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+
+        /* ===== SECTION ENTRANCE ANIMATIONS ===== */
+        .section-wrapper .section-content {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .section-wrapper.active .section-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section-wrapper:nth-child(odd) .section-content {
+            transform: translateY(40px) scale(0.98);
+        }
+        .section-wrapper.active:nth-child(odd) .section-content {
+            transform: translateY(0) scale(1);
+        }
+        .section-wrapper:nth-child(even) .section-content {
+            transform: translateY(-40px) scale(0.98);
+        }
+        .section-wrapper.active:nth-child(even) .section-content {
+            transform: translateY(0) scale(1);
         }
     </style>
     <!-- Lightbox JS -->
@@ -1481,13 +1534,13 @@
 
     <!-- ===== SECTION PROGRESS INDICATOR ===== -->
     <div class="section-progress" id="sectionProgress">
-        <div class="dot active" data-section="home"><span class="tooltip">Home</span></div>
-        <div class="dot" data-section="about"><span class="tooltip">About</span></div>
-        <div class="dot" data-section="skills"><span class="tooltip">Skills</span></div>
-        <div class="dot" data-section="services"><span class="tooltip">Services</span></div>
-        <div class="dot" data-section="gallery"><span class="tooltip">Gallery</span></div>
-        <div class="dot" data-section="testimonials"><span class="tooltip">Testimonials</span></div>
-        <div class="dot" data-section="contact"><span class="tooltip">Contact</span></div>
+        <div class="dot active" data-index="0"><span class="tooltip">Home</span></div>
+        <div class="dot" data-index="1"><span class="tooltip">About</span></div>
+        <div class="dot" data-index="2"><span class="tooltip">Skills</span></div>
+        <div class="dot" data-index="3"><span class="tooltip">Services</span></div>
+        <div class="dot" data-index="4"><span class="tooltip">Gallery</span></div>
+        <div class="dot" data-index="5"><span class="tooltip">Testimonials</span></div>
+        <div class="dot" data-index="6"><span class="tooltip">Contact</span></div>
     </div>
 
     <!-- ===== BACK TO HOME BUTTON ===== -->
@@ -1495,18 +1548,23 @@
         <i class="fas fa-home"></i>
     </button>
 
+    <!-- ===== KEYBOARD SHORTCUTS HINT ===== -->
+    <div class="shortcuts-hint" id="shortcutsHint">
+        <kbd>Alt</kbd> + <kbd>1</kbd>–<kbd>7</kbd> to navigate &nbsp;·&nbsp; <kbd>Ctrl</kbd> + <kbd>K</kbd> for chat
+    </div>
+
     <!-- ===== NAVIGATION ===== -->
     <nav>
         <div class="nav-container">
-            <div class="logo" data-aos="fade-right">Flynn James <span>Pontino</span></div>
+            <div class="logo">Flynn James <span>Pontino</span></div>
             <div class="links">
-                <a href="#" data-section="home" class="nav-link active">Home</a>
-                <a href="#" data-section="about" class="nav-link">About</a>
-                <a href="#" data-section="skills" class="nav-link">Skills</a>
-                <a href="#" data-section="services" class="nav-link">Services</a>
-                <a href="#" data-section="gallery" class="nav-link">Gallery</a>
-                <a href="#" data-section="testimonials" class="nav-link">Testimonials</a>
-                <a href="#" data-section="contact" class="nav-link">Contact</a>
+                <a href="#" data-index="0" class="nav-link active">Home</a>
+                <a href="#" data-index="1" class="nav-link">About</a>
+                <a href="#" data-index="2" class="nav-link">Skills</a>
+                <a href="#" data-index="3" class="nav-link">Services</a>
+                <a href="#" data-index="4" class="nav-link">Gallery</a>
+                <a href="#" data-index="5" class="nav-link">Testimonials</a>
+                <a href="#" data-index="6" class="nav-link">Contact</a>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <i class="fas fa-moon" id="themeIcon"></i>
                 </button>
@@ -1515,13 +1573,13 @@
         </div>
         <div class="dropdown" id="mobileDropdown">
             <div class="links">
-                <a href="#" data-section="home">Home</a>
-                <a href="#" data-section="about">About</a>
-                <a href="#" data-section="skills">Skills</a>
-                <a href="#" data-section="services">Services</a>
-                <a href="#" data-section="gallery">Gallery</a>
-                <a href="#" data-section="testimonials">Testimonials</a>
-                <a href="#" data-section="contact">Contact</a>
+                <a href="#" data-index="0">Home</a>
+                <a href="#" data-index="1">About</a>
+                <a href="#" data-index="2">Skills</a>
+                <a href="#" data-index="3">Services</a>
+                <a href="#" data-index="4">Gallery</a>
+                <a href="#" data-index="5">Testimonials</a>
+                <a href="#" data-index="6">Contact</a>
                 <button class="theme-toggle" id="mobileThemeToggle" aria-label="Toggle theme" style="margin:0 auto;">
                     <i class="fas fa-moon"></i>
                 </button>
@@ -1530,329 +1588,343 @@
         </div>
     </nav>
 
-    <!-- ===== HERO SECTION ===== -->
-    <section id="home-section" data-section="home">
-        <div class="main-container">
-            <div class="image" data-aos="zoom-in" data-aos-duration="1300">
-                <div class="profile-ring"></div>
-                <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn James Pontino" loading="lazy" />
-                <div class="status-badge">
-                    <span class="dot"></span>
-                    Open to opportunities
-                </div>
-                <a href="https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing" target="_blank" class="check-cv-btn">
-                    <i class="fas fa-file-pdf"></i> Check My CV
-                </a>
-            </div>
-            <div class="content">
-                <div class="greeting" data-aos="fade-up">👋 Welcome to my world</div>
-                <h1 data-aos="fade-up">Hey I'm <span>Flynn</span></h1>
-                <div class="typewriter" data-aos="fade-up" data-aos-delay="150">
-                    I'm a <span class="typewriter-text"></span><span class="cursor">|</span>
-                </div>
-                <p class="bio" data-aos="fade-up" data-aos-delay="300">
-                    Senior Sales Development Representative with <strong>10+ years</strong> of B2B outbound &amp; pipeline acceleration.
-                    I help companies <strong>scale revenue</strong> through high-volume cold calling, multi-channel sequencing,
-                    and data-driven sales strategies.
-                </p>
-                <div class="social-links" data-aos="fade-up" data-aos-delay="450">
-                    <a href="https://www.facebook.com/flynn.james.9655" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.linkedin.com/in/fjpontino/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="tel:+639306359306" aria-label="Phone"><i class="fas fa-phone"></i></a>
-                    <a href="mailto:va.flynnjames@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                </div>
-                <div class="cta-group" data-aos="fade-up" data-aos-delay="600">
-                    <a href="mailto:va.flynnjames@gmail.com" class="btn-primary">
-                        <i class="fas fa-paper-plane"></i> Hire Me
-                    </a>
-                    <a href="#" data-section="testimonials" class="btn-secondary nav-link">
-                        <i class="fas fa-star"></i> See Testimonials
-                    </a>
-                </div>
-                <div class="stats-bar" data-aos="fade-up" data-aos-delay="700">
-                    <div class="stat-item">
-                        <span class="number" data-count="10">0</span>
-                        <span class="label">Years Experience</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="number" data-count="120">0</span>
-                        <span class="label">% Quota Attainment</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="number" data-count="150">0</span>
-                        <span class="label">Calls/Day</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- ===== SCROLL CONTAINER ===== -->
+    <div class="scroll-container" id="scrollContainer">
 
-    <!-- ===== ABOUT PANEL ===== -->
-    <div id="about-panel" class="info-panel" data-section="about">
-        <div class="panel-container">
-            <h2>About Me</h2>
-            <div class="about-grid">
-                <div class="about-image">
-                    <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn portrait" loading="lazy" />
-                </div>
-                <div class="about-text">
-                    <p><span class="highlight">Flynn James Q. Pontino</span> — a hands-on sales leader who believes in growing people, not just pipelines. With over a decade in B2B outbound, I've built and mentored high-performing teams that consistently exceed targets through coaching, accountability, and a human-first approach.</p>
-                    <br />
-                    <p>I thrive on <span class="highlight">developing sales talent</span> — whether it's reducing ramp time from 8 weeks to 5, or coaching SDRs to master objection handling and consultative selling. My leadership style is rooted in leading by example: I'm in the trenches with my team, sharing scripts, running role-plays, and celebrating wins together.</p>
-                    <br />
-                    <p>Beyond the numbers, I'm passionate about <span class="highlight">building resilient sales cultures</span> that adapt, grow, and deliver. I've managed teams across APAC, US, UK, and AU markets, and I bring that global perspective to every conversation.</p>
-                    <div class="quote">
-                        "The best sales leaders don't just hit targets — they build teams that can hit any target."
+        <!-- ===== HOME ===== -->
+        <section class="section-wrapper active" data-index="0" id="section-home">
+            <div class="bg-glow"></div>
+            <div class="section-content">
+                <div class="hero-grid">
+                    <div class="hero-image" data-aos="zoom-in" data-aos-duration="1300">
+                        <div class="profile-ring"></div>
+                        <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn James Pontino" loading="lazy" />
+                        <div class="status-badge">
+                            <span class="dot"></span>
+                            Open to opportunities
+                        </div>
+                        <a href="https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing" target="_blank" class="check-cv-btn">
+                            <i class="fas fa-file-pdf"></i> Check My CV
+                        </a>
+                    </div>
+                    <div class="hero-content">
+                        <div class="greeting" data-aos="fade-up">👋 Welcome to my world</div>
+                        <h1 data-aos="fade-up">Hey I'm <span>Flynn</span></h1>
+                        <div class="typewriter" data-aos="fade-up" data-aos-delay="150">
+                            I'm a <span class="typewriter-text"></span><span class="cursor">|</span>
+                        </div>
+                        <p class="bio" data-aos="fade-up" data-aos-delay="300">
+                            Senior Sales Development Representative with <strong>10+ years</strong> of B2B outbound &amp; pipeline acceleration.
+                            I help companies <strong>scale revenue</strong> through high-volume cold calling, multi-channel sequencing,
+                            and data-driven sales strategies.
+                        </p>
+                        <div class="social-links" data-aos="fade-up" data-aos-delay="450">
+                            <a href="https://www.facebook.com/flynn.james.9655" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.linkedin.com/in/fjpontino/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="tel:+639306359306" aria-label="Phone"><i class="fas fa-phone"></i></a>
+                            <a href="mailto:va.flynnjames@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        </div>
+                        <div class="cta-group" data-aos="fade-up" data-aos-delay="600">
+                            <a href="mailto:va.flynnjames@gmail.com" class="btn-primary">
+                                <i class="fas fa-paper-plane"></i> Hire Me
+                            </a>
+                            <a href="#" data-index="5" class="btn-secondary nav-link">
+                                <i class="fas fa-star"></i> See Testimonials
+                            </a>
+                        </div>
+                        <div class="stats-bar" data-aos="fade-up" data-aos-delay="700">
+                            <div class="stat-item">
+                                <span class="number" data-count="10">0</span>
+                                <span class="label">Years Experience</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="number" data-count="120">0</span>
+                                <span class="label">% Quota Attainment</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="number" data-count="150">0</span>
+                                <span class="label">Calls/Day</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- ===== SKILLS PANEL ===== -->
-    <div id="skills-panel" class="info-panel" data-section="skills">
-        <div class="panel-container">
-            <h2>Core Competencies</h2>
-            <div class="skills-grid">
-                <div class="skill-card" data-aos="flip-up">
-                    <span class="icon"><i class="fas fa-phone-volume"></i></span>
-                    <h3>High-Volume Outbound</h3>
-                    <p><strong>10+ years</strong> cold calling (100-150 daily), appointment setting, lead generation, and pipeline management. Proven ability to book 40+ appointments/month.</p>
-                </div>
-                <div class="skill-card" data-aos="flip-up" data-aos-delay="100">
-                    <span class="icon"><i class="fas fa-chart-pie"></i></span>
-                    <h3>CRM &amp; Sales Tech Stack</h3>
-                    <p>HubSpot CRM, LinkedIn Sales Navigator, ZoomInfo, Lusha, Outreach.io. Multi-channel sequencing expert with 22% conversion improvement.</p>
-                </div>
-                <div class="skill-card" data-aos="flip-up" data-aos-delay="200">
-                    <span class="icon"><i class="fas fa-bullseye"></i></span>
-                    <h3>Strategic Qualification</h3>
-                    <p>BANT / MEDDIC frameworks, market intelligence analytics, and regional messaging nuance. Increased opportunity-to-close rates by 15%.</p>
-                </div>
-                <div class="skill-card" data-aos="flip-up" data-aos-delay="300">
-                    <span class="icon"><i class="fas fa-users"></i></span>
-                    <h3>Team Leadership</h3>
-                    <p>Coached 12+ SDRs, reduced ramp time from 8 to 5 weeks, and fostered high-performance cultures with 120%+ quota attainment.</p>
-                </div>
-                <div class="skill-card" data-aos="flip-up" data-aos-delay="400">
-                    <span class="icon"><i class="fas fa-globe"></i></span>
-                    <h3>Global Market Expertise</h3>
-                    <p>Deep experience across APAC, US, UK, and AU markets with nuanced regional messaging strategies.</p>
-                </div>
-                <div class="skill-card" data-aos="flip-up" data-aos-delay="500">
-                    <span class="icon"><i class="fas fa-certificate"></i></span>
-                    <h3>Lean Six Sigma</h3>
-                    <p>SSWB and LSSWB certified with a focus on continuous improvement and process optimization.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== SERVICES PANEL ===== -->
-    <div id="services-panel" class="info-panel" data-section="services">
-        <div class="panel-container">
-            <h2>What I Offer</h2>
-            <div class="services-grid">
-                <div class="service-card" data-aos="zoom-in">
-                    <span class="icon"><i class="fas fa-rocket"></i></span>
-                    <h3>End-to-End Pipeline Generation</h3>
-                    <p>Build qualified opportunities from prospecting to SQL conversion. Deliver 30+ qualified meetings/month with 120% quota attainment.</p>
-                </div>
-                <div class="service-card" data-aos="zoom-in" data-aos-delay="100">
-                    <span class="icon"><i class="fas fa-chart-line"></i></span>
-                    <h3>Sales Development Consulting</h3>
-                    <p>Custom multi-channel cadences, objection handling playbooks, and CRM optimization. Boosted reply rates by 12% and open rates by 22%.</p>
-                </div>
-                <div class="service-card" data-aos="zoom-in" data-aos-delay="200">
-                    <span class="icon"><i class="fas fa-users-cog"></i></span>
-                    <h3>Team Mentorship &amp; Ramp-up</h3>
-                    <p>Reduce ramp time from 8 weeks to 5 weeks with data-centric training, role-play frameworks, and weekly intelligence sessions.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== GALLERY PANEL ===== -->
-    <div id="gallery-panel" class="info-panel" data-section="gallery">
-        <div class="panel-container">
-            <h2>Behind the Scenes</h2>
-            <p style="opacity:0.7;margin-bottom:20px;">A glimpse into my professional journey — real moments, real results.</p>
-            <div class="gallery-grid">
-                <div class="gallery-item" data-aos="fade-up">
-                    <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176185a9.jpg" data-lightbox="gallery" data-title="Professional Headshot - 2024">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176185a9.jpg" alt="Professional Headshot" loading="lazy" />
-                        <div class="badge">2024</div>
-                        <div class="overlay">
-                            <span>📸 Professional Headshot</span>
-                            <small>Updated portfolio photo</small>
-                        </div>
-                    </a>
-                </div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
-                    <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" data-lightbox="gallery" data-title="Award Ceremony - Top Performer Recognition">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" alt="Award Ceremony" loading="lazy" />
-                        <div class="badge">🏆 Award</div>
-                        <div class="overlay">
-                            <span>🏆 Top Performer Award</span>
-                            <small>Recognized as June's Top Performer</small>
-                        </div>
-                    </a>
-                </div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
-                    <a href="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" data-lightbox="gallery" data-title="Global Team Collaboration">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" alt="Global Team" loading="lazy" />
-                        <div class="badge">🌍 Global</div>
-                        <div class="overlay">
-                            <span>🌍 Global Team</span>
-                            <small>Collaborating across APAC, US, UK, AU</small>
-                        </div>
-                    </a>
-                </div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
-                    <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176a1e85.jpg" data-lightbox="gallery" data-title="Sales Presentation - Strategic Pitch">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176a1e85.jpg" alt="Sales Presentation" loading="lazy" />
-                        <div class="badge">📊 Strategy</div>
-                        <div class="overlay">
-                            <span>📊 Sales Presentation</span>
-                            <small>Pitching to key decision-makers</small>
-                        </div>
-                    </a>
-                </div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="400">
-                    <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176b5147.jpg" data-lightbox="gallery" data-title="Client Meeting - Building Trust">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176b5147.jpg" alt="Client Meeting" loading="lazy" />
-                        <div class="badge">🤝 Trust</div>
-                        <div class="overlay">
-                            <span>🤝 Client Meeting</span>
-                            <small>Building lasting relationships</small>
-                        </div>
-                    </a>
-                </div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="500">
-                    <a href="https://images.cdn-files-a.com/uploads/6358148/2000_6297717695d8d.jpg" data-lightbox="gallery" data-title="Performance Dashboard - Data-Driven Sales">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_6297717695d8d.jpg" alt="Performance Dashboard" loading="lazy" />
-                        <div class="badge">📈 Results</div>
-                        <div class="overlay">
-                            <span>📈 Performance Dashboard</span>
-                            <small>Tracking KPIs and wins</small>
-                        </div>
-                    </a>
-                </div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="600">
-                    <a href="https://images.cdn-files-a.com/uploads/6358148/2000_629771767e967.jpg" data-lightbox="gallery" data-title="Team Collaboration - Mentoring Session">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_629771767e967.jpg" alt="Team Collaboration" loading="lazy" />
-                        <div class="badge">👥 Mentorship</div>
-                        <div class="overlay">
-                            <span>👥 Team Collaboration</span>
-                            <small>Mentoring SDRs for success</small>
-                        </div>
-                    </a>
-                </div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="700">
-                    <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176ba76e.jpg" data-lightbox="gallery" data-title="Strategic Planning - Revenue Growth">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176ba76e.jpg" alt="Strategic Planning" loading="lazy" />
-                        <div class="badge">📋 Planning</div>
-                        <div class="overlay">
-                            <span>📋 Strategic Planning</span>
-                            <small>Mapping out revenue growth</small>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== TESTIMONIALS PANEL ===== -->
-    <div id="testimonials-panel" class="info-panel" data-section="testimonials">
-        <div class="panel-container">
-            <h2>What People Say</h2>
-            <p style="opacity:0.7;margin-bottom:20px;">Real feedback from real clients and colleagues.</p>
-            <div class="testimonial-grid">
-                <div class="testimonial-card" data-aos="fade-up">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="quote-text">Working with <span class="highlight-name">Flynn</span> has been an absolute game-changer. He didn't just bring us leads — he brought us a complete sales methodology. Within three months, our qualified pipeline grew by 40% and we closed deals we'd been chasing for over a year. He's the kind of person who makes everyone around him better.</p>
-                    <div class="author">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/400_64fdaf32ca5e7.jpg" alt="Van Ng" loading="lazy" />
-                        <div>
-                            <div class="name">Van Ng</div>
-                            <div class="role">Account Manager - AVERPS</div>
+        <!-- ===== ABOUT ===== -->
+        <section class="section-wrapper" data-index="1" id="section-about">
+            <div class="bg-glow"></div>
+            <div class="section-content">
+                <h2 class="section-title">About Me</h2>
+                <div class="about-grid">
+                    <div class="about-image">
+                        <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn portrait" loading="lazy" />
+                    </div>
+                    <div class="about-text">
+                        <p><span class="highlight">Flynn James Q. Pontino</span> — a hands-on sales leader who believes in growing people, not just pipelines. With over a decade in B2B outbound, I've built and mentored high-performing teams that consistently exceed targets through coaching, accountability, and a human-first approach.</p>
+                        <br />
+                        <p>I thrive on <span class="highlight">developing sales talent</span> — whether it's reducing ramp time from 8 weeks to 5, or coaching SDRs to master objection handling and consultative selling. My leadership style is rooted in leading by example: I'm in the trenches with my team, sharing scripts, running role-plays, and celebrating wins together.</p>
+                        <br />
+                        <p>Beyond the numbers, I'm passionate about <span class="highlight">building resilient sales cultures</span> that adapt, grow, and deliver. I've managed teams across APAC, US, UK, and AU markets, and I bring that global perspective to every conversation.</p>
+                        <div class="quote">
+                            "The best sales leaders don't just hit targets — they build teams that can hit any target."
                         </div>
                     </div>
-                    <span class="result-tag">📈 40% Pipeline Growth</span>
-                </div>
-
-                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="quote-text">I've worked with many SDRs over the years, but <span class="highlight-name">Flynn</span> stands out. His strategic approach to multi-channel outreach completely transformed our sales motion. He didn't just hit his numbers — he redefined what was possible. Our conversion rates jumped 22% after he restructured our cadence. An absolute pleasure to work with.</p>
-                    <div class="author">
-                        <img src="https://images.cdn-files-a.com/uploads/6358148/400_64fdb337e961e.jpg" alt="Shann Wong" loading="lazy" />
-                        <div>
-                            <div class="name">Shann Wong</div>
-                            <div class="role">Sales Director - Yellow Pages Singapore</div>
-                        </div>
-                    </div>
-                    <span class="result-tag">🚀 22% Conversion Increase</span>
-                </div>
-
-                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="quote-text"><span class="highlight-name">Flynn</span> is the kind of sales professional every leader dreams of having on their team. His dedication to mentoring our junior SDRs was beyond anything I expected. He took raw talent and turned it into a high-performing team that exceeded quota by 120%. He doesn't just sell — he builds sales cultures.</p>
-                    <div class="author">
-                        <img src="https://media.licdn.com/dms/image/v2/D4E03AQE0CKw1VyHB8g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1663775428654?e=1787184000&v=beta&t=zUoQAtgldt2ZSgPPtm1N_SBYrrbsxWZg9V5Zif9HpDI" alt="Toby Whittaker" loading="lazy" />
-                        <div>
-                            <div class="name">Toby Whittaker</div>
-                            <div class="role">Head of Sales - Seek Marketing Partners</div>
-                        </div>
-                    </div>
-                    <span class="result-tag">🏆 120% Quota Attainment</span>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- ===== CONTACT PANEL ===== -->
-    <div id="contact-panel" class="info-panel" data-section="contact">
-        <div class="panel-container">
-            <h2>Let's Connect</h2>
-            <div class="contact-details" data-aos="zoom-in">
-                <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn James" loading="lazy" />
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <a href="mailto:va.flynnjames@gmail.com">va.flynnjames@gmail.com</a>
+        <!-- ===== SKILLS ===== -->
+        <section class="section-wrapper" data-index="2" id="section-skills">
+            <div class="bg-glow"></div>
+            <div class="section-content">
+                <h2 class="section-title">Core Competencies</h2>
+                <div class="skills-grid">
+                    <div class="skill-card" data-aos="flip-up">
+                        <span class="icon"><i class="fas fa-phone-volume"></i></span>
+                        <h3>High-Volume Outbound</h3>
+                        <p><strong>10+ years</strong> cold calling (100-150 daily), appointment setting, lead generation, and pipeline management. Proven ability to book 40+ appointments/month.</p>
+                    </div>
+                    <div class="skill-card" data-aos="flip-up" data-aos-delay="100">
+                        <span class="icon"><i class="fas fa-chart-pie"></i></span>
+                        <h3>CRM &amp; Sales Tech Stack</h3>
+                        <p>HubSpot CRM, LinkedIn Sales Navigator, ZoomInfo, Lusha, Outreach.io. Multi-channel sequencing expert with 22% conversion improvement.</p>
+                    </div>
+                    <div class="skill-card" data-aos="flip-up" data-aos-delay="200">
+                        <span class="icon"><i class="fas fa-bullseye"></i></span>
+                        <h3>Strategic Qualification</h3>
+                        <p>BANT / MEDDIC frameworks, market intelligence analytics, and regional messaging nuance. Increased opportunity-to-close rates by 15%.</p>
+                    </div>
+                    <div class="skill-card" data-aos="flip-up" data-aos-delay="300">
+                        <span class="icon"><i class="fas fa-users"></i></span>
+                        <h3>Team Leadership</h3>
+                        <p>Coached 12+ SDRs, reduced ramp time from 8 to 5 weeks, and fostered high-performance cultures with 120%+ quota attainment.</p>
+                    </div>
+                    <div class="skill-card" data-aos="flip-up" data-aos-delay="400">
+                        <span class="icon"><i class="fas fa-globe"></i></span>
+                        <h3>Global Market Expertise</h3>
+                        <p>Deep experience across APAC, US, UK, and AU markets with nuanced regional messaging strategies.</p>
+                    </div>
+                    <div class="skill-card" data-aos="flip-up" data-aos-delay="500">
+                        <span class="icon"><i class="fas fa-certificate"></i></span>
+                        <h3>Lean Six Sigma</h3>
+                        <p>SSWB and LSSWB certified with a focus on continuous improvement and process optimization.</p>
+                    </div>
                 </div>
-                <div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <a href="tel:+639306359306">+63 930 635 9306</a>
-                </div>
-                <div class="contact-item">
-                    <i class="fab fa-whatsapp"></i>
-                    <a href="https://wa.me/639306359306">WhatsApp</a>
-                </div>
-                <div class="contact-item">
-                    <i class="fab fa-linkedin"></i>
-                    <a href="https://www.linkedin.com/in/fjpontino/" target="_blank">linkedin.com/in/fjpontino</a>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Toledo, Cebu (Remote / Global)</span>
-                </div>
-                <div class="contact-actions">
-                    <a href="mailto:va.flynnjames@gmail.com" class="btn-primary">
-                        <i class="fas fa-paper-plane"></i> Send Email
-                    </a>
-                    <a href="tel:+639306359306" class="btn-secondary">
-                        <i class="fas fa-phone"></i> Call Me
-                    </a>
-                    <a href="https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing" target="_blank" class="btn-secondary">
-                        <i class="fas fa-file-pdf"></i> Download CV
-                    </a>
-                </div>
-                <p style="margin-top: 24px; opacity:0.6; font-size:0.85rem;">
-                    <i class="fas fa-chart-line" style="color:#0a9e40;"></i>
-                    "Turning prospecting into predictable pipeline — recognized for 2x growth enablement."
-                </p>
             </div>
-        </div>
+        </section>
+
+        <!-- ===== SERVICES ===== -->
+        <section class="section-wrapper" data-index="3" id="section-services">
+            <div class="bg-glow"></div>
+            <div class="section-content">
+                <h2 class="section-title">What I Offer</h2>
+                <div class="services-grid">
+                    <div class="service-card" data-aos="zoom-in">
+                        <span class="icon"><i class="fas fa-rocket"></i></span>
+                        <h3>End-to-End Pipeline Generation</h3>
+                        <p>Build qualified opportunities from prospecting to SQL conversion. Deliver 30+ qualified meetings/month with 120% quota attainment.</p>
+                    </div>
+                    <div class="service-card" data-aos="zoom-in" data-aos-delay="100">
+                        <span class="icon"><i class="fas fa-chart-line"></i></span>
+                        <h3>Sales Development Consulting</h3>
+                        <p>Custom multi-channel cadences, objection handling playbooks, and CRM optimization. Boosted reply rates by 12% and open rates by 22%.</p>
+                    </div>
+                    <div class="service-card" data-aos="zoom-in" data-aos-delay="200">
+                        <span class="icon"><i class="fas fa-users-cog"></i></span>
+                        <h3>Team Mentorship &amp; Ramp-up</h3>
+                        <p>Reduce ramp time from 8 weeks to 5 weeks with data-centric training, role-play frameworks, and weekly intelligence sessions.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== GALLERY ===== -->
+        <section class="section-wrapper" data-index="4" id="section-gallery">
+            <div class="bg-glow"></div>
+            <div class="section-content">
+                <h2 class="section-title">Behind the Scenes</h2>
+                <p style="opacity:0.7;margin-bottom:20px;">A glimpse into my professional journey — real moments, real results.</p>
+                <div class="gallery-grid">
+                    <div class="gallery-item" data-aos="fade-up">
+                        <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176185a9.jpg" data-lightbox="gallery" data-title="Professional Headshot - 2024">
+                            <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176185a9.jpg" alt="Professional Headshot" loading="lazy" />
+                            <div class="badge">2024</div>
+                            <div class="overlay">
+                                <span>📸 Professional Headshot</span>
+                                <small>Updated portfolio photo</small>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                        <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" data-lightbox="gallery" data-title="Award Ceremony - Top Performer Recognition">
+                            <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" alt="Award Ceremony" loading="lazy" />
+                            <div class="badge">🏆 Award</div>
+                            <div class="overlay">
+                                <span>🏆 Top Performer Award</span>
+                                <small>Recognized as June's Top Performer</small>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
+                        <a href="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" data-lightbox="gallery" data-title="Global Team Collaboration">
+                            <img src="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" alt="Global Team" loading="lazy" />
+                            <div class="badge">🌍 Global</div>
+                            <div class="overlay">
+                                <span>🌍 Global Team</span>
+                                <small>Collaborating across APAC, US, UK, AU</small>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
+                        <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176a1e85.jpg" data-lightbox="gallery" data-title="Sales Presentation - Strategic Pitch">
+                            <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176a1e85.jpg" alt="Sales Presentation" loading="lazy" />
+                            <div class="badge">📊 Strategy</div>
+                            <div class="overlay">
+                                <span>📊 Sales Presentation</span>
+                                <small>Pitching to key decision-makers</small>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="400">
+                        <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176b5147.jpg" data-lightbox="gallery" data-title="Client Meeting - Building Trust">
+                            <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176b5147.jpg" alt="Client Meeting" loading="lazy" />
+                            <div class="badge">🤝 Trust</div>
+                            <div class="overlay">
+                                <span>🤝 Client Meeting</span>
+                                <small>Building lasting relationships</small>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="500">
+                        <a href="https://images.cdn-files-a.com/uploads/6358148/2000_6297717695d8d.jpg" data-lightbox="gallery" data-title="Performance Dashboard - Data-Driven Sales">
+                            <img src="https://images.cdn-files-a.com/uploads/6358148/2000_6297717695d8d.jpg" alt="Performance Dashboard" loading="lazy" />
+                            <div class="badge">📈 Results</div>
+                            <div class="overlay">
+                                <span>📈 Performance Dashboard</span>
+                                <small>Tracking KPIs and wins</small>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="600">
+                        <a href="https://images.cdn-files-a.com/uploads/6358148/2000_629771767e967.jpg" data-lightbox="gallery" data-title="Team Collaboration - Mentoring Session">
+                            <img src="https://images.cdn-files-a.com/uploads/6358148/2000_629771767e967.jpg" alt="Team Collaboration" loading="lazy" />
+                            <div class="badge">👥 Mentorship</div>
+                            <div class="overlay">
+                                <span>👥 Team Collaboration</span>
+                                <small>Mentoring SDRs for success</small>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="700">
+                        <a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176ba76e.jpg" data-lightbox="gallery" data-title="Strategic Planning - Revenue Growth">
+                            <img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176ba76e.jpg" alt="Strategic Planning" loading="lazy" />
+                            <div class="badge">📋 Planning</div>
+                            <div class="overlay">
+                                <span>📋 Strategic Planning</span>
+                                <small>Mapping out revenue growth</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== TESTIMONIALS ===== -->
+        <section class="section-wrapper" data-index="5" id="section-testimonials">
+            <div class="bg-glow"></div>
+            <div class="section-content">
+                <h2 class="section-title">What People Say</h2>
+                <p style="opacity:0.7;margin-bottom:20px;">Real feedback from real clients and colleagues.</p>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card" data-aos="fade-up">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="quote-text">Working with <span class="highlight-name">Flynn</span> has been an absolute game-changer. He didn't just bring us leads — he brought us a complete sales methodology. Within three months, our qualified pipeline grew by 40% and we closed deals we'd been chasing for over a year. He's the kind of person who makes everyone around him better.</p>
+                        <div class="author">
+                            <img src="https://images.cdn-files-a.com/uploads/6358148/400_64fdaf32ca5e7.jpg" alt="Van Ng" loading="lazy" />
+                            <div>
+                                <div class="name">Van Ng</div>
+                                <div class="role">Account Manager - AVERPS</div>
+                            </div>
+                        </div>
+                        <span class="result-tag">📈 40% Pipeline Growth</span>
+                    </div>
+
+                    <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="quote-text">I've worked with many SDRs over the years, but <span class="highlight-name">Flynn</span> stands out. His strategic approach to multi-channel outreach completely transformed our sales motion. He didn't just hit his numbers — he redefined what was possible. Our conversion rates jumped 22% after he restructured our cadence. An absolute pleasure to work with.</p>
+                        <div class="author">
+                            <img src="https://images.cdn-files-a.com/uploads/6358148/400_64fdb337e961e.jpg" alt="Shann Wong" loading="lazy" />
+                            <div>
+                                <div class="name">Shann Wong</div>
+                                <div class="role">Sales Director - Yellow Pages Singapore</div>
+                            </div>
+                        </div>
+                        <span class="result-tag">🚀 22% Conversion Increase</span>
+                    </div>
+
+                    <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="quote-text"><span class="highlight-name">Flynn</span> is the kind of sales professional every leader dreams of having on their team. His dedication to mentoring our junior SDRs was beyond anything I expected. He took raw talent and turned it into a high-performing team that exceeded quota by 120%. He doesn't just sell — he builds sales cultures.</p>
+                        <div class="author">
+                            <img src="https://media.licdn.com/dms/image/v2/D4E03AQE0CKw1VyHB8g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1663775428654?e=1787184000&v=beta&t=zUoQAtgldt2ZSgPPtm1N_SBYrrbsxWZg9V5Zif9HpDI" alt="Toby Whittaker" loading="lazy" />
+                            <div>
+                                <div class="name">Toby Whittaker</div>
+                                <div class="role">Head of Sales - Seek Marketing Partners</div>
+                            </div>
+                        </div>
+                        <span class="result-tag">🏆 120% Quota Attainment</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CONTACT ===== -->
+        <section class="section-wrapper" data-index="6" id="section-contact">
+            <div class="bg-glow"></div>
+            <div class="section-content">
+                <h2 class="section-title">Let's Connect</h2>
+                <div class="contact-details" data-aos="zoom-in">
+                    <img src="https://i.ibb.co/LdxPLm5/Flynn-2x2.jpg" alt="Flynn James" loading="lazy" />
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:va.flynnjames@gmail.com">va.flynnjames@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+639306359306">+63 930 635 9306</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <a href="https://wa.me/639306359306">WhatsApp</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        <a href="https://www.linkedin.com/in/fjpontino/" target="_blank">linkedin.com/in/fjpontino</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Toledo, Cebu (Remote / Global)</span>
+                    </div>
+                    <div class="contact-actions">
+                        <a href="mailto:va.flynnjames@gmail.com" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Email
+                        </a>
+                        <a href="tel:+639306359306" class="btn-secondary">
+                            <i class="fas fa-phone"></i> Call Me
+                        </a>
+                        <a href="https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing" target="_blank" class="btn-secondary">
+                            <i class="fas fa-file-pdf"></i> Download CV
+                        </a>
+                    </div>
+                    <p style="margin-top: 24px; opacity:0.6; font-size:0.85rem;">
+                        <i class="fas fa-chart-line" style="color:#0a9e40;"></i>
+                        "Turning prospecting into predictable pipeline — recognized for 2x growth enablement."
+                    </p>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <!-- ===== FLOATING ACTIONS ===== -->
@@ -1870,7 +1942,7 @@
 
     <!-- ===== CHATBUBBLE ===== -->
     <div class="chat-bubble">
-        <div class="suggestion"><i class="fas fa-comment-dots"></i> Ask me anything!</div>
+        <div class="suggestion"><i class="fas fa-comment-dots"></i> Quick Navigation</div>
         <button class="icon-wrapper" id="chatToggle" aria-label="Open chat">
             <i class="fas fa-comment"></i>
         </button>
@@ -1879,27 +1951,39 @@
     <!-- ===== CHAT WINDOW ===== -->
     <div class="chat-window" id="chatWindow">
         <div class="chat-header">
-            <span><i class="fas fa-robot" style="margin-right:8px;"></i> Flynn's AI Assistant</span>
+            <span><i class="fas fa-robot" style="margin-right:8px;"></i> Flynn's AI Navigator</span>
+            <span class="chat-badge">⚡ Quick Actions</span>
             <button class="close-chat" id="closeChat">&times;</button>
         </div>
-        <div class="quick-actions" id="quickActions">
-            <button data-section="about">📋 About Me</button>
-            <button data-section="skills">🛠️ Skills</button>
-            <button data-section="services">💼 Services</button>
-            <button data-section="contact">📞 Contact</button>
-            <button data-section="gallery">🖼️ Gallery</button>
-            <button data-section="testimonials">⭐ Testimonials</button>
-            <button data-action="cv">📄 Download CV</button>
+        <div class="chat-actions" id="chatActions">
+            <div class="action-group">
+                <span class="action-group-label">📍 Navigate</span>
+                <button data-action="home"><span class="icon">🏠</span> Home</button>
+                <button data-action="about"><span class="icon">👤</span> About</button>
+                <button data-action="skills"><span class="icon">🛠️</span> Skills</button>
+                <button data-action="services"><span class="icon">💼</span> Services</button>
+                <button data-action="gallery"><span class="icon">🖼️</span> Gallery</button>
+                <button data-action="testimonials"><span class="icon">⭐</span> Testimonials</button>
+                <button data-action="contact"><span class="icon">📞</span> Contact</button>
+            </div>
+            <div class="action-group">
+                <span class="action-group-label">🚀 Actions</span>
+                <button data-action="hire"><span class="icon">💌</span> Hire Flynn</button>
+                <button data-action="cv"><span class="icon">📄</span> View Resume</button>
+                <button data-action="book"><span class="icon">📅</span> Book a Meeting</button>
+                <button data-action="leadership"><span class="icon">👔</span> Leadership</button>
+                <button data-action="certifications"><span class="icon">🎓</span> Certifications</button>
+            </div>
         </div>
         <div class="chat-messages" id="chatMessages">
-            <div class="chat-message bot">👋 Hello! I'm Flynn's AI assistant. Click any button below to navigate to that section, or type your question below.</div>
+            <div class="chat-message bot">👋 Hi! I'm Flynn's AI Navigator. Click any button above to explore the portfolio instantly.</div>
         </div>
         <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="Ask something..." />
+            <input type="text" id="chatInput" placeholder="Type a message..." />
             <button id="sendChatMsg"><i class="fas fa-paper-plane"></i></button>
         </div>
         <div class="chat-status">
-            <span class="online">●</span> AI Ready
+            <span class="online">●</span> Ready to assist
         </div>
     </div>
 
@@ -1967,7 +2051,6 @@
         document.getElementById('themeToggle').addEventListener('click', toggleTheme);
         document.getElementById('mobileThemeToggle').addEventListener('click', toggleTheme);
 
-        // Load saved theme
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'light') {
             toggleTheme();
@@ -1999,102 +2082,117 @@
         }
 
         // ========================================
-        // ===== PANEL TOGGLE =====
+        // ===== SCROLL NAVIGATION =====
         // ========================================
-        function closeAllPanels() {
-            document.querySelectorAll('.info-panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        const scrollContainer = document.getElementById('scrollContainer');
+        const sections = document.querySelectorAll('.section-wrapper');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const progressDots = document.querySelectorAll('.section-progress .dot');
+        const totalSections = sections.length;
+
+        let isScrolling = false;
+        let currentIndex = 0;
+
+        function updateActiveSection(index) {
+            if (isScrolling) return;
+            isScrolling = true;
+
+            // Update sections
+            sections.forEach((section, i) => {
+                section.classList.toggle('active', i === index);
+            });
+
+            // Update nav links
+            navLinks.forEach((link, i) => {
+                link.classList.toggle('active', i === index);
+            });
+
+            // Update progress dots
+            progressDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+
+            currentIndex = index;
+            isScrolling = false;
         }
 
-        function openPanel(section) {
-            closeAllPanels();
-            if (section === 'home') {
-                document.getElementById('home-section').scrollIntoView({ behavior: 'smooth' });
-                document.querySelector('.nav-link[data-section="home"]').classList.add('active');
-                return;
+        // Scroll to section
+        function scrollToSection(index) {
+            if (index < 0 || index >= totalSections) return;
+            const targetSection = sections[index];
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+                updateActiveSection(index);
+                // Close chat if open
+                document.getElementById('chatWindow').classList.remove('open');
             }
-            const panel = document.getElementById(section + '-panel');
-            if (panel) {
-                panel.classList.add('active');
-                document.querySelector(`.nav-link[data-section="${section}"]`)?.classList.add('active');
-                // Update progress dots
-                document.querySelectorAll('.section-progress .dot').forEach(d => {
-                    d.classList.toggle('active', d.dataset.section === section);
-                });
-                if (section === 'testimonials') {
-                    animateStats();
-                }
-            }
-            document.getElementById('mobileDropdown').style.transform = 'translateY(-120%)';
-            // Close chat window when opening a panel
-            document.getElementById('chatWindow').classList.remove('open');
         }
 
-        // Nav links
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
+        // Nav links click
+        navLinks.forEach((link, index) => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const section = this.dataset.section;
-                openPanel(section);
+                scrollToSection(index);
             });
         });
 
-        // Section progress dots
-        document.querySelectorAll('.section-progress .dot').forEach(dot => {
-            dot.addEventListener('click', function() {
-                const section = this.dataset.section;
-                if (section === 'home') {
-                    document.getElementById('home-section').scrollIntoView({ behavior: 'smooth' });
-                } else {
-                    openPanel(section);
+        // Progress dots click
+        progressDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                scrollToSection(index);
+            });
+        });
+
+        // Intersection Observer for scroll snapping
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const index = parseInt(entry.target.dataset.index);
+                    if (!isNaN(index) && index !== currentIndex) {
+                        updateActiveSection(index);
+                    }
                 }
             });
+        }, {
+            threshold: 0.5,
+            root: scrollContainer
         });
 
-        // Back to Home button
+        sections.forEach(section => observer.observe(section));
+
+        // ========================================
+        // ===== BACK TO HOME BUTTON =====
+        // ========================================
         const backToHome = document.getElementById('backToHome');
         backToHome.addEventListener('click', () => {
-            closeAllPanels();
-            document.getElementById('home-section').scrollIntoView({ behavior: 'smooth' });
-            document.querySelector('.nav-link[data-section="home"]').classList.add('active');
-            document.querySelectorAll('.section-progress .dot').forEach(d => {
-                d.classList.toggle('active', d.dataset.section === 'home');
-            });
+            scrollToSection(0);
+        });
+
+        // Show back to home after second section
+        scrollContainer.addEventListener('scroll', () => {
+            const scrollY = scrollContainer.scrollTop;
+            const sectionHeight = window.innerHeight;
+            if (scrollY > sectionHeight * 1.2) {
+                backToHome.classList.add('visible');
+            } else {
+                backToHome.classList.remove('visible');
+            }
         });
 
         // ========================================
-        // ===== SCROLL-BASED INTERACTIONS =====
+        // ===== NAV AUTO-HIDE =====
         // ========================================
         let lastScrollY = 0;
         const nav = document.querySelector('nav');
-        const heroSection = document.getElementById('home-section');
 
-        window.addEventListener('scroll', () => {
-            const currentScrollY = window.scrollY;
-
-            // Hide/show nav on scroll down/up
-            if (currentScrollY > 100 && currentScrollY > lastScrollY) {
+        scrollContainer.addEventListener('scroll', () => {
+            const currentScrollY = scrollContainer.scrollTop;
+            if (currentScrollY > 80 && currentScrollY > lastScrollY) {
                 nav.classList.add('hidden');
             } else {
                 nav.classList.remove('hidden');
             }
             lastScrollY = currentScrollY;
-
-            // Back to Home button visibility (after second section)
-            const heroHeight = heroSection.offsetHeight;
-            if (currentScrollY > heroHeight * 0.7) {
-                backToHome.classList.add('visible');
-            } else {
-                backToHome.classList.remove('visible');
-            }
-
-            // Section visibility for background effects
-            document.querySelectorAll('section, .info-panel.active').forEach(el => {
-                const rect = el.getBoundingClientRect();
-                if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    el.classList.add('visible');
-                }
-            });
         });
 
         // ========================================
@@ -2110,9 +2208,8 @@
             window.location.href = 'tel:+639306359306';
         });
 
-        // Show floating actions on scroll
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
+        scrollContainer.addEventListener('scroll', () => {
+            const currentScroll = scrollContainer.scrollTop;
             const fabButtons = document.querySelectorAll('.floating-actions .fab');
             if (currentScroll > 300) {
                 fabButtons.forEach((btn, i) => {
@@ -2124,312 +2221,186 @@
         });
 
         // ========================================
-        // ===== CHATBOT =====
+        // ===== CHATBOT - CTA DRIVEN =====
         // ========================================
-        // Gemini API Configuration
-        const GEMINI_API_KEY = 'AQ.Ab8RN6JXS2brh_npcMHMfmbtT7mplkfU-A6wt9TpZlJYeaVYzg';
-        const GEMINI_API_URL =
-            'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' +
-            GEMINI_API_KEY;
-
-        // Portfolio Knowledge Base
-        const PORTFOLIO_KNOWLEDGE = `
-        PORTFOLIO KNOWLEDGE BASE - FLYNN JAMES PONTINO
-
-        PERSONAL:
-        - Name: Flynn James Q. Pontino
-        - Title: Senior Sales Development Representative | Junior Sales Team Lead
-        - Location: Toledo, Cebu, Philippines (Remote)
-        - Email: va.flynnjames@gmail.com
-        - Phone: +63 930 635 9306
-        - LinkedIn: linkedin.com/in/fjpontino
-
-        EXPERIENCE:
-        1. Regen Digital - Junior Sales Team Lead (Jul 2026-Present)
-           - Coach SDRs, share scripts/strategies, mentor team members
-           - Foster high-performance culture, monitor metrics
-
-        2. Regen Digital - SDR (May 2026-Present)
-           - Engage decision-makers, book appointments, manage CRM
-           - Achievement: Level 4 Top Performance Tier in 3 weeks
-
-        3. Seek Marketing Partners - Outbound Sales Rep (Nov 2025-Apr 2026)
-           - B2B outreach, lead qualification, appointment setting
-
-        4. Averps - SDR / B2B Lead Gen (Feb 2025-Nov 2025)
-           - Lead generation for custom applications
-
-        5. Public Sector Network - Delegate Sales Acquisition (Nov 2022-Jan 2025)
-           - Outreach via email/calls, LinkedIn Sales Navigator, HubSpot
-
-        6. Pacific Outsource - Client Acquisition Manager (Mar 2015-Jan 2022)
-           - Client management, lead generation, meeting scheduling
-
-        SKILLS:
-        - High-Volume Outbound: 10+ years, 100-150 calls/day
-        - CRM: HubSpot, Pipedrive, Salesforce
-        - Tools: LinkedIn Sales Navigator, ZoomInfo, Lusha, Outreach.io
-        - Qualification: BANT, MEDDIC frameworks
-
-        CERTIFICATIONS:
-        - SSWB Certification
-        - LSSWB Certification (Lean Six Sigma White Belt)
-
-        AWARDS:
-        - June's Top Performer
-        - Top Performance Tier (Level 4) - 60+ KPIs exceeded
-
-        SERVICES:
-        1. Pipeline Generation: 30+ meetings/month, 120% quota attainment
-        2. Sales Consulting: Custom cadences, objection handling, CRM optimization
-        3. Team Mentorship: Reduce ramp time 8→5 weeks
-
-        TESTIMONIALS:
-        - Van Ng (AVERPS): "A true partner in growth."
-        - Shann Wong (Yellow Pages): "A pleasure to work with."
-        - Toby Whittaker (Seek Marketing): "A standout professional."
-
-        EDUCATION: University of Cebu (2009-2014)
-        `;
-
-        const SYSTEM_PROMPT = `
-        You are the official AI assistant for Flynn James Pontino's portfolio website.
-        Answer ONLY using the PORTFOLIO KNOWLEDGE BASE provided below.
-
-        RULES:
-        - Never invent or assume information not in the knowledge base.
-        - If you don't know, say: "I couldn't find that in the portfolio. Please use the contact form for more details."
-        - Be professional, friendly, concise, and helpful.
-        - For contact: email va.flynnjames@gmail.com, phone +63 930 635 9306, LinkedIn linkedin.com/in/fjpontino.
-
-        PORTFOLIO KNOWLEDGE BASE:
-        ${PORTFOLIO_KNOWLEDGE}
-        `;
-
-        // DOM Elements
         const chatToggle = document.getElementById('chatToggle');
         const chatWindow = document.getElementById('chatWindow');
         const closeChat = document.getElementById('closeChat');
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendChatMsg');
-        const chatStatus = document.querySelector('.chat-status');
 
-        let conversationHistory = [];
-        let isProcessing = false;
+        const sectionNames = {
+            home: 'Home',
+            about: 'About',
+            skills: 'Skills',
+            services: 'Services',
+            gallery: 'Gallery',
+            testimonials: 'Testimonials',
+            contact: 'Contact'
+        };
 
-        // UI Helpers
-        function addMessage(text, sender, extra = null) {
+        const sectionIndices = {
+            home: 0,
+            about: 1,
+            skills: 2,
+            services: 3,
+            gallery: 4,
+            testimonials: 5,
+            contact: 6
+        };
+
+        function addChatMessage(text, sender) {
             const div = document.createElement('div');
             div.className = `chat-message ${sender}`;
-
-            if (sender === 'bot' && extra) {
-                let html = text;
-                if (extra.contact) {
-                    html += '<div class="contact-row">';
-                    extra.contact.forEach(c => {
-                        html += `<a href="${c.url}" target="_blank"><i class="${c.icon}"></i> ${c.label}</a>`;
-                    });
-                    html += '</div>';
-                }
-                if (extra.actions) {
-                    html += '<div style="margin-top:8px;">';
-                    extra.actions.forEach(a => {
-                        html += `<a href="${a.url}" target="_blank" class="action-btn">${a.label}</a> `;
-                    });
-                    html += '</div>';
-                }
-                div.innerHTML = html;
-            } else {
-                div.textContent = text;
-            }
-
+            div.textContent = text;
             chatMessages.appendChild(div);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        function showTyping() {
-            const div = document.createElement('div');
-            div.className = 'chat-message loading';
-            div.id = 'typingIndicator';
-            div.textContent = '● ● ●';
-            chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
+        function handleChatAction(action) {
+            // Close chat
+            chatWindow.classList.remove('open');
 
-        function hideTyping() {
-            const el = document.getElementById('typingIndicator');
-            if (el) el.remove();
-        }
-
-        function setStatus(text, online = true) {
-            chatStatus.innerHTML = `<span class="${online ? 'online' : 'offline'}">●</span> ${text}`;
-        }
-
-        // Send to Gemini API
-        async function sendToGemini(message) {
-            try {
-                const response = await fetch(GEMINI_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [
-                                { text: SYSTEM_PROMPT },
-                                { text: `User question: ${message}` }
-                            ]
-                        }],
-                        generationConfig: {
-                            temperature: 0.3,
-                            maxOutputTokens: 800,
-                            topP: 0.95,
-                        }
-                    })
-                });
-
-                if (!response.ok) {
-                    console.error('API Error:', response.status);
-                    return null;
-                }
-
-                const data = await response.json();
-                return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
-            } catch (error) {
-                console.error('Gemini API error:', error);
-                return null;
-            }
-        }
-
-        // Handle Send
-        async function handleSend() {
-            const msg = chatInput.value.trim();
-            if (!msg || isProcessing) return;
-
-            isProcessing = true;
-            chatInput.disabled = true;
-            sendBtn.disabled = true;
-            setStatus('Thinking...', true);
-
-            addMessage(msg, 'user');
-            chatInput.value = '';
-            conversationHistory.push({ role: 'user', content: msg });
-
-            showTyping();
-
-            try {
-                let reply = await sendToGemini(msg);
-                let extra = null;
-
-                if (!reply) {
-                    reply =
-                    "I couldn't find that in the portfolio. Please use the contact form for more details.";
-                    setStatus('AI Ready (Local)', true);
-                } else {
-                    // Check if reply contains contact info
-                    if (reply.toLowerCase().includes('contact') || reply.toLowerCase().includes('email')) {
-                        extra = {
-                            contact: [
-                                { label: '📧 Email', url: 'mailto:va.flynnjames@gmail.com', icon: 'fas fa-envelope' },
-                                { label: '📞 Phone', url: 'tel:+639306359306', icon: 'fas fa-phone' },
-                                { label: '💼 LinkedIn', url: 'https://linkedin.com/in/fjpontino', icon: 'fab fa-linkedin' }
-                            ]
-                        };
+            // Handle actions
+            switch (action) {
+                case 'home':
+                case 'about':
+                case 'skills':
+                case 'services':
+                case 'gallery':
+                case 'testimonials':
+                case 'contact':
+                    const index = sectionIndices[action];
+                    if (index !== undefined) {
+                        scrollToSection(index);
+                        setTimeout(() => {
+                            chatWindow.classList.add('open');
+                            addChatMessage(`✅ Navigating to the **${sectionNames[action]}** section.`, 'bot');
+                        }, 600);
                     }
-                    if (reply.toLowerCase().includes('cv') || reply.toLowerCase().includes('resume')) {
-                        extra = {
-                            ...extra,
-                            actions: [{ label: '📄 Download CV', url: 'https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing' }]
-                        };
-                    }
-                    setStatus('AI Ready', true);
-                }
+                    break;
 
-                hideTyping();
-                addMessage(reply, 'bot', extra);
-                conversationHistory.push({ role: 'assistant', content: reply });
+                case 'hire':
+                    window.location.href = 'mailto:va.flynnjames@gmail.com';
+                    setTimeout(() => {
+                        chatWindow.classList.add('open');
+                        addChatMessage("📧 Opening email to hire Flynn...", 'bot');
+                    }, 400);
+                    break;
 
-            } catch (error) {
-                hideTyping();
-                addMessage("I'm having trouble connecting. Please use the contact form for more details.", 'bot');
-                conversationHistory.push({ role: 'assistant', content: "I'm having trouble connecting." });
-                setStatus('AI Ready (Fallback)', true);
-            }
+                case 'cv':
+                    window.open('https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing',
+                    '_blank');
+                    setTimeout(() => {
+                        chatWindow.classList.add('open');
+                        addChatMessage("📄 Opening Flynn's resume...", 'bot');
+                    }, 400);
+                    break;
 
-            isProcessing = false;
-            chatInput.disabled = false;
-            sendBtn.disabled = false;
-            chatInput.focus();
+                case 'book':
+                    window.location.href = 'mailto:va.flynnjames@gmail.com?subject=Book%20a%20Meeting%20with%20Flynn';
+                    setTimeout(() => {
+                        chatWindow.classList.add('open');
+                        addChatMessage("📅 Opening email to book a meeting...", 'bot');
+                    }, 400);
+                    break;
 
-            if (conversationHistory.length > 20) {
-                conversationHistory = conversationHistory.slice(-10);
-            }
-        }
+                case 'leadership':
+                    scrollToSection(1); // About section
+                    setTimeout(() => {
+                        chatWindow.classList.add('open');
+                        addChatMessage("👔 Flynn's leadership experience is highlighted in the **About** section.", 'bot');
+                    }, 600);
+                    break;
 
-        // Quick action buttons - navigate to sections
-        document.querySelectorAll('#quickActions button[data-section]').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const section = this.dataset.section;
-                // Close chat
-                chatWindow.classList.remove('open');
-                // Navigate to section
-                openPanel(section);
-                // Add a message confirming navigation
-                const sectionNames = {
-                    about: 'About Me',
-                    skills: 'Skills',
-                    services: 'Services',
-                    gallery: 'Gallery',
-                    testimonials: 'Testimonials',
-                    contact: 'Contact'
-                };
-                // Reopen chat with confirmation
-                setTimeout(() => {
+                case 'certifications':
+                    scrollToSection(2); // Skills section
+                    setTimeout(() => {
+                        chatWindow.classList.add('open');
+                        addChatMessage("🎓 Flynn's certifications are listed in the **Skills** section.", 'bot');
+                    }, 600);
+                    break;
+
+                default:
                     chatWindow.classList.add('open');
-                    addMessage(`✅ Navigating to the **${sectionNames[section] || section}** section.`, 'bot');
-                }, 600);
+                    addChatMessage("I'm not sure about that action. Please use one of the buttons above.", 'bot');
+            }
+        }
+
+        // Chat action buttons
+        document.querySelectorAll('.chat-actions button[data-action]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.dataset.action;
+                handleChatAction(action);
             });
         });
 
-        // Download CV action
-        document.querySelector('#quickActions button[data-action="cv"]')?.addEventListener('click', function() {
-            window.open('https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing', '_blank');
-            addMessage("📄 Opening Flynn's CV for download...", 'bot');
-        });
-
-        // Chat toggle
         chatToggle.addEventListener('click', () => {
             chatWindow.classList.toggle('open');
             if (chatWindow.classList.contains('open')) {
                 chatInput.focus();
-                setStatus('AI Ready', true);
             }
         });
 
         closeChat.addEventListener('click', () => chatWindow.classList.remove('open'));
-        sendBtn.addEventListener('click', handleSend);
+
+        // Simple send (with fallback)
+        sendBtn.addEventListener('click', () => {
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+            addChatMessage(msg, 'user');
+            chatInput.value = '';
+            addChatMessage(
+                "👋 Please use the buttons above to navigate the portfolio. I'm designed to help you explore Flynn's work quickly!",
+                'bot');
+        });
 
         chatInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                handleSend();
+                sendBtn.click();
             }
         });
 
+        // ========================================
+        // ===== KEYBOARD SHORTCUTS =====
+        // ========================================
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && chatWindow.classList.contains('open')) {
-                chatWindow.classList.remove('open');
+            // Escape: Close chat
+            if (e.key === 'Escape') {
+                if (chatWindow.classList.contains('open')) {
+                    chatWindow.classList.remove('open');
+                }
             }
+
+            // Ctrl+K: Toggle chat
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
                 chatToggle.click();
             }
+
+            // Alt+1-7: Navigate sections
+            if (e.altKey && e.key >= '1' && e.key <= '7') {
+                e.preventDefault();
+                const idx = parseInt(e.key) - 1;
+                if (idx < totalSections) {
+                    scrollToSection(idx);
+                    chatWindow.classList.remove('open');
+                }
+            }
         });
 
-        console.log('✅ Flynn AI Chatbot initialized with Gemini API');
-        console.log('🔑 API Key: ' + (GEMINI_API_KEY ? '✓ Configured' : '✗ Missing'));
-        console.log('💡 Press Ctrl+K to open/close chat');
-        console.log('🌓 Toggle theme with the sun/moon icon');
-        console.log('⬆️ Back to Home button appears after scrolling past the hero section');
+        // ========================================
+        // ===== KEYBOARD SHORTCUTS HINT =====
+        // ========================================
+        const shortcutsHint = document.getElementById('shortcutsHint');
+        setTimeout(() => {
+            shortcutsHint.classList.add('visible');
+            setTimeout(() => {
+                shortcutsHint.classList.remove('visible');
+            }, 6000);
+        }, 3000);
 
         // ========================================
         // ===== INITIAL STATS ANIMATION =====
@@ -2437,22 +2408,15 @@
         setTimeout(animateStats, 1500);
 
         // ========================================
-        // ===== KEYBOARD NAVIGATION =====
+        // ===== ACTIVE SECTION ON LOAD =====
         // ========================================
-        document.addEventListener('keydown', (e) => {
-            // Alt+1-7 for sections
-            const sections = ['home', 'about', 'skills', 'services', 'gallery', 'testimonials', 'contact'];
-            if (e.altKey && e.key >= '1' && e.key <= '7') {
-                e.preventDefault();
-                const idx = parseInt(e.key) - 1;
-                openPanel(sections[idx]);
-                if (idx === 0) {
-                    document.getElementById('home-section').scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        });
+        updateActiveSection(0);
 
-        console.log('⌨️ Keyboard shortcuts: Alt+1-7 to navigate sections');
+        console.log('✅ Portfolio Enhanced: Full-page scroll, CTA chatbot, premium features');
+        console.log('💡 Keyboard shortcuts:');
+        console.log('   Ctrl+K - Toggle chat');
+        console.log('   Alt+1-7 - Navigate sections');
+        console.log('   Escape - Close chat');
     </script>
 </body>
 </html>
