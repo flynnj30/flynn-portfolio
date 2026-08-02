@@ -128,7 +128,7 @@
         <kbd>Alt</kbd> + <kbd>1</kbd>–<kbd>8</kbd> to navigate &nbsp;·&nbsp; <kbd>Ctrl</kbd> + <kbd>K</kbd> for chat
     </div>
 
-    <!-- NAVIGATION - CTA BUTTON REMOVED -->
+    <!-- NAVIGATION -->
     <nav>
         <div class="nav-container">
             <div class="logo" id="logoBtn">Flynn James <span>Pontino</span></div>
@@ -448,13 +448,22 @@
                                 <textarea id="user_message" name="user_message" placeholder="Tell me about your project, goals, or how I can help..." required></textarea>
                             </div>
                             
-                            <!-- reCAPTCHA v2 with explicit render -->
-                            <div class="recaptcha-container">
-                                <div id="recaptchaWidget"></div>
+                            <!-- Terms & Conditions Checkbox -->
+                            <div class="form-group terms-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="termsCheckbox" required />
+                                    <span class="checkmark"></span>
+                                    <span class="checkbox-text">
+                                        I have read and agree to the 
+                                        <a href="terms.html" target="_blank" class="terms-link">Terms &amp; Conditions</a> 
+                                        and 
+                                        <a href="privacy.html" target="_blank" class="terms-link">Privacy Policy</a>
+                                    </span>
+                                </label>
                             </div>
                             
                             <button type="submit" class="form-submit-btn" id="formSubmitBtn" disabled>
-                                <i class="fas fa-paper-plane"></i> Complete reCAPTCHA First
+                                <i class="fas fa-paper-plane"></i> Please Accept Terms to Continue
                             </button>
                             <div id="formStatus" class="form-status"></div>
                         </form>
@@ -489,9 +498,6 @@
         <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type a message..." /><button id="sendChatMsg"><i class="fas fa-paper-plane"></i></button></div>
     </div>
 
-    <!-- reCAPTCHA API with explicit render -->
-    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="assets/js/main.js"></script>
