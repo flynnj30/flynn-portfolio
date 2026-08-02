@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+    
+    <!-- reCAPTCHA API -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
     <style>
         :root {
             --bg-dark: #0a0a0a;
@@ -1129,6 +1133,26 @@
             gap: 16px;
         }
 
+        /* ===== reCAPTCHA Container ===== */
+        .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            margin: 16px 0;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-dark);
+            min-height: 78px;
+            align-items: center;
+        }
+        body.light-mode .recaptcha-container {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        .recaptcha-container .g-recaptcha {
+            transform: scale(0.92);
+            transform-origin: center;
+        }
+
         .form-submit-btn {
             width: 100%;
             padding: 14px;
@@ -1382,6 +1406,7 @@
             .notification-toast { left: 15px; right: 15px; max-width: none; top: 75px; }
             .contact-wrapper { grid-template-columns: 1fr; }
             .form-row { grid-template-columns: 1fr; }
+            .recaptcha-container .g-recaptcha { transform: scale(0.85); }
         }
         @media (max-width: 550px) {
             .hero-image img { max-width: 220px; }
@@ -1393,6 +1418,7 @@
             .action-hub .hub-toggle { width: 48px; height: 48px; font-size: 1.3rem; }
             .action-hub .hub-item { width: 40px; height: 40px; }
             .contact-info, .contact-form-wrapper { padding: 20px; }
+            .recaptcha-container .g-recaptcha { transform: scale(0.75); }
         }
     </style>
 </head>
@@ -1710,6 +1736,11 @@
                                 <textarea id="user_message" name="user_message" placeholder="Tell me about your project, goals, or how I can help..." required></textarea>
                             </div>
                             
+                            <!-- ===== reCAPTCHA WIDGET ===== -->
+                            <div class="recaptcha-container">
+                                <div class="g-recaptcha" data-sitekey="6LfAaXEtAAAAALnWqDEYvVKOX-4CqLrMIBIeAEXd"></div>
+                            </div>
+                            
                             <button type="submit" class="form-submit-btn" id="formSubmitBtn">
                                 <i class="fas fa-paper-plane"></i> Send Message
                             </button>
@@ -1754,21 +1785,24 @@
     
     <script>
         // ===== EMAILJS CONFIGURATION =====
-        // 🔑 REPLACE THESE WITH YOUR ACTUAL EMAILJS KEYS
         const EMAILJS_CONFIG = {
-            publicKey: 'crekfvN6H352DXAfx',      // Get from EmailJS Dashboard → Account → API Keys
-            serviceID: 'service_av4pfmh',      // Get from EmailJS Dashboard → Email Services
-            templateID: 'template_vcqi0qv'     // Get from EmailJS Dashboard → Email Templates
+            publicKey: 'crekfvN6H352DXAfx',
+            serviceID: 'service_av4pfmh',
+            templateID: 'template_vcqi0qv'
         };
+
+        // reCAPTCHA Site Key
+        const RECAPTCHA_SITE_KEY = '6LfAaXEtAAAAALnWqDEYvVKOX-4CqLrMIBIeAEXd';
+        const RECAPTCHA_SECRET_KEY = '6LfAaXEtAAAAAJpAQSyrS7-9RN99MbO3x7MS_rA0';
 
         // Initialize EmailJS
         (function() {
             try {
-                if (EMAILJS_CONFIG.publicKey !== 'YOUR_PUBLIC_KEY') {
+                if (EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.publicKey !== 'YOUR_PUBLIC_KEY') {
                     emailjs.init(EMAILJS_CONFIG.publicKey);
                     console.log('✅ EmailJS initialized successfully');
                 } else {
-                    console.warn('⚠️ EmailJS not configured. Please set your keys.');
+                    console.warn('⚠️ EmailJS not configured properly.');
                 }
             } catch (error) {
                 console.warn('⚠️ EmailJS init error:', error);
@@ -2044,6 +2078,10 @@
             window.statusTimeout = setTimeout(() => {
                 formStatus.className = 'form-status';
                 formStatus.style.display = 'none';
+                // Reset reCAPTCHA after status clears
+                if (typeof grecaptcha !== 'undefined') {
+                    try { grecaptcha.reset(); } catch(e) {}
+                }
             }, 6000);
         }
 
@@ -2054,10 +2092,9 @@
             formStatus.style.display = 'none';
             
             // Check EmailJS config
-            if (EMAILJS_CONFIG.publicKey === 'YOUR_PUBLIC_KEY' || 
-                EMAILJS_CONFIG.serviceID === 'YOUR_SERVICE_ID' || 
-                EMAILJS_CONFIG.templateID === 'YOUR_TEMPLATE_ID') {
-                setStatus('error', '⚠️ Email service not configured. Please set your EmailJS keys.');
+            if (!EMAILJS_CONFIG.publicKey || !EMAILJS_CONFIG.serviceID || !EMAILJS_CONFIG.templateID ||
+                EMAILJS_CONFIG.publicKey === 'YOUR_PUBLIC_KEY') {
+                setStatus('error', '⚠️ Email service not configured. Please check your EmailJS keys.');
                 return;
             }
 
@@ -2076,24 +2113,53 @@
                 return;
             }
 
+            // Get reCAPTCHA response
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                setStatus('error', '⚠️ Please complete the reCAPTCHA verification.');
+                return;
+            }
+
             // Disable button
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
 
-            // Send email via EmailJS
-            emailjs.send(
-                EMAILJS_CONFIG.serviceID,
-                EMAILJS_CONFIG.templateID,
-                formData
-            )
+            // ===== VERIFY reCAPTCHA =====
+            fetch('https://www.google.com/recaptcha/api/siteverify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'secret=' + RECAPTCHA_SECRET_KEY + '&response=' + recaptchaResponse
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // reCAPTCHA verified - send email
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                    return emailjs.send(
+                        EMAILJS_CONFIG.serviceID,
+                        EMAILJS_CONFIG.templateID,
+                        formData
+                    );
+                } else {
+                    throw new Error('reCAPTCHA verification failed. Please try again.');
+                }
+            })
             .then(function(response) {
                 setStatus('success', '✅ Message sent successfully! I\'ll get back to you within 24 hours.');
                 contactForm.reset();
+                if (typeof grecaptcha !== 'undefined') {
+                    try { grecaptcha.reset(); } catch(e) {}
+                }
                 showCustomToast('📨 Message Sent!', 'Thanks for reaching out. I\'ll respond within 24 hours.');
             })
             .catch(function(error) {
-                console.error('EmailJS Error:', error);
-                setStatus('error', '❌ Failed to send message. Please try again or email me directly at va.flynnjames@gmail.com');
+                console.error('Error:', error);
+                setStatus('error', '❌ ' + error.message + ' Please try again or email me directly.');
+                if (typeof grecaptcha !== 'undefined') {
+                    try { grecaptcha.reset(); } catch(e) {}
+                }
             })
             .finally(function() {
                 submitBtn.disabled = false;
@@ -2117,12 +2183,13 @@
         }
 
         updateActiveSection(0);
-        console.log('✅ Portfolio Ready — Contact form with EmailJS integrated');
+        console.log('✅ Portfolio Ready — Contact form with EmailJS & reCAPTCHA');
         console.log('📧 EmailJS Config:', {
             publicKey: EMAILJS_CONFIG.publicKey,
             serviceID: EMAILJS_CONFIG.serviceID,
             templateID: EMAILJS_CONFIG.templateID
         });
+        console.log('🔒 reCAPTCHA Site Key:', RECAPTCHA_SITE_KEY);
     </script>
 </body>
 </html>
