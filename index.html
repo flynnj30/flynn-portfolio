@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+    
+    <!-- reCAPTCHA API -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
     <style>
         :root {
             --bg-dark: #0a0a0a;
@@ -23,6 +27,8 @@
             --border-dark: rgba(255, 255, 255, 0.06);
             --border-light: rgba(0, 0, 0, 0.06);
             --nav-height: 70px;
+            --error: #ef4444;
+            --success: #22c55e;
         }
 
         * {
@@ -1022,38 +1028,210 @@
             font-weight: 600;
         }
 
-        .contact-details {
-            text-align: center;
-            max-width: 600px;
+        /* ===== CONTACT FORM ===== */
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1100px;
             margin: 0 auto;
+            align-items: start;
+        }
+
+        .contact-info {
             background: var(--card-bg-dark);
-            padding: 40px;
-            border-radius: 32px;
+            padding: 32px;
+            border-radius: 24px;
             border: 1px solid var(--border-dark);
             backdrop-filter: blur(12px);
-            transition: all 0.5s ease;
         }
-        body.light-mode .contact-details { background: var(--card-bg-light); border-color: var(--border-light); }
-        .contact-details:hover { transform: translateY(-6px); border-color: rgba(10, 158, 64, 0.1); }
-        .contact-details img {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
+        body.light-mode .contact-info {
+            background: var(--card-bg-light);
+            border-color: var(--border-light);
+        }
+
+        .contact-info h3 {
+            font-size: 1.3rem;
+            color: var(--green);
+            margin-bottom: 16px;
+        }
+
+        .contact-info p {
+            opacity: 0.8;
             margin-bottom: 20px;
-            border: 3px solid var(--green);
-            object-fit: cover;
+            line-height: 1.7;
         }
-        .contact-details .contact-item {
+
+        .contact-info .info-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 12px 0;
+            font-size: 0.95rem;
+        }
+        .contact-info .info-item i {
+            color: var(--green);
+            width: 20px;
+            font-size: 1.1rem;
+        }
+        .contact-info .info-item a {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        body.light-mode .contact-info .info-item a {
+            color: var(--text-light);
+        }
+        .contact-info .info-item a:hover {
+            color: var(--green);
+        }
+
+        .contact-form-wrapper {
+            background: var(--card-bg-dark);
+            padding: 32px;
+            border-radius: 24px;
+            border: 1px solid var(--border-dark);
+            backdrop-filter: blur(12px);
+        }
+        body.light-mode .contact-form-wrapper {
+            background: var(--card-bg-light);
+            border-color: var(--border-light);
+        }
+
+        .contact-form-wrapper h3 {
+            font-size: 1.3rem;
+            color: var(--green);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            opacity: 0.8;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        body.light-mode .form-group input,
+        body.light-mode .form-group select,
+        body.light-mode .form-group textarea {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-light);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(10, 158, 64, 0.15);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group select option {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+        body.light-mode .form-group select option {
+            background: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* ===== reCAPTCHA Container ===== */
+        .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            margin: 16px 0;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-dark);
+            min-height: 78px;
+            align-items: center;
+        }
+        body.light-mode .recaptcha-container {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .recaptcha-container .g-recaptcha {
+            transform: scale(0.92);
+            transform-origin: center;
+        }
+
+        .form-submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin: 12px 0;
-            font-size: 1rem;
+            gap: 10px;
+            margin-top: 8px;
         }
-        .contact-details .contact-item i { color: var(--green); width: 22px; }
-        .contact-details .contact-item a { color: var(--green); font-weight: 600; text-decoration: none; }
-        .contact-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px; }
+        .form-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(10, 158, 64, 0.4);
+        }
+        .form-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-status {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            display: none;
+            text-align: center;
+        }
+        .form-status.success {
+            display: block;
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        .form-status.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
 
         .action-hub {
             position: fixed;
@@ -1253,6 +1431,9 @@
             .back-to-top { bottom: 90px; }
             .chat-window { right: 5px; bottom: 85px; width: calc(100vw - 10px); }
             .notification-toast { left: 15px; right: 15px; max-width: none; top: 75px; }
+            .contact-wrapper { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .recaptcha-container .g-recaptcha { transform: scale(0.85); }
         }
         @media (max-width: 550px) {
             .hero-image img { max-width: 220px; }
@@ -1263,6 +1444,8 @@
             .back-to-top { bottom: 75px; right: 10px; }
             .action-hub .hub-toggle { width: 48px; height: 48px; font-size: 1.3rem; }
             .action-hub .hub-item { width: 40px; height: 40px; }
+            .contact-info, .contact-form-wrapper { padding: 20px; }
+            .recaptcha-container .g-recaptcha { transform: scale(0.75); }
         }
     </style>
 </head>
@@ -1340,7 +1523,6 @@
                     <div class="hero-image">
                         <div class="profile-ring"></div>
                         <div class="profile-ring-2"></div>
-                        <!-- UPDATED: Hero/Home profile image -->
                         <img src="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" alt="Flynn James Pontino - Strategic Growth Leader" loading="eager" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22370%22 height=%22370%22><rect fill=%22%231a1a1a%22 width=%22370%22 height=%22370%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%230a9e40%22 font-size=%2220%22 font-family=%22Inter,sans-serif%22>FJ</text></svg>'" />
                         <div class="status-badge"><span class="dot"></span> Open to opportunities</div>
                         <a href="https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing" target="_blank" rel="noopener" class="check-cv-btn"><i class="fas fa-file-pdf"></i> Check My CV</a>
@@ -1421,7 +1603,6 @@
                 <h2 class="section-title">Behind the Scenes</h2>
                 <p style="opacity:0.7;margin-bottom:20px;text-align:center;">A glimpse into my professional journey — real moments, real results.</p>
                 <div class="gallery-grid">
-                    <!-- UPDATED: Gallery Professional Headshot -->
                     <div class="gallery-item"><a href="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" data-lightbox="gallery" data-title="Professional Headshot"><img src="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" alt="Professional Headshot" loading="lazy" /><div class="badge">2026</div><div class="overlay"><span>📸 Professional Headshot</span></div></a></div>
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" data-lightbox="gallery" data-title="Award Ceremony"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977175af337.jpg" alt="Award Ceremony" loading="lazy" /><div class="badge">🏆 Award</div><div class="overlay"><span>🏆 Top Performer Award</span></div></a></div>
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" data-lightbox="gallery" data-title="Global Team"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_6297717362fda.jpg" alt="Global Team" loading="lazy" /><div class="badge">🌍 Global</div><div class="overlay"><span>🌍 Global Team</span></div></a></div>
@@ -1493,24 +1674,93 @@
             </div>
         </section>
 
+        <!-- ===== CONTACT SECTION WITH FORM & reCAPTCHA ===== -->
         <section class="section-wrapper" data-index="7" id="section-contact">
             <div class="bg-glow"></div>
             <div class="section-content">
                 <h2 class="section-title">Let's Connect</h2>
-                <div class="contact-details">
-                    <!-- UPDATED: Contact section image -->
-                    <img src="https://img.sanishtech.com/u/7d74cd13db3bf8b652e904473663bc73.jpg" alt="Flynn James" loading="lazy" />
-                    <div class="contact-item"><i class="fas fa-envelope"></i><a href="mailto:va.flynnjames@gmail.com">va.flynnjames@gmail.com</a></div>
-                    <div class="contact-item"><i class="fas fa-phone"></i><a href="tel:+639306359306">+63 930 635 9306</a></div>
-                    <div class="contact-item"><i class="fab fa-whatsapp"></i><a href="https://wa.me/639306359306">WhatsApp</a></div>
-                    <div class="contact-item"><i class="fab fa-linkedin"></i><a href="https://www.linkedin.com/in/fjpontino/" target="_blank" rel="noopener">linkedin.com/in/fjpontino</a></div>
-                    <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>Toledo, Cebu (Remote / Global)</span></div>
-                    <div class="contact-actions">
-                        <a href="mailto:va.flynnjames@gmail.com" class="btn-primary"><i class="fas fa-paper-plane"></i> Send Email</a>
-                        <a href="tel:+639306359306" class="btn-secondary"><i class="fas fa-phone"></i> Call Me</a>
-                        <a href="https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing" target="_blank" rel="noopener" class="btn-secondary"><i class="fas fa-file-pdf"></i> Download CV</a>
+                <p style="opacity:0.7;margin-bottom:30px;text-align:center;">Have a project in mind? Let's talk about how I can help you scale your sales.</p>
+                
+                <div class="contact-wrapper">
+                    <!-- Contact Info -->
+                    <div class="contact-info">
+                        <h3><i class="fas fa-address-card" style="color:var(--green);margin-right:10px;"></i>Get in Touch</h3>
+                        <p>I'm always open to new opportunities, partnerships, and conversations about sales growth. Reach out and let's make something happen.</p>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:va.flynnjames@gmail.com">va.flynnjames@gmail.com</a>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+639306359306">+63 930 635 9306</a>
+                        </div>
+                        <div class="info-item">
+                            <i class="fab fa-whatsapp"></i>
+                            <a href="https://wa.me/639306359306">WhatsApp</a>
+                        </div>
+                        <div class="info-item">
+                            <i class="fab fa-linkedin"></i>
+                            <a href="https://www.linkedin.com/in/fjpontino/" target="_blank">linkedin.com/in/fjpontino</a>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Toledo, Cebu (Remote / Global)</span>
+                        </div>
+                        
+                        <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border-dark);">
+                            <p style="font-size:0.85rem;opacity:0.7;">
+                                <i class="fas fa-clock" style="color:var(--green);"></i> 
+                                Response within 24 hours
+                            </p>
+                        </div>
                     </div>
-                    <p style="margin-top: 20px; opacity:0.6; font-size:0.85rem;"><i class="fas fa-chart-line" style="color:var(--green);"></i> "Turning prospecting into predictable pipeline."</p>
+
+                    <!-- Contact Form -->
+                    <div class="contact-form-wrapper">
+                        <h3><i class="fas fa-paper-plane" style="color:var(--green);margin-right:10px;"></i>Send a Message</h3>
+                        <form id="contactForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="user_name">Full Name *</label>
+                                    <input type="text" id="user_name" name="user_name" placeholder="John Doe" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="user_email">Email Address *</label>
+                                    <input type="email" id="user_email" name="user_email" placeholder="john@example.com" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="user_phone">Phone Number</label>
+                                <input type="tel" id="user_phone" name="user_phone" placeholder="+63 900 000 0000" />
+                            </div>
+                            <div class="form-group">
+                                <label for="user_subject">Subject *</label>
+                                <select id="user_subject" name="user_subject" required>
+                                    <option value="">Select a subject...</option>
+                                    <option value="Hiring Opportunity">Hiring Opportunity</option>
+                                    <option value="Sales Consulting">Sales Consulting</option>
+                                    <option value="Partnership">Partnership</option>
+                                    <option value="Speaking Engagement">Speaking Engagement</option>
+                                    <option value="General Inquiry">General Inquiry</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="user_message">Message *</label>
+                                <textarea id="user_message" name="user_message" placeholder="Tell me about your project, goals, or how I can help..." required></textarea>
+                            </div>
+                            
+                            <!-- ===== reCAPTCHA WIDGET ===== -->
+                            <div class="recaptcha-container">
+                                <div class="g-recaptcha" data-sitekey="6Le8ZXEtAAAAAHNhLkcOy_Eup5vfMX0silm91iwe"></div>
+                            </div>
+                            
+                            <button type="submit" class="form-submit-btn" id="formSubmitBtn">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                            <div id="formStatus" class="form-status"></div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1539,17 +1789,165 @@
         <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type a message..." /><button id="sendChatMsg"><i class="fas fa-paper-plane"></i></button></div>
     </div>
 
+    <!-- ===== EMAILJS LIBRARY ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
+    
     <script>
+        // ===== EMAILJS CONFIGURATION =====
+        // 🔑 YOU MUST REPLACE THESE VALUES WITH YOUR OWN FROM EMAILJS
+        const EMAILJS_CONFIG = {
+            publicKey: 'YOUR_PUBLIC_KEY',      // Get from EmailJS Dashboard → Account → API Keys
+            serviceID: 'YOUR_SERVICE_ID',      // Get from EmailJS Dashboard → Email Services
+            templateID: 'YOUR_TEMPLATE_ID'     // Get from EmailJS Dashboard → Email Templates
+        };
+
+        // Initialize EmailJS
+        (function() {
+            try {
+                emailjs.init(EMAILJS_CONFIG.publicKey);
+                console.log('✅ EmailJS initialized successfully');
+            } catch (error) {
+                console.warn('⚠️ EmailJS not configured yet. Please set your keys.');
+            }
+        })();
+
+        // ===== CONTACT FORM HANDLER =====
+        const contactForm = document.getElementById('contactForm');
+        const formStatus = document.getElementById('formStatus');
+        const submitBtn = document.getElementById('formSubmitBtn');
+
+        // Auto-dismiss status after 5 seconds
+        function dismissStatus() {
+            setTimeout(() => {
+                formStatus.className = 'form-status';
+                formStatus.style.display = 'none';
+                // Reset reCAPTCHA after successful submission
+                if (typeof grecaptcha !== 'undefined') {
+                    try {
+                        grecaptcha.reset();
+                    } catch(e) {}
+                }
+            }, 5000);
+        }
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset status
+            formStatus.className = 'form-status';
+            formStatus.style.display = 'none';
+            
+            // Check if EmailJS is configured
+            if (EMAILJS_CONFIG.publicKey === 'YOUR_PUBLIC_KEY' || 
+                EMAILJS_CONFIG.serviceID === 'YOUR_SERVICE_ID' || 
+                EMAILJS_CONFIG.templateID === 'YOUR_TEMPLATE_ID') {
+                formStatus.className = 'form-status error';
+                formStatus.style.display = 'block';
+                formStatus.innerHTML = '⚠️ Email service not configured. Please set your EmailJS keys in the script.';
+                dismissStatus();
+                return;
+            }
+
+            // Get form data
+            const formData = {
+                user_name: document.getElementById('user_name').value.trim(),
+                user_email: document.getElementById('user_email').value.trim(),
+                user_phone: document.getElementById('user_phone').value.trim(),
+                user_subject: document.getElementById('user_subject').value,
+                user_message: document.getElementById('user_message').value.trim(),
+                to_email: 'va.flynnjames@gmail.com'
+            };
+
+            // Validate
+            if (!formData.user_name || !formData.user_email || !formData.user_subject || !formData.user_message) {
+                formStatus.className = 'form-status error';
+                formStatus.style.display = 'block';
+                formStatus.innerHTML = '⚠️ Please fill in all required fields.';
+                dismissStatus();
+                return;
+            }
+
+            // ===== VALIDATE reCAPTCHA =====
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                formStatus.className = 'form-status error';
+                formStatus.style.display = 'block';
+                formStatus.innerHTML = '⚠️ Please complete the reCAPTCHA verification.';
+                dismissStatus();
+                return;
+            }
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+            // Send email via EmailJS
+            emailjs.send(
+                EMAILJS_CONFIG.serviceID,
+                EMAILJS_CONFIG.templateID,
+                formData
+            )
+            .then(function(response) {
+                // Success
+                formStatus.className = 'form-status success';
+                formStatus.style.display = 'block';
+                formStatus.innerHTML = '✅ Message sent successfully! I\'ll get back to you within 24 hours.';
+                contactForm.reset();
+                // Reset reCAPTCHA
+                if (typeof grecaptcha !== 'undefined') {
+                    try {
+                        grecaptcha.reset();
+                    } catch(e) {}
+                }
+                dismissStatus();
+                
+                // Show toast notification
+                showCustomToast('📨 Message Sent!', 'Thanks for reaching out. I\'ll respond within 24 hours.');
+            })
+            .catch(function(error) {
+                // Error
+                console.error('EmailJS Error:', error);
+                formStatus.className = 'form-status error';
+                formStatus.style.display = 'block';
+                formStatus.innerHTML = '❌ Failed to send message. Please try again or email me directly at va.flynnjames@gmail.com';
+                // Reset reCAPTCHA so user can try again
+                if (typeof grecaptcha !== 'undefined') {
+                    try {
+                        grecaptcha.reset();
+                    } catch(e) {}
+                }
+                dismissStatus();
+            })
+            .finally(function() {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+            });
+        });
+
+        // ===== CUSTOM TOAST =====
+        function showCustomToast(title, message) {
+            const toast = document.getElementById('notificationToast');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+
         // ===== PARTICLES =====
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        let mouseX = -1000,
-            mouseY = -1000;
+        let mouseX = -1000, mouseY = -1000;
 
-        function resizeCanvas() { canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight; }
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
@@ -1566,8 +1964,7 @@
                 this.hue = Math.random() * 40 + 100;
             }
             update() {
-                const dx = mouseX - this.x,
-                    dy = mouseY - this.y;
+                const dx = mouseX - this.x, dy = mouseY - this.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < 150) { const angle = Math.atan2(dy, dx);
                     this.speedX -= Math.cos(angle) * 0.2;
@@ -1595,32 +1992,26 @@
             }
         }
         for (let i = 0; i < 70; i++) particles.push(new Particle());
-        document.addEventListener('mousemove', (e) => { mouseX = e.clientX;
-            mouseY = e.clientY; });
-        document.addEventListener('touchmove', (e) => { mouseX = e.touches[0].clientX;
-            mouseY = e.touches[0].clientY; });
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+        document.addEventListener('touchmove', (e) => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
 
         function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update();
-                p.draw(ctx); });
+            particles.forEach(p => { p.update(); p.draw(ctx); });
             requestAnimationFrame(animateParticles); }
         animateParticles();
 
         // ===== TYPEWRITER =====
         const roles = ["SALES LEADER", "PIPELINE ARCHITECT", "TEAM BUILDER", "GROWTH STRATEGIST"];
-        let roleIndex = 0,
-            charIndex = 0;
+        let roleIndex = 0, charIndex = 0;
         const typedSpan = document.querySelector(".typewriter-text");
         let isDeleting = false;
 
         function typeEffect() {
             if (!typedSpan) return;
             const currentRole = roles[roleIndex];
-            if (!isDeleting && charIndex <= currentRole.length) { typedSpan.textContent = currentRole.substring(0,
-                    charIndex);
+            if (!isDeleting && charIndex <= currentRole.length) { typedSpan.textContent = currentRole.substring(0, charIndex);
                 charIndex++;
-                setTimeout(typeEffect, 80); } else if (isDeleting && charIndex >= 0) { typedSpan.textContent = currentRole
-                    .substring(0, charIndex);
+                setTimeout(typeEffect, 80); } else if (isDeleting && charIndex >= 0) { typedSpan.textContent = currentRole.substring(0, charIndex);
                 charIndex--;
                 setTimeout(typeEffect, 35); } else if (!isDeleting && charIndex > currentRole.length) { isDeleting = true;
                 setTimeout(typeEffect, 1600); } else if (isDeleting && charIndex < 0) { isDeleting = false;
@@ -1643,7 +2034,6 @@
         }
 
         themeToggle.addEventListener('click', toggleTheme);
-
         if (localStorage.getItem('theme') === 'light') toggleTheme();
 
         // ===== STATS COUNTER =====
@@ -1655,8 +2045,7 @@
             stats.forEach(stat => { const target = parseInt(stat.dataset.count);
                 let current = 0;
                 const increment = target / 40;
-                const timer = setInterval(() => { current += increment; if (current >= target) { stat.textContent =
-                            target + (target === 120 || target === 150 ? '%' : '+');
+                const timer = setInterval(() => { current += increment; if (current >= target) { stat.textContent = target + (target === 120 || target === 150 ? '%' : '+');
                         clearInterval(timer); } else { stat.textContent = Math.floor(current); } }, 30); }); }
         setTimeout(animateStats, 1500);
 
@@ -1683,8 +2072,7 @@
             const targetRect = targetSection.getBoundingClientRect();
             const scrollOffset = targetRect.top - containerRect.top + scrollContainer.scrollTop;
             scrollContainer.scrollTo({ top: scrollOffset, behavior: 'smooth' });
-            setTimeout(() => { if (Math.abs(scrollContainer.scrollTop - scrollOffset) > 50) { targetSection
-                        .scrollIntoView({ behavior: 'smooth', block: 'start' }); } }, 100);
+            setTimeout(() => { if (Math.abs(scrollContainer.scrollTop - scrollOffset) > 50) { targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }, 100);
             setTimeout(() => updateActiveSection(index), 200);
             document.getElementById('chatWindow').classList.remove('open');
             document.getElementById('actionHub').classList.remove('expanded');
@@ -1694,10 +2082,7 @@
             scrollToSection(i); }));
         progressDots.forEach((dot, i) => dot.addEventListener('click', () => scrollToSection(i)));
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) {
-                    const index = parseInt(entry.target.dataset.index); if (!isNaN(index) && index !== currentIndex && !
-                        isScrolling) updateActiveSection(index); if (index === 0) document.getElementById(
-                        'section-home')?.classList.remove('hero-blur'); if (index === 6) setTimeout(animateStats,
-                    300); } }); }, { threshold: 0.3, root: scrollContainer });
+                    const index = parseInt(entry.target.dataset.index); if (!isNaN(index) && index !== currentIndex && !isScrolling) updateActiveSection(index); if (index === 0) document.getElementById('section-home')?.classList.remove('hero-blur'); if (index === 6) setTimeout(animateStats, 300); } }); }, { threshold: 0.3, root: scrollContainer });
         sections.forEach(s => observer.observe(s));
 
         // ===== HERO BLUR =====
@@ -1707,29 +2092,23 @@
         function updateHeroBlur() { if (!heroSection) return; if (heroBlurTimeout) clearTimeout(heroBlurTimeout);
             const vh = window.innerHeight;
             const rect = heroSection.getBoundingClientRect(); if (rect.top < -vh * 0.3 || rect.bottom < vh * 0.2) {
-                heroBlurTimeout = setTimeout(() => heroSection.classList.add('hero-blur'), 100); } else { heroSection
-                    .classList.remove('hero-blur'); } }
+                heroBlurTimeout = setTimeout(() => heroSection.classList.add('hero-blur'), 100); } else { heroSection.classList.remove('hero-blur'); } }
         scrollContainer.addEventListener('scroll', () => requestAnimationFrame(updateHeroBlur));
         setTimeout(updateHeroBlur, 100);
 
         // ===== BACK TO TOP =====
         const backToTop = document.getElementById('backToTop');
 
-        function scrollToTopHandler(e) { if (e) { e.preventDefault();
-                e.stopPropagation(); }
+        function scrollToTopHandler(e) { if (e) { e.preventDefault(); e.stopPropagation(); }
             backToTop.style.transform = 'scale(0.85)';
             setTimeout(() => { if (backToTop.classList.contains('visible')) backToTop.style.transform = ''; }, 300);
             scrollToSection(0);
-            setTimeout(() => { if (scrollContainer.scrollTop > 10) scrollContainer.scrollTo({ top: 0,
-                behavior: 'smooth' }); }, 50);
-            setTimeout(() => { if (scrollContainer.scrollTop > 100) document.getElementById('section-home')
-                    ?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150); }
+            setTimeout(() => { if (scrollContainer.scrollTop > 10) scrollContainer.scrollTo({ top: 0, behavior: 'smooth' }); }, 50);
+            setTimeout(() => { if (scrollContainer.scrollTop > 100) document.getElementById('section-home')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150); }
         backToTop.addEventListener('click', scrollToTopHandler);
-        backToTop.addEventListener('touchstart', function(e) { e.preventDefault();
-            scrollToTopHandler(e); }, { passive: false });
+        backToTop.addEventListener('touchstart', function(e) { e.preventDefault(); scrollToTopHandler(e); }, { passive: false });
 
-        function updateBackToTopVisibility() { if (scrollContainer.scrollTop > window.innerHeight * 0.6) { backToTop
-                .classList.add('visible'); } else { backToTop.classList.remove('visible'); } }
+        function updateBackToTopVisibility() { if (scrollContainer.scrollTop > window.innerHeight * 0.6) { backToTop.classList.add('visible'); } else { backToTop.classList.remove('visible'); } }
         scrollContainer.addEventListener('scroll', updateBackToTopVisibility);
         setTimeout(updateBackToTopVisibility, 200);
 
@@ -1762,29 +2141,20 @@
             toastMessage.textContent = notif.message;
             notificationToast.classList.add('show');
             currentNotificationIndex = (currentNotificationIndex + 1) % funnyNotifications.length;
-            setTimeout(() => { notificationToast.classList.remove('show');
-                notificationVisible = false; }, 6000); }
+            setTimeout(() => { notificationToast.classList.remove('show'); notificationVisible = false; }, 6000); }
 
-        function startNotificationCycle() { showNotification();
-            notificationInterval = setInterval(showNotification, 20000); }
+        function startNotificationCycle() { showNotification(); notificationInterval = setInterval(showNotification, 20000); }
         startNotificationCycle();
-        toastCloseBtn.addEventListener('click', () => { notificationToast.classList.remove('show');
-            notificationVisible = false; });
-        notificationToast.addEventListener('click', (e) => { if (e.target !== toastCloseBtn) { notificationToast.classList
-                    .remove('show');
-                notificationVisible = false; } });
+        toastCloseBtn.addEventListener('click', () => { notificationToast.classList.remove('show'); notificationVisible = false; });
+        notificationToast.addEventListener('click', (e) => { if (e.target !== toastCloseBtn) { notificationToast.classList.remove('show'); notificationVisible = false; } });
 
         // ===== ACTION HUB =====
         const hubToggle = document.getElementById('hubToggle');
         const actionHub = document.getElementById('actionHub');
-        hubToggle.addEventListener('click', (e) => { e.stopPropagation();
-            actionHub.classList.toggle('expanded'); });
-        document.addEventListener('click', (e) => { if (!actionHub.contains(e.target)) actionHub.classList.remove(
-            'expanded'); });
-        document.querySelectorAll('.hub-item[data-action]').forEach(item => { item.addEventListener('click', function(
-            e) { e.stopPropagation();
-                const action = this.dataset.action; if (action === 'cv') window.open(
-                    'https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing', '_blank');
+        hubToggle.addEventListener('click', (e) => { e.stopPropagation(); actionHub.classList.toggle('expanded'); });
+        document.addEventListener('click', (e) => { if (!actionHub.contains(e.target)) actionHub.classList.remove('expanded'); });
+        document.querySelectorAll('.hub-item[data-action]').forEach(item => { item.addEventListener('click', function(e) { e.stopPropagation();
+                const action = this.dataset.action; if (action === 'cv') window.open('https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing', '_blank');
                 else if (action === 'email') window.location.href = 'mailto:va.flynnjames@gmail.com';
                 else if (action === 'phone') window.location.href = 'tel:+639306359306';
                 else if (action === 'chat') document.getElementById('chatWindow').classList.toggle('open');
@@ -1795,8 +2165,7 @@
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendChatMsg');
-        const sectionIndices = { home: 0, about: 1, skills: 2, services: 3, gallery: 4, testimonials: 5, certifications: 6,
-            contact: 7 };
+        const sectionIndices = { home: 0, about: 1, skills: 2, services: 3, gallery: 4, testimonials: 5, certifications: 6, contact: 7 };
 
         function addChatMessage(text, sender) { const div = document.createElement('div');
             div.className = `chat-message ${sender}`;
@@ -1804,46 +2173,32 @@
             chatMessages.appendChild(div);
             chatMessages.scrollTop = chatMessages.scrollHeight; }
 
-        function handleChatAction(action) { chatWindow.classList.remove('open'); if (sectionIndices[action] !==
-                undefined) scrollToSection(sectionIndices[action]); else if (action === 'hire') window.location.href =
-                'mailto:va.flynnjames@gmail.com'; else if (action === 'cv') window.open(
-                'https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing', '_blank'); }
-        document.querySelectorAll('.chat-actions button[data-action]').forEach(btn => { btn.addEventListener('click',
-            function() { handleChatAction(this.dataset.action); }); });
+        function handleChatAction(action) { chatWindow.classList.remove('open'); if (sectionIndices[action] !== undefined) scrollToSection(sectionIndices[action]); else if (action === 'hire') window.location.href = 'mailto:va.flynnjames@gmail.com'; else if (action === 'cv') window.open('https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing', '_blank'); }
+        document.querySelectorAll('.chat-actions button[data-action]').forEach(btn => { btn.addEventListener('click', function() { handleChatAction(this.dataset.action); }); });
         document.getElementById('closeChat').addEventListener('click', () => chatWindow.classList.remove('open'));
         sendBtn.addEventListener('click', () => { const msg = chatInput.value.trim(); if (!msg) return;
             addChatMessage(msg, 'user');
             chatInput.value = '';
             addChatMessage("👋 Use the buttons above to navigate. I'm here to help!", 'bot'); });
-        chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault();
-                sendBtn.click(); } });
+        chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendBtn.click(); } });
 
         // ===== KEYBOARD SHORTCUTS =====
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { chatWindow.classList.remove('open');
-                actionHub.classList.remove('expanded'); } if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e
-                .preventDefault();
-                chatWindow.classList.toggle('open'); if (chatWindow.classList.contains('open')) chatInput.focus(); } if (e
-                .altKey && e.key >= '1' && e.key <= '8') { e.preventDefault();
-                scrollToSection(parseInt(e.key) - 1);
-                chatWindow.classList.remove('open'); } });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { chatWindow.classList.remove('open'); actionHub.classList.remove('expanded'); } if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); chatWindow.classList.toggle('open'); if (chatWindow.classList.contains('open')) chatInput.focus(); } if (e.altKey && e.key >= '1' && e.key <= '8') { e.preventDefault(); scrollToSection(parseInt(e.key) - 1); chatWindow.classList.remove('open'); } });
 
         // ===== SHORTCUTS HINT =====
         const shortcutsHint = document.getElementById('shortcutsHint');
-        setTimeout(() => { shortcutsHint.classList.add('visible');
-            setTimeout(() => shortcutsHint.classList.remove('visible'), 6000); }, 3000);
+        setTimeout(() => { shortcutsHint.classList.add('visible'); setTimeout(() => shortcutsHint.classList.remove('visible'), 6000); }, 3000);
 
         // ===== MOBILE MENU =====
         const mobileDropdown = document.getElementById('mobileDropdown');
-        document.getElementById('hamburgerBtn').addEventListener('click', () => mobileDropdown.style.transform =
-            'translateY(0)');
-        document.getElementById('cancelBtn').addEventListener('click', () => mobileDropdown.style.transform =
-            'translateY(-105%)');
-        mobileDropdown.querySelectorAll('.links a').forEach(link => { link.addEventListener('click', () => {
-                mobileDropdown.style.transform = 'translateY(-105%)';
+        document.getElementById('hamburgerBtn').addEventListener('click', () => mobileDropdown.style.transform = 'translateY(0)');
+        document.getElementById('cancelBtn').addEventListener('click', () => mobileDropdown.style.transform = 'translateY(-105%)');
+        mobileDropdown.querySelectorAll('.links a').forEach(link => { link.addEventListener('click', () => { mobileDropdown.style.transform = 'translateY(-105%)';
                 const idx = parseInt(link.dataset.index); if (!isNaN(idx)) scrollToSection(idx); }); });
 
         updateActiveSection(0);
-        console.log('✅ Portfolio Ready — All images updated with new URLs');
+        console.log('✅ Portfolio Ready — Contact form with reCAPTCHA integrated');
+        console.log('🔒 reCAPTCHA Site Key: 6Le8ZXEtAAAAAHNhLkcOy_Eup5vfMX0silm91iwe');
     </script>
 </body>
 </html>
