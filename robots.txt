@@ -1,0 +1,24 @@
+# ============================================================
+# ROBOTS.TXT - Flynn James Pontino Portfolio
+# ============================================================
+
+User-agent: *
+Allow: /
+Disallow: /assets/
+
+Sitemap: https://flynn-portfolio-1.onrender.com/sitemap.xml
+Crawl-delay: 1
+
+User-agent: Googlebot
+Allow: /
+Disallow: /assets/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /assets/
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
