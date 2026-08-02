@@ -2,7 +2,6 @@
  * ============================================================
  * FLYNN JAMES PONTINO | PORTFOLIO MAIN SCRIPT
  * Version: 1.0.0
- * Last Updated: 2026-08-02
  * ============================================================
  */
 
@@ -288,6 +287,9 @@
             this.setupHeroBlur();
             this.setupNavScroll();
             this.setupStatsAnimation();
+            
+            // Expose scrollToSection globally
+            window.scrollToSection = (index) => this.scrollToSection(index);
         }
 
         updateActiveSection(index) {
