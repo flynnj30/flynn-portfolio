@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
-    
-    <!-- reCAPTCHA API -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    
     <style>
         :root {
             --bg-dark: #0a0a0a;
@@ -31,11 +27,7 @@
             --success: #22c55e;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background: var(--bg-dark);
@@ -53,25 +45,14 @@
             color: var(--text-light);
         }
 
-        html {
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
+        html { scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
 
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--green);
-            border-radius: 4px;
-        }
-        body.light-mode ::-webkit-scrollbar-track {
-            background: #e0e0e0;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 4px; }
+        body.light-mode ::-webkit-scrollbar-track { background: #e0e0e0; }
 
+        /* ===== NAVIGATION ===== */
         nav {
             width: 100%;
             height: var(--nav-height);
@@ -96,6 +77,7 @@
         body.light-mode nav.scrolled {
             background: rgba(245, 245, 245, 0.95);
         }
+
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -105,6 +87,7 @@
             align-items: center;
             padding: 0 clamp(16px, 5vw, 40px);
         }
+
         .logo {
             font-size: clamp(1.1rem, 2.5vw, 1.4rem);
             font-weight: 800;
@@ -132,6 +115,7 @@
             0%, 100% { left: -100%; }
             50% { left: 100%; }
         }
+
         .links {
             display: flex;
             gap: clamp(0.8rem, 2vw, 1.8rem);
@@ -148,9 +132,7 @@
             cursor: pointer;
             white-space: nowrap;
         }
-        body.light-mode .links a {
-            color: var(--text-light);
-        }
+        body.light-mode .links a { color: var(--text-light); }
         .links a::after {
             content: '';
             position: absolute;
@@ -164,15 +146,11 @@
             box-shadow: 0 0 10px rgba(10, 158, 64, 0.3);
         }
         .links a:hover::after,
-        .links a.active::after {
-            width: 100%;
-        }
+        .links a.active::after { width: 100%; }
         .links a:hover,
-        .links a.active {
-            color: var(--green);
-        }
-        .hamburg,
-        .cancel {
+        .links a.active { color: var(--green); }
+
+        .hamburg, .cancel {
             font-size: 1.6rem;
             cursor: pointer;
             display: none;
@@ -184,13 +162,9 @@
             z-index: 2;
         }
         body.light-mode .hamburg,
-        body.light-mode .cancel {
-            color: var(--text-light);
-        }
-        .hamburg:hover,
-        .cancel:hover {
-            transform: rotate(90deg);
-        }
+        body.light-mode .cancel { color: var(--text-light); }
+        .hamburg:hover, .cancel:hover { transform: rotate(90deg); }
+
         .dropdown {
             position: fixed;
             top: 0;
@@ -209,9 +183,7 @@
             justify-content: center;
             gap: 2rem;
         }
-        body.light-mode .dropdown {
-            background: rgba(245, 245, 245, 0.98);
-        }
+        body.light-mode .dropdown { background: rgba(245, 245, 245, 0.98); }
         .dropdown .links {
             flex-direction: column;
             gap: 1.5rem;
@@ -256,6 +228,7 @@
             box-shadow: 0 0 30px rgba(10, 158, 64, 0.3);
         }
 
+        /* ===== SECTION PROGRESS ===== */
         .section-progress {
             position: fixed;
             right: clamp(10px, 2vw, 25px);
@@ -313,6 +286,7 @@
             color: #1a1a1a;
         }
 
+        /* ===== BACK TO TOP ===== */
         .back-to-top {
             position: fixed;
             bottom: 110px;
@@ -354,22 +328,19 @@
             background: var(--green);
             border-color: rgba(255, 255, 255, 0.3);
         }
-        .back-to-top:active {
-            transform: scale(0.9);
-        }
+        .back-to-top:active { transform: scale(0.9); }
         .back-to-top .arrow-icon {
             transition: transform 0.3s ease;
             pointer-events: none;
         }
-        .back-to-top:hover .arrow-icon {
-            transform: translateY(-3px);
-        }
+        .back-to-top:hover .arrow-icon { transform: translateY(-3px); }
         body.light-mode .back-to-top {
             background: rgba(10, 158, 64, 0.9);
             border-color: rgba(0, 0, 0, 0.1);
             box-shadow: 0 4px 30px rgba(10, 158, 64, 0.25);
         }
 
+        /* ===== SHORTCUTS HINT ===== */
         .shortcuts-hint {
             position: fixed;
             bottom: 30px;
@@ -388,9 +359,7 @@
             opacity: 0;
             white-space: nowrap;
         }
-        .shortcuts-hint.visible {
-            opacity: 1;
-        }
+        .shortcuts-hint.visible { opacity: 1; }
         body.light-mode .shortcuts-hint {
             background: rgba(255, 255, 255, 0.7);
             color: rgba(0, 0, 0, 0.4);
@@ -403,6 +372,7 @@
             font-size: 0.6rem;
         }
 
+        /* ===== SCROLL CONTAINER ===== */
         .scroll-container {
             height: 100vh;
             height: 100dvh;
@@ -412,10 +382,9 @@
             will-change: scroll-position;
             -webkit-overflow-scrolling: touch;
         }
-        .scroll-container::-webkit-scrollbar {
-            width: 0;
-        }
+        .scroll-container::-webkit-scrollbar { width: 0; }
 
+        /* ===== SECTION WRAPPER ===== */
         .section-wrapper {
             min-height: 100vh;
             min-height: 100dvh;
@@ -441,9 +410,7 @@
             opacity: 0;
             transition: opacity 1s ease;
         }
-        .section-wrapper.visible .bg-glow {
-            opacity: 1;
-        }
+        .section-wrapper.visible .bg-glow { opacity: 1; }
         .section-wrapper .section-content {
             opacity: 0;
             transform: translateY(30px);
@@ -459,9 +426,8 @@
             transform: translateY(0);
         }
 
-        #section-home .hero-grid {
-            transition: all 0.8s ease;
-        }
+        /* ===== HERO ===== */
+        #section-home .hero-grid { transition: all 0.8s ease; }
         #section-home.hero-blur .hero-grid {
             filter: blur(3px) brightness(0.55);
             transform: scale(0.96);
@@ -471,6 +437,7 @@
             filter: blur(3px) brightness(0.7);
             opacity: 0.5;
         }
+
         .hero-grid {
             display: flex;
             align-items: center;
@@ -525,6 +492,7 @@
             transform: scale(1.03) rotate(-3deg);
             box-shadow: 0 0 120px rgba(10, 158, 64, 0.35);
         }
+
         .status-badge {
             position: absolute;
             bottom: 15px;
@@ -561,6 +529,7 @@
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.5; transform: scale(0.7); }
         }
+
         .check-cv-btn {
             position: absolute;
             bottom: 0;
@@ -588,6 +557,7 @@
             background: var(--green-dark);
             box-shadow: 0 8px 45px rgba(10, 158, 64, 0.6);
         }
+
         .hero-content {
             flex: 1 1 350px;
             min-width: 280px;
@@ -635,6 +605,7 @@
             max-width: 550px;
         }
         .hero-content .bio strong { color: var(--green); }
+
         .social-links {
             display: flex;
             gap: 12px;
@@ -680,6 +651,7 @@
             box-shadow: 0 8px 35px rgba(10, 158, 64, 0.3);
         }
         .social-links a:hover i { position: relative; z-index: 2; }
+
         .cta-group {
             display: flex;
             flex-wrap: wrap;
@@ -734,6 +706,7 @@
             color: var(--green);
             transform: translateY(-3px);
         }
+
         .stats-bar {
             display: flex;
             gap: clamp(1.5rem, 4vw, 3rem);
@@ -759,6 +732,7 @@
             letter-spacing: 0.5px;
         }
 
+        /* ===== SECTION TITLES ===== */
         .section-title {
             font-size: clamp(1.6rem, 3.5vw, 2.4rem);
             font-weight: 800;
@@ -779,6 +753,7 @@
             flex-shrink: 0;
         }
 
+        /* ===== ABOUT ===== */
         .about-grid {
             display: flex;
             flex-wrap: wrap;
@@ -825,15 +800,14 @@
             opacity: 0.8;
         }
 
-        .skills-grid,
-        .services-grid {
+        /* ===== SKILLS & SERVICES ===== */
+        .skills-grid, .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 24px;
             margin-top: 10px;
         }
-        .skill-card,
-        .service-card {
+        .skill-card, .service-card {
             background: var(--card-bg-dark);
             padding: 28px 22px;
             border-radius: 24px;
@@ -850,37 +824,33 @@
             background: var(--card-bg-light);
             border-color: var(--border-light);
         }
-        .skill-card:hover,
-        .service-card:hover {
+        .skill-card:hover, .service-card:hover {
             transform: translateY(-10px);
             border-color: var(--green);
             box-shadow: 0 20px 60px rgba(10, 158, 64, 0.1);
         }
-        .skill-card .icon,
-        .service-card .icon {
+        .skill-card .icon, .service-card .icon {
             font-size: 2.8rem;
             color: var(--green);
             margin-bottom: 12px;
             display: block;
             transition: all 0.5s ease;
         }
-        .skill-card:hover .icon,
-        .service-card:hover .icon {
+        .skill-card:hover .icon, .service-card:hover .icon {
             transform: scale(1.15) rotate(-8deg);
         }
-        .skill-card h3,
-        .service-card h3 {
+        .skill-card h3, .service-card h3 {
             font-size: 1.1rem;
             color: var(--green);
             margin-bottom: 8px;
         }
-        .skill-card p,
-        .service-card p {
+        .skill-card p, .service-card p {
             font-size: 0.9rem;
             opacity: 0.8;
             line-height: 1.6;
         }
 
+        /* ===== GALLERY ===== */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -936,6 +906,7 @@
             pointer-events: none;
         }
 
+        /* ===== TESTIMONIALS ===== */
         .testimonial-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -982,6 +953,7 @@
             margin-top: 12px;
         }
 
+        /* ===== CERTIFICATIONS ===== */
         .cert-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1055,13 +1027,11 @@
             color: var(--green);
             margin-bottom: 16px;
         }
-
         .contact-info p {
             opacity: 0.8;
             margin-bottom: 20px;
             line-height: 1.7;
         }
-
         .contact-info .info-item {
             display: flex;
             align-items: center;
@@ -1079,12 +1049,8 @@
             text-decoration: none;
             transition: color 0.3s ease;
         }
-        body.light-mode .contact-info .info-item a {
-            color: var(--text-light);
-        }
-        .contact-info .info-item a:hover {
-            color: var(--green);
-        }
+        body.light-mode .contact-info .info-item a { color: var(--text-light); }
+        .contact-info .info-item a:hover { color: var(--green); }
 
         .contact-form-wrapper {
             background: var(--card-bg-dark);
@@ -1107,7 +1073,6 @@
         .form-group {
             margin-bottom: 16px;
         }
-
         .form-group label {
             display: block;
             font-size: 0.85rem;
@@ -1115,7 +1080,10 @@
             margin-bottom: 4px;
             opacity: 0.8;
         }
-
+        .form-group label .required {
+            color: #ef4444;
+            margin-left: 2px;
+        }
         .form-group input,
         .form-group select,
         .form-group textarea {
@@ -1136,19 +1104,16 @@
             background: rgba(0, 0, 0, 0.04);
             color: var(--text-light);
         }
-
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             border-color: var(--green);
             box-shadow: 0 0 0 3px rgba(10, 158, 64, 0.15);
         }
-
         .form-group textarea {
             resize: vertical;
             min-height: 120px;
         }
-
         .form-group select option {
             background: var(--bg-dark);
             color: var(--text-dark);
@@ -1162,26 +1127,6 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-        }
-
-        .recaptcha-container {
-            display: flex;
-            justify-content: center;
-            margin: 16px 0;
-            padding: 8px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-dark);
-            min-height: 78px;
-            align-items: center;
-        }
-        body.light-mode .recaptcha-container {
-            background: rgba(0, 0, 0, 0.03);
-        }
-
-        .recaptcha-container .g-recaptcha {
-            transform: scale(0.92);
-            transform-origin: center;
         }
 
         .form-submit-btn {
@@ -1232,6 +1177,7 @@
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
+        /* ===== ACTION HUB ===== */
         .action-hub {
             position: fixed;
             bottom: 25px;
@@ -1301,6 +1247,7 @@
         }
         .action-hub .hub-item:hover .tooltip { opacity: 1; }
 
+        /* ===== CHAT WINDOW ===== */
         .chat-window {
             position: fixed;
             bottom: 100px;
@@ -1383,6 +1330,7 @@
             cursor: pointer;
         }
 
+        /* ===== NOTIFICATION TOAST ===== */
         .notification-toast {
             position: fixed;
             top: 85px;
@@ -1407,6 +1355,7 @@
         .notification-toast .toast-message { font-size: 0.75rem; opacity: 0.8; line-height: 1.4; }
         .notification-toast .toast-close { background: none; border: none; color: rgba(255, 255, 255, 0.4); cursor: pointer; font-size: 1rem; }
 
+        /* ===== PARTICLES CANVAS ===== */
         #particleCanvas {
             position: fixed;
             top: 0;
@@ -1417,6 +1366,7 @@
             z-index: 0;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 900px) {
             .nav-container .links { display: none; }
             .hamburg { display: block; }
@@ -1432,7 +1382,6 @@
             .notification-toast { left: 15px; right: 15px; max-width: none; top: 75px; }
             .contact-wrapper { grid-template-columns: 1fr; }
             .form-row { grid-template-columns: 1fr; }
-            .recaptcha-container .g-recaptcha { transform: scale(0.85); }
         }
         @media (max-width: 550px) {
             .hero-image img { max-width: 220px; }
@@ -1444,7 +1393,6 @@
             .action-hub .hub-toggle { width: 48px; height: 48px; font-size: 1.3rem; }
             .action-hub .hub-item { width: 40px; height: 40px; }
             .contact-info, .contact-form-wrapper { padding: 20px; }
-            .recaptcha-container .g-recaptcha { transform: scale(0.75); }
         }
     </style>
 </head>
@@ -1452,6 +1400,7 @@
 
     <canvas id="particleCanvas"></canvas>
 
+    <!-- SECTION PROGRESS -->
     <div class="section-progress" id="sectionProgress">
         <div class="dot active" data-index="0"><span class="tooltip">Home</span></div>
         <div class="dot" data-index="1"><span class="tooltip">About</span></div>
@@ -1463,10 +1412,12 @@
         <div class="dot" data-index="7"><span class="tooltip">Contact</span></div>
     </div>
 
+    <!-- BACK TO TOP -->
     <button class="back-to-top" id="backToTop" aria-label="Back to Top">
         <i class="fas fa-arrow-up arrow-icon"></i>
     </button>
 
+    <!-- NOTIFICATION TOAST -->
     <div class="notification-toast" id="notificationToast">
         <span class="toast-icon">💡</span>
         <div class="toast-content">
@@ -1476,10 +1427,12 @@
         <button class="toast-close" id="toastClose">&times;</button>
     </div>
 
+    <!-- SHORTCUTS HINT -->
     <div class="shortcuts-hint" id="shortcutsHint">
         <kbd>Alt</kbd> + <kbd>1</kbd>–<kbd>8</kbd> to navigate &nbsp;·&nbsp; <kbd>Ctrl</kbd> + <kbd>K</kbd> for chat
     </div>
 
+    <!-- NAVIGATION -->
     <nav>
         <div class="nav-container">
             <div class="logo" id="logoBtn">Flynn James <span>Pontino</span></div>
@@ -1513,8 +1466,10 @@
         </div>
     </nav>
 
+    <!-- SCROLL CONTAINER -->
     <div class="scroll-container" id="scrollContainer">
 
+        <!-- HOME -->
         <section class="section-wrapper active" data-index="0" id="section-home">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1551,6 +1506,7 @@
             </div>
         </section>
 
+        <!-- ABOUT -->
         <section class="section-wrapper" data-index="1" id="section-about">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1569,6 +1525,7 @@
             </div>
         </section>
 
+        <!-- SKILLS -->
         <section class="section-wrapper" data-index="2" id="section-skills">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1584,6 +1541,7 @@
             </div>
         </section>
 
+        <!-- SERVICES -->
         <section class="section-wrapper" data-index="3" id="section-services">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1596,6 +1554,7 @@
             </div>
         </section>
 
+        <!-- GALLERY -->
         <section class="section-wrapper" data-index="4" id="section-gallery">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1614,6 +1573,7 @@
             </div>
         </section>
 
+        <!-- TESTIMONIALS -->
         <section class="section-wrapper" data-index="5" id="section-testimonials">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1642,6 +1602,7 @@
             </div>
         </section>
 
+        <!-- CERTIFICATIONS -->
         <section class="section-wrapper" data-index="6" id="section-certifications">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1673,7 +1634,7 @@
             </div>
         </section>
 
-        <!-- ===== CONTACT SECTION ===== -->
+        <!-- CONTACT -->
         <section class="section-wrapper" data-index="7" id="section-contact">
             <div class="bg-glow"></div>
             <div class="section-content">
@@ -1721,20 +1682,20 @@
                         <form id="contactForm">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="user_name">Full Name *</label>
+                                    <label for="user_name">Full Name <span class="required">*</span></label>
                                     <input type="text" id="user_name" name="user_name" placeholder="John Doe" required />
                                 </div>
                                 <div class="form-group">
-                                    <label for="user_email">Email Address *</label>
+                                    <label for="user_email">Email Address <span class="required">*</span></label>
                                     <input type="email" id="user_email" name="user_email" placeholder="john@example.com" required />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="user_phone">Phone Number</label>
+                                <label for="user_phone">Phone Number <span style="color:rgba(232,232,232,0.3);font-weight:400;">(Optional)</span></label>
                                 <input type="tel" id="user_phone" name="user_phone" placeholder="+63 900 000 0000" />
                             </div>
                             <div class="form-group">
-                                <label for="user_subject">Subject *</label>
+                                <label for="user_subject">Subject <span class="required">*</span></label>
                                 <select id="user_subject" name="user_subject" required>
                                     <option value="">Select a subject...</option>
                                     <option value="Hiring Opportunity">Hiring Opportunity</option>
@@ -1745,13 +1706,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="user_message">Message *</label>
+                                <label for="user_message">Message <span class="required">*</span></label>
                                 <textarea id="user_message" name="user_message" placeholder="Tell me about your project, goals, or how I can help..." required></textarea>
-                            </div>
-                            
-                            <!-- reCAPTCHA -->
-                            <div class="recaptcha-container">
-                                <div class="g-recaptcha" data-sitekey="6LfAaXEtAAAAALnWqDEYvVKOX-4CqLrMIBIeAEXd"></div>
                             </div>
                             
                             <button type="submit" class="form-submit-btn" id="formSubmitBtn">
@@ -1765,6 +1721,7 @@
         </section>
     </div>
 
+    <!-- ACTION HUB -->
     <div class="action-hub" id="actionHub">
         <div class="hub-items" id="hubItems">
             <button class="hub-item" data-action="cv"><i class="fas fa-file-pdf"></i><span class="tooltip">Download CV</span></button>
@@ -1775,6 +1732,7 @@
         <button class="hub-toggle" id="hubToggle" aria-label="Toggle actions"><i class="fas fa-plus"></i></button>
     </div>
 
+    <!-- CHAT WINDOW -->
     <div class="chat-window" id="chatWindow">
         <div class="chat-header"><span><i class="fas fa-robot"></i> Flynn's AI Navigator</span><button class="close-chat" id="closeChat">&times;</button></div>
         <div class="chat-actions">
@@ -1788,36 +1746,291 @@
         <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type a message..." /><button id="sendChatMsg"><i class="fas fa-paper-plane"></i></button></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <!-- Lightbox JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
+    
+    <!-- EmailJS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     
     <script>
         // ===== EMAILJS CONFIGURATION =====
         // 🔑 REPLACE THESE WITH YOUR ACTUAL EMAILJS KEYS
         const EMAILJS_CONFIG = {
-            publicKey: 'YOUR_PUBLIC_KEY',
-            serviceID: 'YOUR_SERVICE_ID',
-            templateID: 'YOUR_TEMPLATE_ID'
+            publicKey: 'crekfvN6H352DXAfx',      // Get from EmailJS Dashboard → Account → API Keys
+            serviceID: 'service_av4pfmh',      // Get from EmailJS Dashboard → Email Services
+            templateID: 'template_vcqi0qv'     // Get from EmailJS Dashboard → Email Templates
         };
-
-        // reCAPTCHA Site Key
-        const RECAPTCHA_SITE_KEY = '6LfAaXEtAAAAALnWqDEYvVKOX-4CqLrMIBIeAEXd';
 
         // Initialize EmailJS
         (function() {
             try {
                 if (EMAILJS_CONFIG.publicKey !== 'YOUR_PUBLIC_KEY') {
                     emailjs.init(EMAILJS_CONFIG.publicKey);
-                    console.log('✅ EmailJS initialized');
+                    console.log('✅ EmailJS initialized successfully');
                 } else {
-                    console.warn('⚠️ EmailJS not configured');
+                    console.warn('⚠️ EmailJS not configured. Please set your keys.');
                 }
             } catch (error) {
                 console.warn('⚠️ EmailJS init error:', error);
             }
         })();
 
-        // ===== CONTACT FORM =====
+        // ===== PARTICLES =====
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouseX = -1000, mouseY = -1000;
+
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 1.2;
+                this.speedY = -(Math.random() * 1.5 + 0.6);
+                this.life = 1;
+                this.decay = Math.random() * 0.003 + 0.001;
+                this.hue = Math.random() * 40 + 100;
+            }
+            update() {
+                const dx = mouseX - this.x, dy = mouseY - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 150) { const angle = Math.atan2(dy, dx);
+                    this.speedX -= Math.cos(angle) * 0.2;
+                    this.speedY -= Math.sin(angle) * 0.2; }
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life -= this.decay;
+                if (this.y < -20 || this.life <= 0 || this.x < -20 || this.x > canvas.width + 20) { this.reset();
+                    this.y = canvas.height + Math.random() * 50; }
+            }
+            draw(ctx) {
+                const alpha = this.life * 0.6;
+                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 2);
+                gradient.addColorStop(0, `hsla(${this.hue}, 100%, 50%, ${alpha})`);
+                gradient.addColorStop(0.6, `hsla(${this.hue}, 100%, 20%, ${alpha * 0.4})`);
+                gradient.addColorStop(1, 'transparent');
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${this.hue}, 100%, 70%, ${alpha})`;
+                ctx.fill();
+            }
+        }
+        for (let i = 0; i < 70; i++) particles.push(new Particle());
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+        document.addEventListener('touchmove', (e) => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+
+        function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(ctx); });
+            requestAnimationFrame(animateParticles); }
+        animateParticles();
+
+        // ===== TYPEWRITER =====
+        const roles = ["SALES LEADER", "PIPELINE ARCHITECT", "TEAM BUILDER", "GROWTH STRATEGIST"];
+        let roleIndex = 0, charIndex = 0;
+        const typedSpan = document.querySelector(".typewriter-text");
+        let isDeleting = false;
+
+        function typeEffect() {
+            if (!typedSpan) return;
+            const currentRole = roles[roleIndex];
+            if (!isDeleting && charIndex <= currentRole.length) { typedSpan.textContent = currentRole.substring(0, charIndex);
+                charIndex++;
+                setTimeout(typeEffect, 80); } else if (isDeleting && charIndex >= 0) { typedSpan.textContent = currentRole.substring(0, charIndex);
+                charIndex--;
+                setTimeout(typeEffect, 35); } else if (!isDeleting && charIndex > currentRole.length) { isDeleting = true;
+                setTimeout(typeEffect, 1600); } else if (isDeleting && charIndex < 0) { isDeleting = false;
+                roleIndex = (roleIndex + 1) % roles.length;
+                charIndex = 0;
+                setTimeout(typeEffect, 200); }
+        }
+        setTimeout(typeEffect, 400);
+
+        // ===== THEME TOGGLE =====
+        let isDarkMode = true;
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('light-mode', !isDarkMode);
+            themeIcon.className = isDarkMode ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+        if (localStorage.getItem('theme') === 'light') toggleTheme();
+
+        // ===== STATS COUNTER =====
+        const stats = document.querySelectorAll('.stat-item .number');
+        let statsAnimated = false;
+
+        function animateStats() { if (statsAnimated) return;
+            statsAnimated = true;
+            stats.forEach(stat => { const target = parseInt(stat.dataset.count);
+                let current = 0;
+                const increment = target / 40;
+                const timer = setInterval(() => { current += increment; if (current >= target) { stat.textContent = target + (target === 120 || target === 150 ? '%' : '+');
+                        clearInterval(timer); } else { stat.textContent = Math.floor(current); } }, 30); }); }
+        setTimeout(animateStats, 1500);
+
+        // ===== SCROLL NAVIGATION =====
+        const scrollContainer = document.getElementById('scrollContainer');
+        const sections = document.querySelectorAll('.section-wrapper');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const progressDots = document.querySelectorAll('.section-progress .dot');
+        const totalSections = sections.length;
+        let isScrolling = false;
+        let currentIndex = 0;
+
+        function updateActiveSection(index) { if (isScrolling) return;
+            isScrolling = true;
+            sections.forEach((s, i) => s.classList.toggle('active', i === index));
+            navLinks.forEach((l, i) => l.classList.toggle('active', i === index));
+            progressDots.forEach((d, i) => d.classList.toggle('active', i === index));
+            currentIndex = index;
+            setTimeout(() => { isScrolling = false; }, 150); }
+
+        function scrollToSection(index) { if (index < 0 || index >= totalSections || !sections[index]) return;
+            const targetSection = sections[index];
+            const containerRect = scrollContainer.getBoundingClientRect();
+            const targetRect = targetSection.getBoundingClientRect();
+            const scrollOffset = targetRect.top - containerRect.top + scrollContainer.scrollTop;
+            scrollContainer.scrollTo({ top: scrollOffset, behavior: 'smooth' });
+            setTimeout(() => { if (Math.abs(scrollContainer.scrollTop - scrollOffset) > 50) { targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }, 100);
+            setTimeout(() => updateActiveSection(index), 200);
+            document.getElementById('chatWindow').classList.remove('open');
+            document.getElementById('actionHub').classList.remove('expanded');
+            const mobileDropdown = document.getElementById('mobileDropdown');
+            if (mobileDropdown) mobileDropdown.style.transform = 'translateY(-105%)'; }
+        navLinks.forEach((link, i) => link.addEventListener('click', (e) => { e.preventDefault();
+            scrollToSection(i); }));
+        progressDots.forEach((dot, i) => dot.addEventListener('click', () => scrollToSection(i)));
+        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) {
+                    const index = parseInt(entry.target.dataset.index); if (!isNaN(index) && index !== currentIndex && !isScrolling) updateActiveSection(index); if (index === 0) document.getElementById('section-home')?.classList.remove('hero-blur'); if (index === 6) setTimeout(animateStats, 300); } }); }, { threshold: 0.3, root: scrollContainer });
+        sections.forEach(s => observer.observe(s));
+
+        // ===== HERO BLUR =====
+        const heroSection = document.getElementById('section-home');
+        let heroBlurTimeout;
+
+        function updateHeroBlur() { if (!heroSection) return; if (heroBlurTimeout) clearTimeout(heroBlurTimeout);
+            const vh = window.innerHeight;
+            const rect = heroSection.getBoundingClientRect(); if (rect.top < -vh * 0.3 || rect.bottom < vh * 0.2) {
+                heroBlurTimeout = setTimeout(() => heroSection.classList.add('hero-blur'), 100); } else { heroSection.classList.remove('hero-blur'); } }
+        scrollContainer.addEventListener('scroll', () => requestAnimationFrame(updateHeroBlur));
+        setTimeout(updateHeroBlur, 100);
+
+        // ===== BACK TO TOP =====
+        const backToTop = document.getElementById('backToTop');
+
+        function scrollToTopHandler(e) { if (e) { e.preventDefault(); e.stopPropagation(); }
+            backToTop.style.transform = 'scale(0.85)';
+            setTimeout(() => { if (backToTop.classList.contains('visible')) backToTop.style.transform = ''; }, 300);
+            scrollToSection(0);
+            setTimeout(() => { if (scrollContainer.scrollTop > 10) scrollContainer.scrollTo({ top: 0, behavior: 'smooth' }); }, 50);
+            setTimeout(() => { if (scrollContainer.scrollTop > 100) document.getElementById('section-home')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150); }
+        backToTop.addEventListener('click', scrollToTopHandler);
+        backToTop.addEventListener('touchstart', function(e) { e.preventDefault(); scrollToTopHandler(e); }, { passive: false });
+
+        function updateBackToTopVisibility() { if (scrollContainer.scrollTop > window.innerHeight * 0.6) { backToTop.classList.add('visible'); } else { backToTop.classList.remove('visible'); } }
+        scrollContainer.addEventListener('scroll', updateBackToTopVisibility);
+        setTimeout(updateBackToTopVisibility, 200);
+
+        // ===== NAV SCROLL EFFECT =====
+        const nav = document.querySelector('nav');
+        scrollContainer.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollContainer.scrollTop > 10));
+        document.getElementById('logoBtn').addEventListener('click', () => scrollToSection(0));
+
+        // ===== NOTIFICATIONS =====
+        const notificationToast = document.getElementById('notificationToast');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastMessage = document.getElementById('toastMessage');
+        const toastCloseBtn = document.getElementById('toastClose');
+        const funnyNotifications = [
+            { title: "💡 Did you know?", message: "Flynn books 40+ qualified meetings monthly — that's basically a meeting every working hour!" },
+            { title: "📞 Ring Ring!", message: "150 cold calls daily? Flynn treats rejection like a gym workout — every 'no' builds stronger sales muscles." },
+            { title: "🚀 Pipeline Magic", message: "Flynn doesn't just fill your pipeline — he makes it rain opportunities. Some say he dreams in CRM dashboards." },
+            { title: "🧠 Sales Wisdom", message: "Flynn believes sales isn't about selling — it's about solving. He listens first, pitches second." },
+            { title: "🏆 Fun Fact", message: "Flynn reduced SDR ramp time from 8 weeks to 5. That's 3 extra weeks of productivity!" },
+            { title: "🌍 Global Reach", message: "APAC, US, UK, AU — Flynn works across time zones so smoothly, even the sun asks for tips." },
+        ];
+        let notificationInterval;
+        let currentNotificationIndex = 0;
+        let notificationVisible = false;
+
+        function showNotification() { if (notificationVisible) return;
+            notificationVisible = true;
+            const notif = funnyNotifications[currentNotificationIndex];
+            toastTitle.textContent = notif.title;
+            toastMessage.textContent = notif.message;
+            notificationToast.classList.add('show');
+            currentNotificationIndex = (currentNotificationIndex + 1) % funnyNotifications.length;
+            setTimeout(() => { notificationToast.classList.remove('show'); notificationVisible = false; }, 6000); }
+
+        function startNotificationCycle() { showNotification(); notificationInterval = setInterval(showNotification, 20000); }
+        startNotificationCycle();
+        toastCloseBtn.addEventListener('click', () => { notificationToast.classList.remove('show'); notificationVisible = false; });
+        notificationToast.addEventListener('click', (e) => { if (e.target !== toastCloseBtn) { notificationToast.classList.remove('show'); notificationVisible = false; } });
+
+        // ===== ACTION HUB =====
+        const hubToggle = document.getElementById('hubToggle');
+        const actionHub = document.getElementById('actionHub');
+        hubToggle.addEventListener('click', (e) => { e.stopPropagation(); actionHub.classList.toggle('expanded'); });
+        document.addEventListener('click', (e) => { if (!actionHub.contains(e.target)) actionHub.classList.remove('expanded'); });
+        document.querySelectorAll('.hub-item[data-action]').forEach(item => { item.addEventListener('click', function(e) { e.stopPropagation();
+                const action = this.dataset.action; if (action === 'cv') window.open('https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing', '_blank');
+                else if (action === 'email') window.location.href = 'mailto:va.flynnjames@gmail.com';
+                else if (action === 'phone') window.location.href = 'tel:+639306359306';
+                else if (action === 'chat') document.getElementById('chatWindow').classList.toggle('open');
+                actionHub.classList.remove('expanded'); }); });
+
+        // ===== CHATBOT =====
+        const chatWindow = document.getElementById('chatWindow');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendChatMsg');
+        const sectionIndices = { home: 0, about: 1, skills: 2, services: 3, gallery: 4, testimonials: 5, certifications: 6, contact: 7 };
+
+        function addChatMessage(text, sender) { const div = document.createElement('div');
+            div.className = `chat-message ${sender}`;
+            div.textContent = text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight; }
+
+        function handleChatAction(action) { chatWindow.classList.remove('open'); if (sectionIndices[action] !== undefined) scrollToSection(sectionIndices[action]); else if (action === 'hire') window.location.href = 'mailto:va.flynnjames@gmail.com'; else if (action === 'cv') window.open('https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing', '_blank'); }
+        document.querySelectorAll('.chat-actions button[data-action]').forEach(btn => { btn.addEventListener('click', function() { handleChatAction(this.dataset.action); }); });
+        document.getElementById('closeChat').addEventListener('click', () => chatWindow.classList.remove('open'));
+        sendBtn.addEventListener('click', () => { const msg = chatInput.value.trim(); if (!msg) return;
+            addChatMessage(msg, 'user');
+            chatInput.value = '';
+            addChatMessage("👋 Use the buttons above to navigate. I'm here to help!", 'bot'); });
+        chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendBtn.click(); } });
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { chatWindow.classList.remove('open'); actionHub.classList.remove('expanded'); } if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); chatWindow.classList.toggle('open'); if (chatWindow.classList.contains('open')) chatInput.focus(); } if (e.altKey && e.key >= '1' && e.key <= '8') { e.preventDefault(); scrollToSection(parseInt(e.key) - 1); chatWindow.classList.remove('open'); } });
+
+        // ===== SHORTCUTS HINT =====
+        const shortcutsHint = document.getElementById('shortcutsHint');
+        setTimeout(() => { shortcutsHint.classList.add('visible'); setTimeout(() => shortcutsHint.classList.remove('visible'), 6000); }, 3000);
+
+        // ===== MOBILE MENU =====
+        const mobileDropdown = document.getElementById('mobileDropdown');
+        document.getElementById('hamburgerBtn').addEventListener('click', () => mobileDropdown.style.transform = 'translateY(0)');
+        document.getElementById('cancelBtn').addEventListener('click', () => mobileDropdown.style.transform = 'translateY(-105%)');
+        mobileDropdown.querySelectorAll('.links a').forEach(link => { link.addEventListener('click', () => { mobileDropdown.style.transform = 'translateY(-105%)';
+                const idx = parseInt(link.dataset.index); if (!isNaN(idx)) scrollToSection(idx); }); });
+
+        // ===== CONTACT FORM HANDLER =====
         const contactForm = document.getElementById('contactForm');
         const formStatus = document.getElementById('formStatus');
         const submitBtn = document.getElementById('formSubmitBtn');
@@ -1827,7 +2040,6 @@
             formStatus.style.display = 'block';
             formStatus.innerHTML = message;
             
-            // Auto dismiss after 6 seconds
             clearTimeout(window.statusTimeout);
             window.statusTimeout = setTimeout(() => {
                 formStatus.className = 'form-status';
@@ -1835,20 +2047,9 @@
             }, 6000);
         }
 
-        function resetRecaptcha() {
-            if (typeof grecaptcha !== 'undefined') {
-                try {
-                    grecaptcha.reset();
-                } catch(e) {
-                    console.warn('reCAPTCHA reset failed:', e);
-                }
-            }
-        }
-
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Reset status
             formStatus.className = 'form-status';
             formStatus.style.display = 'none';
             
@@ -1869,57 +2070,30 @@
                 user_message: document.getElementById('user_message').value.trim()
             };
 
-            // Validate required fields
+            // Validate
             if (!formData.user_name || !formData.user_email || !formData.user_subject || !formData.user_message) {
                 setStatus('error', '⚠️ Please fill in all required fields.');
                 return;
             }
 
-            // Get reCAPTCHA response
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
-                setStatus('error', '⚠️ Please complete the reCAPTCHA verification.');
-                return;
-            }
-
             // Disable button
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
-            // ===== VERIFY reCAPTCHA WITH GOOGLE =====
-            fetch('https://www.google.com/recaptcha/api/siteverify', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'secret=6LfAaXEtAAAAAJpAQSyrS7-9RN99MbO3x7MS_rA0&response=' + recaptchaResponse
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // reCAPTCHA verified - now send email
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                    
-                    return emailjs.send(
-                        EMAILJS_CONFIG.serviceID,
-                        EMAILJS_CONFIG.templateID,
-                        formData
-                    );
-                } else {
-                    throw new Error('reCAPTCHA verification failed. Please try again.');
-                }
-            })
+            // Send email via EmailJS
+            emailjs.send(
+                EMAILJS_CONFIG.serviceID,
+                EMAILJS_CONFIG.templateID,
+                formData
+            )
             .then(function(response) {
-                // Email sent successfully
                 setStatus('success', '✅ Message sent successfully! I\'ll get back to you within 24 hours.');
                 contactForm.reset();
-                resetRecaptcha();
                 showCustomToast('📨 Message Sent!', 'Thanks for reaching out. I\'ll respond within 24 hours.');
             })
             .catch(function(error) {
-                console.error('Error:', error);
-                setStatus('error', '❌ ' + error.message + ' Please try again or email me directly.');
-                resetRecaptcha();
+                console.error('EmailJS Error:', error);
+                setStatus('error', '❌ Failed to send message. Please try again or email me directly at va.flynnjames@gmail.com');
             })
             .finally(function() {
                 submitBtn.disabled = false;
@@ -1942,13 +2116,13 @@
             }, 5000);
         }
 
-        // ===== PARTICLES (compressed for brevity - keep your existing code) =====
-        // [Particle code remains the same - omitted for length]
-        // Please keep your existing particles, typewriter, theme toggle, and other JS code
-        // The key fix is above - the reCAPTCHA verification via Google's API
-
-        console.log('✅ Portfolio Ready — reCAPTCHA verification fixed');
-        console.log('🔒 reCAPTCHA Site Key:', RECAPTCHA_SITE_KEY);
+        updateActiveSection(0);
+        console.log('✅ Portfolio Ready — Contact form with EmailJS integrated');
+        console.log('📧 EmailJS Config:', {
+            publicKey: EMAILJS_CONFIG.publicKey,
+            serviceID: EMAILJS_CONFIG.serviceID,
+            templateID: EMAILJS_CONFIG.templateID
+        });
     </script>
 </body>
 </html>
