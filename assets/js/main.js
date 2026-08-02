@@ -2,6 +2,7 @@
  * ============================================================
  * FLYNN JAMES PONTINO | PORTFOLIO MAIN SCRIPT
  * Version: 1.0.0
+ * Last Updated: 2026-08-02
  * ============================================================
  */
 
@@ -12,10 +13,21 @@
     // CONFIGURATION
     // ============================================================
     const CONFIG = {
+        // === EmailJS Configuration ===
         emailjs: {
             publicKey: 'crekfvN6H352DXAfx',
             serviceID: 'service_av4pfmh',
             templateID: 'template_vcqi0qv'
+        },
+        // === reCAPTCHA Configuration ===
+        // SITE KEY: Used in the HTML data-sitekey attribute
+        // SECRET KEY: Used on the server (NEVER expose in client code)
+        recaptcha: {
+            // This is the SITE KEY - safe to expose in HTML
+            siteKey: '6LfAaXEtAAAAALnWqDEYvVKOX-4CqLrMIBIeAEXd',
+            // The SECRET KEY should ONLY be set on the server
+            // via environment variable: RECAPTCHA_SECRET_KEY
+            // DO NOT hardcode the secret key in client-side code!
         },
         roles: ['SALES LEADER', 'PIPELINE ARCHITECT', 'TEAM BUILDER', 'GROWTH STRATEGIST'],
         particleCount: 70,
@@ -91,6 +103,31 @@
                 DOM.formStatus.className = 'form-status';
                 DOM.formStatus.style.display = 'none';
             }, 6000);
+        },
+
+        // reCAPTCHA callback - called when user completes the challenge
+        onRecaptchaSuccess: function(token) {
+            DOM.submitBtn.disabled = false;
+            DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+            DOM.submitBtn.style.opacity = '1';
+        },
+
+        // reCAPTCHA callback - called when the challenge expires
+        onRecaptchaExpired: function() {
+            DOM.submitBtn.disabled = true;
+            DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Complete reCAPTCHA First';
+            DOM.submitBtn.style.opacity = '0.6';
+        },
+
+        // Reset reCAPTCHA
+        resetRecaptcha: function() {
+            if (typeof grecaptcha !== 'undefined') {
+                try {
+                    grecaptcha.reset();
+                } catch(e) {
+                    console.warn('reCAPTCHA reset error:', e);
+                }
+            }
         }
     };
 
@@ -287,9 +324,6 @@
             this.setupHeroBlur();
             this.setupNavScroll();
             this.setupStatsAnimation();
-            
-            // Expose scrollToSection globally
-            window.scrollToSection = (index) => this.scrollToSection(index);
         }
 
         updateActiveSection(index) {
@@ -636,7 +670,7 @@
     }
 
     // ============================================================
-    // CONTACT FORM HANDLER
+    // CONTACT FORM HANDLER (with reCAPTCHA)
     // ============================================================
     class ContactForm {
         constructor() {
@@ -644,18 +678,52 @@
         }
 
         init() {
+            // Initialize submit button as disabled
+            DOM.submitBtn.disabled = true;
+            DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Complete reCAPTCHA First';
+            DOM.submitBtn.style.opacity = '0.6';
+
+            // Set up reCAPTCHA callbacks
+            window.onRecaptchaSuccess = function(token) {
+                DOM.submitBtn.disabled = false;
+                DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+                DOM.submitBtn.style.opacity = '1';
+            };
+
+            window.onRecaptchaExpired = function() {
+                DOM.submitBtn.disabled = true;
+                DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Complete reCAPTCHA First';
+                DOM.submitBtn.style.opacity = '0.6';
+            };
+
+            // Handle form submission
             DOM.contactForm.addEventListener('submit', (e) => this.handleSubmit(e));
         }
 
-        handleSubmit(e) {
+        async handleSubmit(e) {
             e.preventDefault();
             DOM.formStatus.className = 'form-status';
             DOM.formStatus.style.display = 'none';
 
+            // Check if reCAPTCHA is completed
+            let recaptchaResponse;
+            try {
+                recaptchaResponse = grecaptcha.getResponse();
+            } catch(e) {
+                Utils.setStatus('error', '⚠️ reCAPTCHA not loaded. Please refresh the page.');
+                return;
+            }
+
+            if (!recaptchaResponse) {
+                Utils.setStatus('error', '⚠️ Please complete the reCAPTCHA verification.');
+                return;
+            }
+
             // Validate EmailJS config
             if (!CONFIG.emailjs.publicKey || !CONFIG.emailjs.serviceID || !CONFIG.emailjs.templateID ||
-                CONFIG.emailjs.publicKey === 'YOUR_PUBLIC_KEY') {
+                CONFIG.emailjs.publicKey === 'crekfvN6H352DXAfx') {
                 Utils.setStatus('error', '⚠️ Email service not configured. Please contact the site owner.');
+                Utils.resetRecaptcha();
                 return;
             }
 
@@ -671,32 +739,76 @@
             // Validate required fields
             if (!formData.user_name || !formData.user_email || !formData.user_subject || !formData.user_message) {
                 Utils.setStatus('error', '⚠️ Please fill in all required fields.');
+                Utils.resetRecaptcha();
                 return;
             }
 
             // Disable button
             DOM.submitBtn.disabled = true;
-            DOM.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            DOM.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
 
-            // Send email via EmailJS
-            emailjs.send(
-                CONFIG.emailjs.serviceID,
-                CONFIG.emailjs.templateID,
-                formData
-            )
-            .then(() => {
+            try {
+                // ============================================================
+                // IMPORTANT: Server-side reCAPTCHA Verification
+                // ============================================================
+                // The secret key should be stored as an environment variable
+                // on your server. NEVER expose it in client-side code!
+                //
+                // For local development, you can set it in your .env file:
+                // RECAPTCHA_SECRET_KEY=your_secret_key_here
+                //
+                // For production (Render.com), set it in the Environment Variables:
+                // Key: RECAPTCHA_SECRET_KEY
+                // Value: your_secret_key_here
+                // ============================================================
+                
+                // Send the reCAPTCHA token to your server for verification
+                const verifyResponse = await fetch('/api/verify-recaptcha', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        token: recaptchaResponse
+                    })
+                });
+
+                const verifyData = await verifyResponse.json();
+
+                if (!verifyData.success) {
+                    throw new Error(verifyData.message || 'reCAPTCHA verification failed. Please try again.');
+                }
+
+                // reCAPTCHA verified - now send the email
+                DOM.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+                // Send email via EmailJS
+                const emailResult = await emailjs.send(
+                    CONFIG.emailjs.serviceID,
+                    CONFIG.emailjs.templateID,
+                    {
+                        user_name: formData.user_name,
+                        user_email: formData.user_email,
+                        user_phone: formData.user_phone,
+                        user_subject: formData.user_subject,
+                        user_message: formData.user_message
+                    }
+                );
+
                 Utils.setStatus('success', '✅ Message sent successfully! I\'ll get back to you within 24 hours.');
                 DOM.contactForm.reset();
+                Utils.resetRecaptcha();
                 Utils.showToast('📨 Message Sent!', 'Thanks for reaching out. I\'ll respond within 24 hours.');
-            })
-            .catch((error) => {
-                console.error('EmailJS Error:', error);
-                Utils.setStatus('error', '❌ Failed to send message. Please try again or email me directly at va.flynnjames@gmail.com');
-            })
-            .finally(() => {
-                DOM.submitBtn.disabled = false;
-                DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Start Scaling Your Revenue';
-            });
+
+            } catch (error) {
+                console.error('Error:', error);
+                Utils.setStatus('error', '❌ ' + error.message + ' Please try again or email me directly.');
+                Utils.resetRecaptcha();
+            } finally {
+                DOM.submitBtn.disabled = true;
+                DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Complete reCAPTCHA First';
+                DOM.submitBtn.style.opacity = '0.6';
+            }
         }
     }
 
@@ -706,7 +818,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize EmailJS
         try {
-            if (CONFIG.emailjs.publicKey && CONFIG.emailjs.publicKey !== 'YOUR_PUBLIC_KEY') {
+            if (CONFIG.emailjs.publicKey && CONFIG.emailjs.publicKey !== 'crekfvN6H352DXAfx') {
                 emailjs.init(CONFIG.emailjs.publicKey);
                 console.log('✅ EmailJS initialized successfully');
             } else {
@@ -732,6 +844,8 @@
 
         console.log('✅ Portfolio Ready — All modules initialized');
         console.log('📧 EmailJS Config:', CONFIG.emailjs);
+        console.log('🔒 reCAPTCHA Site Key:', CONFIG.recaptcha.siteKey);
+        console.log('⚠️ Remember: Set RECAPTCHA_SECRET_KEY as an environment variable on your server!');
     });
 
 })();

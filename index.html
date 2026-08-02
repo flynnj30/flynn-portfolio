@@ -448,8 +448,13 @@
                                 <textarea id="user_message" name="user_message" placeholder="Tell me about your project, goals, or how I can help..." required></textarea>
                             </div>
                             
-                            <button type="submit" class="form-submit-btn" id="formSubmitBtn">
-                                <i class="fas fa-paper-plane"></i> Start Scaling Your Revenue
+                            <!-- reCAPTCHA v2 -->
+                            <div class="recaptcha-container">
+                                <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+                            </div>
+                            
+                            <button type="submit" class="form-submit-btn" id="formSubmitBtn" disabled>
+                                <i class="fas fa-paper-plane"></i> Complete reCAPTCHA First
                             </button>
                             <div id="formStatus" class="form-status"></div>
                         </form>
@@ -484,6 +489,9 @@
         <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type a message..." /><button id="sendChatMsg"><i class="fas fa-paper-plane"></i></button></div>
     </div>
 
+    <!-- reCAPTCHA API -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="assets/js/main.js"></script>
