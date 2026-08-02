@@ -18,10 +18,6 @@
             serviceID: 'service_av4pfmh',
             templateID: 'template_vcqi0qv'
         },
-        recaptcha: {
-            siteKey: '6LfAaXEtAAAAALnWqDEYvVKOX-4CqLrMIBIeAEXd',
-            secretKey: '6LfAaXEtAAAAAJpAQSyrS7-9RN99MbO3x7MS_rA0'
-        },
         roles: ['SALES LEADER', 'PIPELINE ARCHITECT', 'TEAM BUILDER', 'GROWTH STRATEGIST'],
         particleCount: 70,
         notificationInterval: 20000
@@ -79,17 +75,6 @@
             };
         },
 
-        throttle: function(func, limit) {
-            let inThrottle;
-            return function(...args) {
-                if (!inThrottle) {
-                    func.apply(this, args);
-                    inThrottle = true;
-                    setTimeout(() => inThrottle = false, limit);
-                }
-            };
-        },
-
         showToast: function(title, message) {
             const toast = DOM.notificationToast;
             DOM.toastTitle.textContent = title;
@@ -106,16 +91,7 @@
             window.statusTimeout = setTimeout(() => {
                 DOM.formStatus.className = 'form-status';
                 DOM.formStatus.style.display = 'none';
-                if (typeof grecaptcha !== 'undefined') {
-                    try { grecaptcha.reset(); } catch(e) {}
-                }
             }, 6000);
-        },
-
-        resetRecaptcha: function() {
-            if (typeof grecaptcha !== 'undefined') {
-                try { grecaptcha.reset(); } catch(e) {}
-            }
         }
     };
 
@@ -141,8 +117,10 @@
                 this.mouseY = e.clientY;
             });
             document.addEventListener('touchmove', (e) => {
-                this.mouseX = e.touches[0].clientX;
-                this.mouseY = e.touches[0].clientY;
+                if (e.touches.length > 0) {
+                    this.mouseX = e.touches[0].clientX;
+                    this.mouseY = e.touches[0].clientY;
+                }
             });
             for (let i = 0; i < this.count; i++) {
                 this.particles.push(this.createParticle());
@@ -222,7 +200,7 @@
             this.roleIndex = 0;
             this.charIndex = 0;
             this.isDeleting = false;
-            this.type();
+            setTimeout(() => this.type(), 400);
         }
 
         type() {
@@ -309,6 +287,7 @@
             this.setupIntersectionObserver();
             this.setupHeroBlur();
             this.setupNavScroll();
+            this.setupStatsAnimation();
         }
 
         updateActiveSection(index) {
@@ -343,7 +322,6 @@
                             this.updateActiveSection(index);
                         }
                         if (index === 0) DOM.heroSection?.classList.remove('hero-blur');
-                        if (index === 6) this.animateStats();
                     }
                 });
             }, { threshold: 0.3, root: this.scrollContainer });
@@ -375,23 +353,31 @@
             DOM.logoBtn.addEventListener('click', () => this.scrollToSection(0));
         }
 
-        animateStats() {
-            if (window.statsAnimated) return;
-            window.statsAnimated = true;
-            DOM.stats.forEach(stat => {
-                const target = parseInt(stat.dataset.count);
-                let current = 0;
-                const increment = target / 40;
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        stat.textContent = target + (target === 120 || target === 150 ? '%' : '+');
-                        clearInterval(timer);
-                    } else {
-                        stat.textContent = Math.floor(current);
+        setupStatsAnimation() {
+            let statsAnimated = false;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !statsAnimated) {
+                        statsAnimated = true;
+                        DOM.stats.forEach(stat => {
+                            const target = parseInt(stat.dataset.count);
+                            let current = 0;
+                            const increment = target / 40;
+                            const timer = setInterval(() => {
+                                current += increment;
+                                if (current >= target) {
+                                    stat.textContent = target + (target === 120 || target === 150 ? '%' : '+');
+                                    clearInterval(timer);
+                                } else {
+                                    stat.textContent = Math.floor(current);
+                                }
+                            }, 30);
+                        });
                     }
-                }, 30);
-            });
+                });
+            }, { threshold: 0.3, root: this.scrollContainer });
+            const homeSection = document.getElementById('section-home');
+            if (homeSection) observer.observe(homeSection);
         }
     }
 
@@ -458,7 +444,7 @@
         }
 
         init() {
-            this.showNotification();
+            setTimeout(() => this.showNotification(), 2000);
             this.interval = setInterval(() => this.showNotification(), CONFIG.notificationInterval);
             DOM.toastClose.addEventListener('click', () => this.hideNotification());
             DOM.notificationToast.addEventListener('click', (e) => {
@@ -667,7 +653,7 @@
             // Validate EmailJS config
             if (!CONFIG.emailjs.publicKey || !CONFIG.emailjs.serviceID || !CONFIG.emailjs.templateID ||
                 CONFIG.emailjs.publicKey === 'YOUR_PUBLIC_KEY') {
-                Utils.setStatus('error', '⚠️ Email service not configured. Please check your EmailJS keys.');
+                Utils.setStatus('error', '⚠️ Email service not configured. Please contact the site owner.');
                 return;
             }
 
@@ -686,50 +672,28 @@
                 return;
             }
 
-            // Get reCAPTCHA response
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
-                Utils.setStatus('error', '⚠️ Please complete the reCAPTCHA verification.');
-                return;
-            }
-
             // Disable button
             DOM.submitBtn.disabled = true;
-            DOM.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+            DOM.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
-            // Verify reCAPTCHA
-            fetch('https://www.google.com/recaptcha/api/siteverify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'secret=' + CONFIG.recaptcha.secretKey + '&response=' + recaptchaResponse
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    DOM.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                    return emailjs.send(
-                        CONFIG.emailjs.serviceID,
-                        CONFIG.emailjs.templateID,
-                        formData
-                    );
-                } else {
-                    throw new Error('reCAPTCHA verification failed. Please try again.');
-                }
-            })
+            // Send email via EmailJS
+            emailjs.send(
+                CONFIG.emailjs.serviceID,
+                CONFIG.emailjs.templateID,
+                formData
+            )
             .then(() => {
                 Utils.setStatus('success', '✅ Message sent successfully! I\'ll get back to you within 24 hours.');
                 DOM.contactForm.reset();
-                Utils.resetRecaptcha();
                 Utils.showToast('📨 Message Sent!', 'Thanks for reaching out. I\'ll respond within 24 hours.');
             })
             .catch((error) => {
-                console.error('Error:', error);
-                Utils.setStatus('error', '❌ ' + error.message + ' Please try again or email me directly.');
-                Utils.resetRecaptcha();
+                console.error('EmailJS Error:', error);
+                Utils.setStatus('error', '❌ Failed to send message. Please try again or email me directly at va.flynnjames@gmail.com');
             })
             .finally(() => {
                 DOM.submitBtn.disabled = false;
-                DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message &amp; Get Started';
+                DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Start Scaling Your Revenue';
             });
         }
     }
@@ -738,45 +702,34 @@
     // INITIALIZE ALL MODULES
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize particles
+        // Initialize EmailJS
+        try {
+            if (CONFIG.emailjs.publicKey && CONFIG.emailjs.publicKey !== 'YOUR_PUBLIC_KEY') {
+                emailjs.init(CONFIG.emailjs.publicKey);
+                console.log('✅ EmailJS initialized successfully');
+            } else {
+                console.warn('⚠️ EmailJS not configured properly.');
+            }
+        } catch (error) {
+            console.warn('⚠️ EmailJS init error:', error);
+        }
+
+        // Initialize all modules
         new ParticleSystem(DOM.particleCanvas, CONFIG.particleCount);
-
-        // Initialize typewriter
         new Typewriter(DOM.typedSpan, CONFIG.roles);
-
-        // Initialize theme
         new ThemeManager();
-
-        // Initialize scroll navigation
-        const nav = new ScrollNavigation();
-
-        // Initialize back to top
+        new ScrollNavigation();
         new BackToTop();
-
-        // Initialize notifications
         new NotificationSystem();
-
-        // Initialize action hub
         new ActionHub();
-
-        // Initialize chatbot
         new Chatbot();
-
-        // Initialize mobile menu
         new MobileMenu();
-
-        // Initialize keyboard shortcuts
         new KeyboardShortcuts();
-
-        // Initialize shortcuts hint
         new ShortcutsHint();
-
-        // Initialize contact form
         new ContactForm();
 
         console.log('✅ Portfolio Ready — All modules initialized');
         console.log('📧 EmailJS Config:', CONFIG.emailjs);
-        console.log('🔒 reCAPTCHA Site Key:', CONFIG.recaptcha.siteKey);
     });
 
 })();
