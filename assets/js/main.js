@@ -20,14 +20,8 @@
             templateID: 'template_vcqi0qv'
         },
         // === reCAPTCHA Configuration ===
-        // SITE KEY: Used in the HTML data-sitekey attribute
-        // SECRET KEY: Used on the server (NEVER expose in client code)
         recaptcha: {
-            // This is the SITE KEY - safe to expose in HTML
-            siteKey: '6LfAaXEtAAAAALnWqDEYvVKOX-4CqLrMIBIeAEXd',
-            // The SECRET KEY should ONLY be set on the server
-            // via environment variable: RECAPTCHA_SECRET_KEY
-            // DO NOT hardcode the secret key in client-side code!
+            siteKey: '6LfAaXEtAAAAALnWqDEYvVKOX-4CqLrMIBIeAEXd'
         },
         roles: ['SALES LEADER', 'PIPELINE ARCHITECT', 'TEAM BUILDER', 'GROWTH STRATEGIST'],
         particleCount: 70,
@@ -105,21 +99,18 @@
             }, 6000);
         },
 
-        // reCAPTCHA callback - called when user completes the challenge
         onRecaptchaSuccess: function(token) {
             DOM.submitBtn.disabled = false;
             DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
             DOM.submitBtn.style.opacity = '1';
         },
 
-        // reCAPTCHA callback - called when the challenge expires
         onRecaptchaExpired: function() {
             DOM.submitBtn.disabled = true;
             DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Complete reCAPTCHA First';
             DOM.submitBtn.style.opacity = '0.6';
         },
 
-        // Reset reCAPTCHA
         resetRecaptcha: function() {
             if (typeof grecaptcha !== 'undefined') {
                 try {
@@ -130,6 +121,10 @@
             }
         }
     };
+
+    // Expose reCAPTCHA callbacks globally
+    window.onRecaptchaSuccess = Utils.onRecaptchaSuccess;
+    window.onRecaptchaExpired = Utils.onRecaptchaExpired;
 
     // ============================================================
     // PARTICLES SYSTEM
@@ -683,19 +678,6 @@
             DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Complete reCAPTCHA First';
             DOM.submitBtn.style.opacity = '0.6';
 
-            // Set up reCAPTCHA callbacks
-            window.onRecaptchaSuccess = function(token) {
-                DOM.submitBtn.disabled = false;
-                DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
-                DOM.submitBtn.style.opacity = '1';
-            };
-
-            window.onRecaptchaExpired = function() {
-                DOM.submitBtn.disabled = true;
-                DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Complete reCAPTCHA First';
-                DOM.submitBtn.style.opacity = '0.6';
-            };
-
             // Handle form submission
             DOM.contactForm.addEventListener('submit', (e) => this.handleSubmit(e));
         }
@@ -720,8 +702,7 @@
             }
 
             // Validate EmailJS config
-            if (!CONFIG.emailjs.publicKey || !CONFIG.emailjs.serviceID || !CONFIG.emailjs.templateID ||
-                CONFIG.emailjs.publicKey === 'crekfvN6H352DXAfx') {
+            if (!CONFIG.emailjs.publicKey || !CONFIG.emailjs.serviceID || !CONFIG.emailjs.templateID) {
                 Utils.setStatus('error', '⚠️ Email service not configured. Please contact the site owner.');
                 Utils.resetRecaptcha();
                 return;
@@ -750,16 +731,8 @@
             try {
                 // ============================================================
                 // IMPORTANT: Server-side reCAPTCHA Verification
-                // ============================================================
                 // The secret key should be stored as an environment variable
                 // on your server. NEVER expose it in client-side code!
-                //
-                // For local development, you can set it in your .env file:
-                // RECAPTCHA_SECRET_KEY=your_secret_key_here
-                //
-                // For production (Render.com), set it in the Environment Variables:
-                // Key: RECAPTCHA_SECRET_KEY
-                // Value: your_secret_key_here
                 // ============================================================
                 
                 // Send the reCAPTCHA token to your server for verification
@@ -783,7 +756,7 @@
                 DOM.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
                 // Send email via EmailJS
-                const emailResult = await emailjs.send(
+                await emailjs.send(
                     CONFIG.emailjs.serviceID,
                     CONFIG.emailjs.templateID,
                     {
@@ -816,13 +789,13 @@
     // INITIALIZE ALL MODULES
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize EmailJS
+        // Initialize EmailJS with proper error handling
         try {
-            if (CONFIG.emailjs.publicKey && CONFIG.emailjs.publicKey !== 'crekfvN6H352DXAfx') {
+            if (CONFIG.emailjs.publicKey && CONFIG.emailjs.publicKey !== 'YOUR_PUBLIC_KEY') {
                 emailjs.init(CONFIG.emailjs.publicKey);
                 console.log('✅ EmailJS initialized successfully');
             } else {
-                console.warn('⚠️ EmailJS not configured properly.');
+                console.warn('⚠️ EmailJS not configured properly. Please update your public key.');
             }
         } catch (error) {
             console.warn('⚠️ EmailJS init error:', error);
