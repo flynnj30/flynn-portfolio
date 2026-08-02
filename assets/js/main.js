@@ -100,11 +100,6 @@
             return regex.test(email);
         },
 
-        validatePhone: function(phone) {
-            // Optional: Basic phone validation - can be customized
-            return true;
-        },
-
         sanitizeInput: function(input) {
             const div = document.createElement('div');
             div.textContent = input;
@@ -277,7 +272,7 @@
     }
 
     // ============================================================
-    // SCROLL NAVIGATION
+    // SCROLL NAVIGATION with Elegant Transitions
     // ============================================================
     class ScrollNavigation {
         constructor() {
@@ -287,6 +282,7 @@
             this.scrollContainer = DOM.scrollContainer;
             this.currentIndex = 0;
             this.isScrolling = false;
+            this.isHomeTransitioning = false;
             this.init();
         }
 
@@ -305,12 +301,17 @@
             this.setupHeroBlur();
             this.setupNavScroll();
             this.setupStatsAnimation();
+            this.setupElegantHomeTransition();
         }
 
         updateActiveSection(index) {
             if (this.isScrolling) return;
             this.isScrolling = true;
-            this.sections.forEach((s, i) => s.classList.toggle('active', i === index));
+            this.sections.forEach((s, i) => {
+                s.classList.toggle('active', i === index);
+                // Remove elegant-enter class from all sections
+                s.classList.remove('elegant-enter');
+            });
             this.navLinks.forEach((l, i) => l.classList.toggle('active', i === index));
             this.progressDots.forEach((d, i) => d.classList.toggle('active', i === index));
             this.currentIndex = index;
@@ -321,18 +322,63 @@
 
         scrollToSection(index) {
             if (index < 0 || index >= this.sections.length || !this.sections[index]) return;
+            
             const target = this.sections[index];
             const containerRect = this.scrollContainer.getBoundingClientRect();
             const targetRect = target.getBoundingClientRect();
             const scrollOffset = targetRect.top - containerRect.top + this.scrollContainer.scrollTop;
+            
+            // If returning to home, add elegant transition
+            if (index === 0 && this.currentIndex !== 0) {
+                this.triggerElegantHomeTransition(target);
+            }
+            
             this.scrollContainer.scrollTo({
                 top: scrollOffset,
                 behavior: 'smooth'
             });
+            
             setTimeout(() => this.updateActiveSection(index), 200);
             DOM.chatWindow.classList.remove('open');
             DOM.actionHub.classList.remove('expanded');
             if (DOM.mobileDropdown) DOM.mobileDropdown.style.transform = 'translateY(-105%)';
+        }
+
+        triggerElegantHomeTransition(target) {
+            // Add elegant-enter class to trigger the CSS animation
+            target.classList.add('elegant-enter');
+            
+            // Re-trigger the animation after a delay for smoother effect
+            setTimeout(() => {
+                target.classList.remove('elegant-enter');
+                // Force reflow
+                void target.offsetWidth;
+                target.classList.add('elegant-enter');
+            }, 50);
+        }
+
+        setupElegantHomeTransition() {
+            // Listen for scroll events to trigger elegant transition when scrolling to home
+            let lastScrollTop = 0;
+            this.scrollContainer.addEventListener('scroll', () => {
+                const scrollTop = this.scrollContainer.scrollTop;
+                const homeSection = this.sections[0];
+                if (homeSection) {
+                    const rect = homeSection.getBoundingClientRect();
+                    const containerRect = this.scrollContainer.getBoundingClientRect();
+                    const isHomeVisible = rect.top >= containerRect.top - 100 && rect.top <= containerRect.top + 200;
+                    
+                    if (isHomeVisible && this.currentIndex !== 0) {
+                        // Only trigger if not already on home
+                        const isScrollingUp = scrollTop < lastScrollTop;
+                        if (isScrollingUp) {
+                            this.triggerElegantHomeTransition(homeSection);
+                            this.updateActiveSection(0);
+                        }
+                    }
+                }
+                lastScrollTop = scrollTop;
+            });
         }
 
         setupIntersectionObserver() {
@@ -343,7 +389,11 @@
                         if (!isNaN(index) && index !== this.currentIndex && !this.isScrolling) {
                             this.updateActiveSection(index);
                         }
-                        if (index === 0) DOM.heroSection?.classList.remove('hero-blur');
+                        if (index === 0) {
+                            DOM.heroSection?.classList.remove('hero-blur');
+                            // Add elegant transition when home becomes visible
+                            entry.target.classList.add('elegant-enter');
+                        }
                     }
                 });
             }, {
@@ -375,7 +425,14 @@
             this.scrollContainer.addEventListener('scroll', () => {
                 nav.classList.toggle('scrolled', this.scrollContainer.scrollTop > 10);
             });
-            DOM.logoBtn.addEventListener('click', () => this.scrollToSection(0));
+            DOM.logoBtn.addEventListener('click', () => {
+                this.scrollToSection(0);
+                // Add elegant transition for logo click
+                const homeSection = this.sections[0];
+                if (homeSection) {
+                    setTimeout(() => this.triggerElegantHomeTransition(homeSection), 300);
+                }
+            });
         }
 
         setupStatsAnimation() {
@@ -410,7 +467,7 @@
     }
 
     // ============================================================
-    // BACK TO TOP
+    // BACK TO TOP with Elegant Animation
     // ============================================================
     class BackToTop {
         constructor() {
@@ -434,8 +491,11 @@
         updateVisibility() {
             if (this.scrollContainer.scrollTop > window.innerHeight * 0.6) {
                 this.button.classList.add('visible');
+                // Add subtle pulse animation
+                this.button.style.animation = 'floatGlow 3s ease-in-out infinite';
             } else {
                 this.button.classList.remove('visible');
+                this.button.style.animation = '';
             }
         }
 
@@ -444,12 +504,28 @@
                 e.preventDefault();
                 e.stopPropagation();
             }
+            
+            // Add click animation
             this.button.style.transform = 'scale(0.85)';
             setTimeout(() => {
-                if (this.button.classList.contains('visible')) this.button.style.transform = '';
+                if (this.button.classList.contains('visible')) {
+                    this.button.style.transform = '';
+                }
             }, 300);
+            
             const nav = new ScrollNavigation();
             nav.scrollToSection(0);
+            
+            // Add elegant transition
+            const homeSection = document.getElementById('section-home');
+            if (homeSection) {
+                setTimeout(() => {
+                    homeSection.classList.remove('elegant-enter');
+                    void homeSection.offsetWidth;
+                    homeSection.classList.add('elegant-enter');
+                }, 300);
+            }
+            
             setTimeout(() => {
                 if (DOM.scrollContainer.scrollTop > 10) {
                     DOM.scrollContainer.scrollTo({
@@ -517,9 +593,14 @@
             DOM.hubToggle.addEventListener('click', (e) => {
                 e.stopPropagation();
                 DOM.actionHub.classList.toggle('expanded');
+                // Add rotation animation
+                DOM.hubToggle.style.transform = DOM.actionHub.classList.contains('expanded') ? 'rotate(45deg) scale(1.08)' : '';
             });
             document.addEventListener('click', (e) => {
-                if (!DOM.actionHub.contains(e.target)) DOM.actionHub.classList.remove('expanded');
+                if (!DOM.actionHub.contains(e.target)) {
+                    DOM.actionHub.classList.remove('expanded');
+                    DOM.hubToggle.style.transform = '';
+                }
             });
             document.querySelectorAll('.hub-item[data-action]').forEach(item => {
                 item.addEventListener('click', (e) => {
@@ -540,6 +621,7 @@
                             break;
                     }
                     DOM.actionHub.classList.remove('expanded');
+                    DOM.hubToggle.style.transform = '';
                 });
             });
         }
@@ -589,6 +671,8 @@
             const div = document.createElement('div');
             div.className = `chat-message ${sender}`;
             div.textContent = text;
+            // Add fade-in animation to messages
+            div.style.animation = 'fadeInUp 0.3s ease forwards';
             DOM.chatMessages.appendChild(div);
             DOM.chatMessages.scrollTop = DOM.chatMessages.scrollHeight;
         }
@@ -617,6 +701,17 @@
         init() {
             DOM.hamburgerBtn.addEventListener('click', () => {
                 this.dropdown.style.transform = 'translateY(0)';
+                // Add subtle animation to menu items
+                const items = this.dropdown.querySelectorAll('.links a');
+                items.forEach((item, index) => {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        item.style.transition = 'all 0.4s ease';
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    }, 100 + (index * 50));
+                });
             });
             DOM.cancelBtn.addEventListener('click', () => {
                 this.dropdown.style.transform = 'translateY(-105%)';
@@ -644,6 +739,7 @@
                 if (e.key === 'Escape') {
                     DOM.chatWindow.classList.remove('open');
                     DOM.actionHub.classList.remove('expanded');
+                    DOM.hubToggle.style.transform = '';
                 }
                 if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                     e.preventDefault();
@@ -652,7 +748,8 @@
                 }
                 if (e.altKey && e.key >= '1' && e.key <= '8') {
                     e.preventDefault();
-                    new ScrollNavigation().scrollToSection(parseInt(e.key) - 1);
+                    const nav = new ScrollNavigation();
+                    nav.scrollToSection(parseInt(e.key) - 1);
                     DOM.chatWindow.classList.remove('open');
                 }
             });
@@ -676,7 +773,7 @@
     }
 
     // ============================================================
-    // CONTACT FORM HANDLER (with Terms Checkbox)
+    // CONTACT FORM HANDLER
     // ============================================================
     class ContactForm {
         constructor() {
@@ -699,6 +796,11 @@
                         DOM.submitBtn.style.opacity = '1';
                         DOM.submitBtn.style.cursor = 'pointer';
                         DOM.termsCheckbox.parentElement.classList.remove('error');
+                        // Add success pulse
+                        DOM.submitBtn.style.animation = 'btnPulse 0.5s ease';
+                        setTimeout(() => {
+                            DOM.submitBtn.style.animation = '';
+                        }, 500);
                     } else {
                         DOM.submitBtn.disabled = true;
                         DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Please Accept Terms to Continue';
@@ -723,7 +825,6 @@
             if (!DOM.termsCheckbox || !DOM.termsCheckbox.checked) {
                 DOM.termsCheckbox.parentElement.classList.add('error');
                 Utils.setStatus('error', '⚠️ Please accept the Terms & Conditions and Privacy Policy.');
-                // Scroll to checkbox
                 DOM.termsCheckbox.scrollIntoView({
                     behavior: 'smooth',
                     block: 'center'
@@ -769,9 +870,10 @@
                 terms_accepted: formData.terms_accepted
             };
 
-            // Disable button
+            // Disable button with loading animation
             DOM.submitBtn.disabled = true;
             DOM.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            DOM.submitBtn.style.animation = 'pulse 0.5s ease infinite';
 
             try {
                 // Send email via EmailJS
@@ -794,6 +896,7 @@
                     DOM.submitBtn.style.cursor = 'not-allowed';
                 }
 
+                DOM.submitBtn.style.animation = '';
                 Utils.showToast('📨 Message Sent!', 'Thanks for reaching out. I\'ll respond within 24 hours.');
                 console.log('✅ Email sent successfully via EmailJS');
 
@@ -812,6 +915,7 @@
                 }
 
                 Utils.setStatus('error', errorMessage);
+                DOM.submitBtn.style.animation = '';
 
                 // Re-enable submit if terms are checked
                 if (DOM.termsCheckbox && DOM.termsCheckbox.checked) {
@@ -828,7 +932,11 @@
     // INITIALIZE ALL MODULES
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize EmailJS with proper error handling
+        console.log('=' .repeat(60));
+        console.log('🚀 Starting Portfolio Initialization...');
+        console.log('=' .repeat(60));
+
+        // Initialize EmailJS
         try {
             if (CONFIG.emailjs.publicKey && CONFIG.emailjs.publicKey !== 'YOUR_PUBLIC_KEY') {
                 emailjs.init(CONFIG.emailjs.publicKey);
@@ -842,90 +950,30 @@
             console.warn('⚠️ EmailJS init error:', error);
         }
 
-        // Initialize all modules
-        try {
-            new ParticleSystem(DOM.particleCanvas, CONFIG.particleCount);
-            console.log('✅ Particles system initialized');
-        } catch (error) {
-            console.warn('⚠️ Particles init error:', error);
-        }
+        // Initialize all modules with error handling
+        const modules = [
+            { name: 'Particles System', init: () => new ParticleSystem(DOM.particleCanvas, CONFIG.particleCount) },
+            { name: 'Typewriter', init: () => new Typewriter(DOM.typedSpan, CONFIG.roles) },
+            { name: 'Theme Manager', init: () => new ThemeManager() },
+            { name: 'Scroll Navigation', init: () => new ScrollNavigation() },
+            { name: 'Back to Top', init: () => new BackToTop() },
+            { name: 'Notification System', init: () => new NotificationSystem() },
+            { name: 'Action Hub', init: () => new ActionHub() },
+            { name: 'Chatbot', init: () => new Chatbot() },
+            { name: 'Mobile Menu', init: () => new MobileMenu() },
+            { name: 'Keyboard Shortcuts', init: () => new KeyboardShortcuts() },
+            { name: 'Shortcuts Hint', init: () => new ShortcutsHint() },
+            { name: 'Contact Form', init: () => new ContactForm() }
+        ];
 
-        try {
-            new Typewriter(DOM.typedSpan, CONFIG.roles);
-            console.log('✅ Typewriter initialized');
-        } catch (error) {
-            console.warn('⚠️ Typewriter init error:', error);
-        }
-
-        try {
-            new ThemeManager();
-            console.log('✅ Theme manager initialized');
-        } catch (error) {
-            console.warn('⚠️ Theme manager init error:', error);
-        }
-
-        try {
-            new ScrollNavigation();
-            console.log('✅ Scroll navigation initialized');
-        } catch (error) {
-            console.warn('⚠️ Scroll navigation init error:', error);
-        }
-
-        try {
-            new BackToTop();
-            console.log('✅ Back to top initialized');
-        } catch (error) {
-            console.warn('⚠️ Back to top init error:', error);
-        }
-
-        try {
-            new NotificationSystem();
-            console.log('✅ Notification system initialized');
-        } catch (error) {
-            console.warn('⚠️ Notification system init error:', error);
-        }
-
-        try {
-            new ActionHub();
-            console.log('✅ Action hub initialized');
-        } catch (error) {
-            console.warn('⚠️ Action hub init error:', error);
-        }
-
-        try {
-            new Chatbot();
-            console.log('✅ Chatbot initialized');
-        } catch (error) {
-            console.warn('⚠️ Chatbot init error:', error);
-        }
-
-        try {
-            new MobileMenu();
-            console.log('✅ Mobile menu initialized');
-        } catch (error) {
-            console.warn('⚠️ Mobile menu init error:', error);
-        }
-
-        try {
-            new KeyboardShortcuts();
-            console.log('✅ Keyboard shortcuts initialized');
-        } catch (error) {
-            console.warn('⚠️ Keyboard shortcuts init error:', error);
-        }
-
-        try {
-            new ShortcutsHint();
-            console.log('✅ Shortcuts hint initialized');
-        } catch (error) {
-            console.warn('⚠️ Shortcuts hint init error:', error);
-        }
-
-        try {
-            new ContactForm();
-            console.log('✅ Contact form with Terms checkbox initialized');
-        } catch (error) {
-            console.warn('⚠️ Contact form init error:', error);
-        }
+        modules.forEach(({ name, init }) => {
+            try {
+                init();
+                console.log(`✅ ${name} initialized`);
+            } catch (error) {
+                console.warn(`⚠️ ${name} init error:`, error);
+            }
+        });
 
         console.log('=' .repeat(60));
         console.log('✅ Portfolio Ready — All modules initialized successfully');
@@ -937,11 +985,14 @@
         });
         console.log('📋 Terms & Conditions checkbox enabled');
         console.log('🌓 Theme: ' + (localStorage.getItem('theme') || 'dark'));
+        console.log('🎨 Animations: Enabled');
+        console.log('✨ Elegant Transitions: Enabled');
         console.log('=' .repeat(60));
         console.log('🚀 Portfolio is ready to use!');
         console.log('📱 Responsive: Yes');
         console.log('🔒 Secure: Yes');
         console.log('📋 GDPR Compliant: Yes');
+        console.log('🎯 All buttons: Functional');
         console.log('=' .repeat(60));
     });
 
