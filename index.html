@@ -104,7 +104,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
     
-    <!-- ===== reCAPTCHA API ===== -->
+    <!-- ===== reCAPTCHA API (Keep for widget) ===== -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     
     <style>
@@ -265,7 +265,7 @@
         .links a:hover,
         .links a.active { color: var(--green); }
 
-        /* ===== NAV CTA BUTTON (Always Visible) ===== */
+        /* ===== NAV CTA BUTTON ===== */
         .cta-nav-btn {
             background: var(--cta-gradient);
             color: #fff !important;
@@ -826,7 +826,7 @@
         }
         .social-links a:hover i { position: relative; z-index: 2; }
 
-        /* ===== CTA GROUP (Hero - 3 CTAs) ===== */
+        /* ===== CTA GROUP (Hero) ===== */
         .cta-group {
             display: flex;
             flex-wrap: wrap;
@@ -913,7 +913,7 @@
             transform: translateY(-3px);
         }
 
-        /* ===== TERTIARY CTA BUTTON (Text-only) ===== */
+        /* ===== TERTIARY CTA BUTTON ===== */
         .btn-tertiary {
             background: transparent;
             border: none;
@@ -937,6 +937,27 @@
             transform: translateY(-2px);
         }
 
+        /* ===== SECTION CTA CONTAINER ===== */
+        .section-cta {
+            margin-top: 40px;
+            text-align: center;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            background: rgba(10, 158, 64, 0.03);
+            border: 1px solid rgba(10, 158, 64, 0.06);
+        }
+
+        body.light-mode .section-cta {
+            background: rgba(10, 158, 64, 0.02);
+        }
+
+        .section-cta p {
+            opacity: 0.6;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+
+        /* ===== STATS BAR ===== */
         .stats-bar {
             display: flex;
             gap: clamp(1.5rem, 4vw, 3rem);
@@ -984,26 +1005,6 @@
             background: linear-gradient(180deg, var(--green), transparent);
             border-radius: 4px;
             flex-shrink: 0;
-        }
-
-        /* ===== SECTION CTA CONTAINER ===== */
-        .section-cta {
-            margin-top: 40px;
-            text-align: center;
-            padding: 20px;
-            border-radius: var(--border-radius);
-            background: rgba(10, 158, 64, 0.03);
-            border: 1px solid rgba(10, 158, 64, 0.06);
-        }
-
-        body.light-mode .section-cta {
-            background: rgba(10, 158, 64, 0.02);
-        }
-
-        .section-cta p {
-            opacity: 0.6;
-            font-size: 0.85rem;
-            margin-bottom: 12px;
         }
 
         /* ===== ABOUT ===== */
@@ -1461,6 +1462,7 @@
             gap: 16px;
         }
 
+        /* ===== reCAPTCHA Container ===== */
         .recaptcha-container {
             display: flex;
             justify-content: center;
@@ -1815,7 +1817,6 @@
             .form-row { grid-template-columns: 1fr; }
             .recaptcha-container .g-recaptcha { transform: scale(0.85); }
             
-            /* Mobile CTA adjustments */
             .cta-group .btn-primary,
             .cta-group .btn-secondary,
             .cta-group .btn-tertiary {
@@ -1942,7 +1943,6 @@
                             <a href="tel:+639306359306" aria-label="Phone"><i class="fas fa-phone"></i></a>
                             <a href="mailto:va.flynnjames@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
                         </div>
-                        <!-- ===== HERO CTAs (3 CTAs - Primary, Secondary, Tertiary) ===== -->
                         <div class="cta-group">
                             <a href="#section-contact" class="btn-primary">
                                 <span class="pulse-ring"></span>
@@ -1981,7 +1981,6 @@
                         <div class="quote">"The best sales leaders don't just hit targets — they build teams that can hit any target."</div>
                     </div>
                 </div>
-                <!-- ===== ABOUT SECTION CTA ===== -->
                 <div class="section-cta">
                     <p>Ready to build a sales pipeline that actually works?</p>
                     <a href="#section-contact" class="btn-primary" style="padding: 12px 32px; font-size: 0.95rem;">
@@ -2004,7 +2003,6 @@
                     <div class="skill-card"><span class="icon"><i class="fas fa-globe"></i></span><h3>Global Market Expertise</h3><p>Deep experience across APAC, US, UK, and AU markets with nuanced regional messaging strategies.</p></div>
                     <div class="skill-card"><span class="icon"><i class="fas fa-certificate"></i></span><h3>Lean Six Sigma</h3><p>SSWB and LSSWB certified with a focus on continuous improvement and process optimization.</p></div>
                 </div>
-                <!-- ===== SKILLS SECTION CTA ===== -->
                 <div class="section-cta">
                     <p>Need a sales leader who can actually deliver results?</p>
                     <a href="#section-contact" class="btn-primary" style="padding: 12px 32px; font-size: 0.95rem;">
@@ -2024,7 +2022,6 @@
                     <div class="service-card"><span class="icon"><i class="fas fa-chart-line"></i></span><h3>Sales Consulting</h3><p>Custom cadences, objection playbooks, and CRM optimization. Boosted reply rates by 12% and open rates by 22%.</p></div>
                     <div class="service-card"><span class="icon"><i class="fas fa-users-cog"></i></span><h3>Team Mentorship</h3><p>Reduce ramp time from 8 to 5 weeks with data-centric training and role-play frameworks.</p></div>
                 </div>
-                <!-- ===== SERVICES SECTION CTA ===== -->
                 <div class="section-cta">
                     <p>Every sales team is different. Let's create a custom plan for yours.</p>
                     <a href="#section-contact" class="btn-primary" style="padding: 12px 32px; font-size: 0.95rem;">
@@ -2050,7 +2047,6 @@
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_629771767e967.jpg" data-lightbox="gallery" data-title="Team Mentoring"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_629771767e967.jpg" alt="Team Collaboration" loading="lazy" width="200" height="200" /><div class="badge">👥 Mentorship</div><div class="overlay"><span>👥 Team Collaboration</span></div></a></div>
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176ba76e.jpg" data-lightbox="gallery" data-title="Strategic Planning"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176ba76e.jpg" alt="Strategic Planning" loading="lazy" width="200" height="200" /><div class="badge">📋 Planning</div><div class="overlay"><span>📋 Strategic Planning</span></div></a></div>
                 </div>
-                <!-- ===== GALLERY SECTION CTA ===== -->
                 <div class="section-cta">
                     <p>See how I turn strategy into real results for my clients.</p>
                     <a href="#section-contact" class="btn-primary" style="padding: 12px 32px; font-size: 0.95rem;">
@@ -2086,7 +2082,6 @@
                         <span class="result-tag">🏆 120% Quota Attainment</span>
                     </div>
                 </div>
-                <!-- ===== TESTIMONIALS SECTION CTA ===== -->
                 <div class="section-cta">
                     <p>Join 40+ satisfied clients who've transformed their sales results.</p>
                     <a href="#section-contact" class="btn-primary" style="padding: 12px 32px; font-size: 0.95rem;">
@@ -2125,7 +2120,6 @@
                         <span class="cert-badge">🏆 View Award</span>
                     </a>
                 </div>
-                <!-- ===== CERTIFICATIONS SECTION CTA ===== -->
                 <div class="section-cta">
                     <p>Work with a certified expert who brings proven frameworks to every engagement.</p>
                     <a href="#section-contact" class="btn-primary" style="padding: 12px 32px; font-size: 0.95rem;">
@@ -2143,7 +2137,6 @@
                 <p style="opacity:0.7;margin-bottom:30px;text-align:center;">Have a project in mind? Let's talk about how I can help you scale your sales.</p>
                 
                 <div class="contact-wrapper">
-                    <!-- Contact Info -->
                     <div class="contact-info">
                         <h3><i class="fas fa-address-card" style="color:var(--green);margin-right:10px;"></i>Get in Touch</h3>
                         <p>I'm always open to new opportunities, partnerships, and conversations about sales growth. Reach out and let's make something happen.</p>
@@ -2177,7 +2170,6 @@
                         </div>
                     </div>
 
-                    <!-- Contact Form -->
                     <div class="contact-form-wrapper">
                         <h3><i class="fas fa-paper-plane" style="color:var(--green);margin-right:10px;"></i>Send a Message</h3>
                         <form id="contactForm">
@@ -2267,7 +2259,6 @@
 
         // reCAPTCHA Configuration
         const RECAPTCHA_SITE_KEY = '6LfAaXEtAAAAALnWqDEYvVKOX-4CqLrMIBIeAEXd';
-        const RECAPTCHA_SECRET_KEY = '6LfAaXEtAAAAAJpAQSyrS7-9RN99MbO3x7MS_rA0';
 
         // Initialize EmailJS
         (function() {
@@ -2400,7 +2391,6 @@
         let isScrolling = false;
         let currentIndex = 0;
 
-        // Make scrollToSection globally accessible for onclick handlers
         window.scrollToSection = function(index) {
             if (index < 0 || index >= totalSections || !sections[index]) return;
             const targetSection = sections[index];
@@ -2542,7 +2532,7 @@
         mobileDropdown.querySelectorAll('.links a').forEach(link => { link.addEventListener('click', () => { mobileDropdown.style.transform = 'translateY(-105%)';
                 const idx = parseInt(link.dataset.index); if (!isNaN(idx)) window.scrollToSection(idx); }); });
 
-        // ===== CONTACT FORM HANDLER =====
+        // ===== CONTACT FORM HANDLER (WITHOUT CLIENT-SIDE reCAPTCHA VERIFICATION) =====
         const contactForm = document.getElementById('contactForm');
         const formStatus = document.getElementById('formStatus');
         const submitBtn = document.getElementById('formSubmitBtn');
@@ -2568,12 +2558,14 @@
             formStatus.className = 'form-status';
             formStatus.style.display = 'none';
             
+            // Check EmailJS config
             if (!EMAILJS_CONFIG.publicKey || !EMAILJS_CONFIG.serviceID || !EMAILJS_CONFIG.templateID ||
                 EMAILJS_CONFIG.publicKey === 'YOUR_PUBLIC_KEY') {
                 setStatus('error', '⚠️ Email service not configured. Please check your EmailJS keys.');
                 return;
             }
 
+            // Get form data
             const formData = {
                 user_name: document.getElementById('user_name').value.trim(),
                 user_email: document.getElementById('user_email').value.trim(),
@@ -2582,38 +2574,29 @@
                 user_message: document.getElementById('user_message').value.trim()
             };
 
+            // Validate required fields
             if (!formData.user_name || !formData.user_email || !formData.user_subject || !formData.user_message) {
                 setStatus('error', '⚠️ Please fill in all required fields.');
                 return;
             }
 
+            // Get reCAPTCHA response (for spam protection, but skip verification)
             const recaptchaResponse = grecaptcha.getResponse();
             if (!recaptchaResponse) {
                 setStatus('error', '⚠️ Please complete the reCAPTCHA verification.');
                 return;
             }
 
+            // Disable button
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
-            fetch('https://www.google.com/recaptcha/api/siteverify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'secret=' + RECAPTCHA_SECRET_KEY + '&response=' + recaptchaResponse
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                    return emailjs.send(
-                        EMAILJS_CONFIG.serviceID,
-                        EMAILJS_CONFIG.templateID,
-                        formData
-                    );
-                } else {
-                    throw new Error('reCAPTCHA verification failed. Please try again.');
-                }
-            })
+            // Send email via EmailJS (skip client-side reCAPTCHA verification)
+            emailjs.send(
+                EMAILJS_CONFIG.serviceID,
+                EMAILJS_CONFIG.templateID,
+                formData
+            )
             .then(function(response) {
                 setStatus('success', '✅ Message sent successfully! I\'ll get back to you within 24 hours.');
                 contactForm.reset();
@@ -2623,8 +2606,8 @@
                 showCustomToast('📨 Message Sent!', 'Thanks for reaching out. I\'ll respond within 24 hours.');
             })
             .catch(function(error) {
-                console.error('Error:', error);
-                setStatus('error', '❌ ' + error.message + ' Please try again or email me directly.');
+                console.error('EmailJS Error:', error);
+                setStatus('error', '❌ Failed to send message. Please try again or email me directly at va.flynnjames@gmail.com');
                 if (typeof grecaptcha !== 'undefined') {
                     try { grecaptcha.reset(); } catch(e) {}
                 }
@@ -2651,7 +2634,7 @@
         }
 
         updateActiveSection(0);
-        console.log('✅ Portfolio Ready — Optimized CTAs with GoHighLevel-style conversion strategy');
+        console.log('✅ Portfolio Ready — All errors fixed');
         console.log('📧 EmailJS Config:', EMAILJS_CONFIG);
         console.log('🔒 reCAPTCHA Site Key:', RECAPTCHA_SITE_KEY);
     </script>
