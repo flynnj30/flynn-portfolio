@@ -1,0 +1,52 @@
+# ============================================================
+# ROBOTS.TXT - Flynn James Pontino Portfolio
+# Search Engine Crawler Instructions
+# ============================================================
+
+# Allow all crawlers to index the site
+User-agent: *
+Allow: /
+
+# Disallow access to assets folder (not needed for indexing)
+Disallow: /assets/
+
+# Sitemap location
+Sitemap: https://flynn-portfolio-1.onrender.com/sitemap.xml
+
+# Crawl delay to prevent server overload
+Crawl-delay: 1
+
+# ============================================================
+# SPECIFIC BOT RULES
+# ============================================================
+
+# Googlebot
+User-agent: Googlebot
+Allow: /
+Disallow: /assets/
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+Disallow: /assets/
+
+# DuckDuckBot
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /assets/
+
+# ============================================================
+# BLOCK HARMFUL BOTS
+# ============================================================
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: rogerbot
+Disallow: /
