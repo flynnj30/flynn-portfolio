@@ -128,7 +128,7 @@
         <kbd>Alt</kbd> + <kbd>1</kbd>–<kbd>8</kbd> to navigate &nbsp;·&nbsp; <kbd>Ctrl</kbd> + <kbd>K</kbd> for chat
     </div>
 
-    <!-- NAVIGATION -->
+    <!-- NAVIGATION - CTA BUTTON REMOVED -->
     <nav>
         <div class="nav-container">
             <div class="logo" id="logoBtn">Flynn James <span>Pontino</span></div>
@@ -448,9 +448,9 @@
                                 <textarea id="user_message" name="user_message" placeholder="Tell me about your project, goals, or how I can help..." required></textarea>
                             </div>
                             
-                            <!-- reCAPTCHA v2 -->
+                            <!-- reCAPTCHA v2 with explicit render -->
                             <div class="recaptcha-container">
-                                <div class="g-recaptcha" data-sitekey="6LfAaXEtAAAAALnWqDEYvVKOX-4CqLrMIBIeAEXd"></div>
+                                <div id="recaptchaWidget"></div>
                             </div>
                             
                             <button type="submit" class="form-submit-btn" id="formSubmitBtn" disabled>
@@ -489,8 +489,8 @@
         <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type a message..." /><button id="sendChatMsg"><i class="fas fa-paper-plane"></i></button></div>
     </div>
 
-    <!-- reCAPTCHA API -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- reCAPTCHA API with explicit render -->
+    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>

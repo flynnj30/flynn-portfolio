@@ -22,21 +22,20 @@ Professional portfolio website for **Flynn James Pontino**, Senior Sales Develop
 - ✅ **AI Chat Navigator** — Quick navigation through sections
 - ✅ **Centralized CTAs** — Strategic placement for high conversion
 
+### Security & Contact
+- ✅ **Google reCAPTCHA v2** — Server-side verification
+- ✅ **EmailJS Integration** — Contact form with email delivery
+- ✅ **Server-side Validation** — Secure token verification
+- ✅ **Environment Variables** — Secrets never exposed to client
+
 ### SEO & Performance
-- ✅ **Schema.org Structured Data** — Person, Organization, FAQ, LocalBusiness
+- ✅ **Schema.org Structured Data** — Person, Organization, FAQ
 - ✅ **Open Graph Meta Tags** — Optimized for social sharing
 - ✅ **XML Sitemap** — Complete site indexing
 - ✅ **robots.txt** — Search engine crawler instructions
 - ✅ **Canonical URLs** — Duplicate content prevention
 - ✅ **Lazy Loading** — Optimized image loading
 - ✅ **Core Web Vitals** — Optimized for performance
-
-### Contact & Engagement
-- ✅ **EmailJS Integration** — Contact form with email delivery
-- ✅ **Google reCAPTCHA v2** — Spam protection
-- ✅ **Action Hub** — Floating quick action buttons
-- ✅ **Notification Toast** — Auto-rotating tips and messages
-- ✅ **Keyboard Shortcuts** — Alt+1-8 navigation, Ctrl+K for chat
 
 ---
 
@@ -48,7 +47,9 @@ Professional portfolio website for **Flynn James Pontino**, Senior Sales Develop
 | **CSS3** | Latest | Custom properties, Flexbox, Grid |
 | **JavaScript** | ES6+ | Interactivity and functionality |
 | **EmailJS** | v4 | Contact form email delivery |
-| **Google reCAPTCHA** | v2 | Form spam protection |
+| **Google reCAPTCHA** | v2 | Server-side spam protection |
+| **Express.js** | v4 | Backend API server |
+| **Node.js** | v18+ | Server runtime |
 | **Font Awesome** | v6.5.1 | Icons and social media |
 | **Google Fonts** | Inter | Typography |
 
@@ -60,8 +61,10 @@ flynn-portfolio/
 ├── robots.txt # Search engine crawler rules
 ├── sitemap.xml # XML sitemap for SEO
 ├── .gitignore # Git ignore configuration
-├── README.md # Complete project documentation
-├── render.yaml # Render.com deployment configuration
+├── README.md # Project documentation
+├── render.yaml # Render.com deployment config
+├── package.json # Node.js dependencies
+├── .env.example # Environment variables template
 ├── assets/
 │ ├── css/
 │ │ └── style.css # Production stylesheet
@@ -69,8 +72,10 @@ flynn-portfolio/
 │ │ └── main.js # Production JavaScript
 │ └── images/
 │ └── (All website images)
+├── server/
+│ └── verify-recaptcha.js # Server-side reCAPTCHA verification
 └── .well-known/
-└── (Google Search Console verification files)
+└── (Google Search Console verification)
 
 text
 
@@ -78,9 +83,10 @@ text
 
 ## 🚀 Deployment
 
-### Deploy on Render.com (Recommended)
+### Deploy on Render.com
 
-1. **Fork/Clone this repository**
+1. **Push code to GitHub**
    ```bash
-   git clone https://github.com/flynnj30/flynn-portfolio.git
-   cd flynn-portfolio
+   git add .
+   git commit -m "Initial commit"
+   git push origin main

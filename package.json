@@ -1,0 +1,22 @@
+{
+  "name": "flynn-portfolio-server",
+  "version": "1.0.0",
+  "description": "Server-side reCAPTCHA verification for Flynn James Pontino portfolio",
+  "main": "server/verify-recaptcha.js",
+  "scripts": {
+    "start": "node server/verify-recaptcha.js",
+    "dev": "nodemon server/verify-recaptcha.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.2",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

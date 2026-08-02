@@ -13,13 +13,11 @@
     // CONFIGURATION
     // ============================================================
     const CONFIG = {
-        // === EmailJS Configuration ===
         emailjs: {
             publicKey: 'crekfvN6H352DXAfx',
             serviceID: 'service_av4pfmh',
             templateID: 'template_vcqi0qv'
         },
-        // === reCAPTCHA Configuration ===
         recaptcha: {
             siteKey: '6LfAaXEtAAAAALnWqDEYvVKOX-4CqLrMIBIeAEXd'
         },
@@ -61,7 +59,8 @@
         typedSpan: document.querySelector('.typewriter-text'),
         stats: document.querySelectorAll('.stat-item .number'),
         heroSection: document.getElementById('section-home'),
-        particleCanvas: document.getElementById('particleCanvas')
+        particleCanvas: document.getElementById('particleCanvas'),
+        recaptchaWidget: document.getElementById('recaptchaWidget')
     };
 
     // ============================================================
@@ -116,7 +115,7 @@
                 try {
                     grecaptcha.reset();
                 } catch(e) {
-                    console.warn('reCAPTCHA reset error:', e);
+                    // Silently handle reset errors
                 }
             }
         }
@@ -678,8 +677,64 @@
             DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Complete reCAPTCHA First';
             DOM.submitBtn.style.opacity = '0.6';
 
+            // Render reCAPTCHA explicitly when the API is ready
+            this.renderRecaptcha();
+
             // Handle form submission
             DOM.contactForm.addEventListener('submit', (e) => this.handleSubmit(e));
+        }
+
+        renderRecaptcha() {
+            try {
+                // Check if reCAPTCHA widget container exists
+                if (!DOM.recaptchaWidget) {
+                    console.warn('reCAPTCHA widget container not found');
+                    return;
+                }
+
+                // Check if grecaptcha is available
+                if (typeof grecaptcha !== 'undefined' && grecaptcha.render) {
+                    grecaptcha.render(DOM.recaptchaWidget.id, {
+                        sitekey: CONFIG.recaptcha.siteKey,
+                        callback: function(token) {
+                            Utils.onRecaptchaSuccess(token);
+                        },
+                        'expired-callback': function() {
+                            Utils.onRecaptchaExpired();
+                        },
+                        'error-callback': function() {
+                            // Silently handle reCAPTCHA errors
+                        }
+                    });
+                    console.log('✅ reCAPTCHA rendered successfully');
+                } else {
+                    // If grecaptcha is not available, wait for it
+                    let attempts = 0;
+                    const maxAttempts = 20;
+                    const checkInterval = setInterval(() => {
+                        attempts++;
+                        if (typeof grecaptcha !== 'undefined' && grecaptcha.render) {
+                            clearInterval(checkInterval);
+                            grecaptcha.render(DOM.recaptchaWidget.id, {
+                                sitekey: CONFIG.recaptcha.siteKey,
+                                callback: function(token) {
+                                    Utils.onRecaptchaSuccess(token);
+                                },
+                                'expired-callback': function() {
+                                    Utils.onRecaptchaExpired();
+                                }
+                            });
+                            console.log('✅ reCAPTCHA rendered successfully (delayed)');
+                        } else if (attempts >= maxAttempts) {
+                            clearInterval(checkInterval);
+                            console.warn('⚠️ reCAPTCHA API not loaded after ' + maxAttempts + ' attempts');
+                        }
+                    }, 500);
+                }
+            } catch (e) {
+                // Silently handle reCAPTCHA render errors
+                console.warn('reCAPTCHA render warning:', e.message);
+            }
         }
 
         async handleSubmit(e) {
@@ -690,7 +745,9 @@
             // Check if reCAPTCHA is completed
             let recaptchaResponse;
             try {
-                recaptchaResponse = grecaptcha.getResponse();
+                if (typeof grecaptcha !== 'undefined') {
+                    recaptchaResponse = grecaptcha.getResponse();
+                }
             } catch(e) {
                 Utils.setStatus('error', '⚠️ reCAPTCHA not loaded. Please refresh the page.');
                 return;
@@ -733,6 +790,12 @@
                 // IMPORTANT: Server-side reCAPTCHA Verification
                 // The secret key should be stored as an environment variable
                 // on your server. NEVER expose it in client-side code!
+                // 
+                // For local development, create a .env file:
+                //   RECAPTCHA_SECRET_KEY=your_secret_key_here
+                //
+                // For production (Render.com, Vercel, etc.), set it as an 
+                // environment variable in your deployment dashboard.
                 // ============================================================
                 
                 // Send the reCAPTCHA token to your server for verification
