@@ -57,7 +57,8 @@
         typedSpan: document.querySelector('.typewriter-text'),
         stats: document.querySelectorAll('.stat-item .number'),
         heroSection: document.getElementById('section-home'),
-        particleCanvas: document.getElementById('particleCanvas')
+        particleCanvas: document.getElementById('particleCanvas'),
+        scrollProgress: document.getElementById('scrollProgress')
     };
 
     // ============================================================
@@ -272,6 +273,26 @@
     }
 
     // ============================================================
+    // SCROLL PROGRESS BAR
+    // ============================================================
+    class ScrollProgress {
+        constructor() {
+            this.bar = DOM.scrollProgress;
+            this.container = DOM.scrollContainer;
+            this.init();
+        }
+
+        init() {
+            this.container.addEventListener('scroll', () => {
+                const scrollTop = this.container.scrollTop;
+                const scrollHeight = this.container.scrollHeight - this.container.clientHeight;
+                const progress = (scrollTop / scrollHeight) * 100;
+                this.bar.style.width = progress + '%';
+            });
+        }
+    }
+
+    // ============================================================
     // SCROLL NAVIGATION with Elegant Transitions
     // ============================================================
     class ScrollNavigation {
@@ -309,7 +330,6 @@
             this.isScrolling = true;
             this.sections.forEach((s, i) => {
                 s.classList.toggle('active', i === index);
-                // Remove elegant-enter class from all sections
                 s.classList.remove('elegant-enter');
             });
             this.navLinks.forEach((l, i) => l.classList.toggle('active', i === index));
@@ -328,7 +348,6 @@
             const targetRect = target.getBoundingClientRect();
             const scrollOffset = targetRect.top - containerRect.top + this.scrollContainer.scrollTop;
             
-            // If returning to home, add elegant transition
             if (index === 0 && this.currentIndex !== 0) {
                 this.triggerElegantHomeTransition(target);
             }
@@ -345,20 +364,15 @@
         }
 
         triggerElegantHomeTransition(target) {
-            // Add elegant-enter class to trigger the CSS animation
             target.classList.add('elegant-enter');
-            
-            // Re-trigger the animation after a delay for smoother effect
             setTimeout(() => {
                 target.classList.remove('elegant-enter');
-                // Force reflow
                 void target.offsetWidth;
                 target.classList.add('elegant-enter');
             }, 50);
         }
 
         setupElegantHomeTransition() {
-            // Listen for scroll events to trigger elegant transition when scrolling to home
             let lastScrollTop = 0;
             this.scrollContainer.addEventListener('scroll', () => {
                 const scrollTop = this.scrollContainer.scrollTop;
@@ -369,7 +383,6 @@
                     const isHomeVisible = rect.top >= containerRect.top - 100 && rect.top <= containerRect.top + 200;
                     
                     if (isHomeVisible && this.currentIndex !== 0) {
-                        // Only trigger if not already on home
                         const isScrollingUp = scrollTop < lastScrollTop;
                         if (isScrollingUp) {
                             this.triggerElegantHomeTransition(homeSection);
@@ -391,7 +404,6 @@
                         }
                         if (index === 0) {
                             DOM.heroSection?.classList.remove('hero-blur');
-                            // Add elegant transition when home becomes visible
                             entry.target.classList.add('elegant-enter');
                         }
                     }
@@ -427,7 +439,6 @@
             });
             DOM.logoBtn.addEventListener('click', () => {
                 this.scrollToSection(0);
-                // Add elegant transition for logo click
                 const homeSection = this.sections[0];
                 if (homeSection) {
                     setTimeout(() => this.triggerElegantHomeTransition(homeSection), 300);
@@ -491,7 +502,6 @@
         updateVisibility() {
             if (this.scrollContainer.scrollTop > window.innerHeight * 0.6) {
                 this.button.classList.add('visible');
-                // Add subtle pulse animation
                 this.button.style.animation = 'floatGlow 3s ease-in-out infinite';
             } else {
                 this.button.classList.remove('visible');
@@ -505,7 +515,6 @@
                 e.stopPropagation();
             }
             
-            // Add click animation
             this.button.style.transform = 'scale(0.85)';
             setTimeout(() => {
                 if (this.button.classList.contains('visible')) {
@@ -516,7 +525,6 @@
             const nav = new ScrollNavigation();
             nav.scrollToSection(0);
             
-            // Add elegant transition
             const homeSection = document.getElementById('section-home');
             if (homeSection) {
                 setTimeout(() => {
@@ -593,7 +601,6 @@
             DOM.hubToggle.addEventListener('click', (e) => {
                 e.stopPropagation();
                 DOM.actionHub.classList.toggle('expanded');
-                // Add rotation animation
                 DOM.hubToggle.style.transform = DOM.actionHub.classList.contains('expanded') ? 'rotate(45deg) scale(1.08)' : '';
             });
             document.addEventListener('click', (e) => {
@@ -671,7 +678,6 @@
             const div = document.createElement('div');
             div.className = `chat-message ${sender}`;
             div.textContent = text;
-            // Add fade-in animation to messages
             div.style.animation = 'fadeInUp 0.3s ease forwards';
             DOM.chatMessages.appendChild(div);
             DOM.chatMessages.scrollTop = DOM.chatMessages.scrollHeight;
@@ -701,7 +707,6 @@
         init() {
             DOM.hamburgerBtn.addEventListener('click', () => {
                 this.dropdown.style.transform = 'translateY(0)';
-                // Add subtle animation to menu items
                 const items = this.dropdown.querySelectorAll('.links a');
                 items.forEach((item, index) => {
                     item.style.opacity = '0';
@@ -781,13 +786,11 @@
         }
 
         init() {
-            // Initialize submit button as disabled
             DOM.submitBtn.disabled = true;
             DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Please Accept Terms to Continue';
             DOM.submitBtn.style.opacity = '0.6';
             DOM.submitBtn.style.cursor = 'not-allowed';
 
-            // Terms checkbox listener
             if (DOM.termsCheckbox) {
                 DOM.termsCheckbox.addEventListener('change', () => {
                     if (DOM.termsCheckbox.checked) {
@@ -796,7 +799,6 @@
                         DOM.submitBtn.style.opacity = '1';
                         DOM.submitBtn.style.cursor = 'pointer';
                         DOM.termsCheckbox.parentElement.classList.remove('error');
-                        // Add success pulse
                         DOM.submitBtn.style.animation = 'btnPulse 0.5s ease';
                         setTimeout(() => {
                             DOM.submitBtn.style.animation = '';
@@ -810,18 +812,15 @@
                 });
             }
 
-            // Handle form submission
             DOM.contactForm.addEventListener('submit', (e) => this.handleSubmit(e));
         }
 
         async handleSubmit(e) {
             e.preventDefault();
 
-            // Clear previous status
             DOM.formStatus.className = 'form-status';
             DOM.formStatus.style.display = 'none';
 
-            // Check if terms are accepted
             if (!DOM.termsCheckbox || !DOM.termsCheckbox.checked) {
                 DOM.termsCheckbox.parentElement.classList.add('error');
                 Utils.setStatus('error', '⚠️ Please accept the Terms & Conditions and Privacy Policy.');
@@ -832,7 +831,6 @@
                 return;
             }
 
-            // Get form data
             const formData = {
                 user_name: document.getElementById('user_name').value.trim(),
                 user_email: document.getElementById('user_email').value.trim(),
@@ -842,25 +840,21 @@
                 terms_accepted: 'Yes'
             };
 
-            // Validate required fields
             if (!formData.user_name || !formData.user_email || !formData.user_subject || !formData.user_message) {
                 Utils.setStatus('error', '⚠️ Please fill in all required fields.');
                 return;
             }
 
-            // Validate email format
             if (!Utils.validateEmail(formData.user_email)) {
                 Utils.setStatus('error', '⚠️ Please enter a valid email address.');
                 return;
             }
 
-            // Validate EmailJS config
             if (!CONFIG.emailjs.publicKey || !CONFIG.emailjs.serviceID || !CONFIG.emailjs.templateID) {
                 Utils.setStatus('error', '⚠️ Email service not configured. Please contact the site owner.');
                 return;
             }
 
-            // Sanitize inputs
             const sanitizedData = {
                 user_name: Utils.sanitizeInput(formData.user_name),
                 user_email: Utils.sanitizeInput(formData.user_email),
@@ -870,24 +864,20 @@
                 terms_accepted: formData.terms_accepted
             };
 
-            // Disable button with loading animation
             DOM.submitBtn.disabled = true;
             DOM.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             DOM.submitBtn.style.animation = 'pulse 0.5s ease infinite';
 
             try {
-                // Send email via EmailJS
                 const emailResult = await emailjs.send(
                     CONFIG.emailjs.serviceID,
                     CONFIG.emailjs.templateID,
                     sanitizedData
                 );
 
-                // Success!
                 Utils.setStatus('success', '✅ Message sent successfully! I\'ll get back to you within 24 hours.');
                 DOM.contactForm.reset();
 
-                // Reset checkbox and button
                 if (DOM.termsCheckbox) {
                     DOM.termsCheckbox.checked = false;
                     DOM.submitBtn.disabled = true;
@@ -917,7 +907,6 @@
                 Utils.setStatus('error', errorMessage);
                 DOM.submitBtn.style.animation = '';
 
-                // Re-enable submit if terms are checked
                 if (DOM.termsCheckbox && DOM.termsCheckbox.checked) {
                     DOM.submitBtn.disabled = false;
                     DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
@@ -936,7 +925,6 @@
         console.log('🚀 Starting Portfolio Initialization...');
         console.log('=' .repeat(60));
 
-        // Initialize EmailJS
         try {
             if (CONFIG.emailjs.publicKey && CONFIG.emailjs.publicKey !== 'YOUR_PUBLIC_KEY') {
                 emailjs.init(CONFIG.emailjs.publicKey);
@@ -950,11 +938,11 @@
             console.warn('⚠️ EmailJS init error:', error);
         }
 
-        // Initialize all modules with error handling
         const modules = [
             { name: 'Particles System', init: () => new ParticleSystem(DOM.particleCanvas, CONFIG.particleCount) },
             { name: 'Typewriter', init: () => new Typewriter(DOM.typedSpan, CONFIG.roles) },
             { name: 'Theme Manager', init: () => new ThemeManager() },
+            { name: 'Scroll Progress', init: () => new ScrollProgress() },
             { name: 'Scroll Navigation', init: () => new ScrollNavigation() },
             { name: 'Back to Top', init: () => new BackToTop() },
             { name: 'Notification System', init: () => new NotificationSystem() },
@@ -987,6 +975,7 @@
         console.log('🌓 Theme: ' + (localStorage.getItem('theme') || 'dark'));
         console.log('🎨 Animations: Enabled');
         console.log('✨ Elegant Transitions: Enabled');
+        console.log('📊 Scroll Progress: Enabled');
         console.log('=' .repeat(60));
         console.log('🚀 Portfolio is ready to use!');
         console.log('📱 Responsive: Yes');

@@ -392,6 +392,21 @@ body.light-mode ::-webkit-scrollbar-track {
 }
 
 /* ============================================================
+   SCROLL PROGRESS BAR
+   ============================================================ */
+.scroll-progress {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    height: 3px;
+    background: var(--cta-gradient);
+    z-index: 1001;
+    width: 0%;
+    transition: width 0.1s ease;
+    box-shadow: 0 0 20px rgba(10, 158, 64, 0.3);
+}
+
+/* ============================================================
    ANIMATED ELEMENTS
    ============================================================ */
 
@@ -2697,7 +2712,8 @@ body.light-mode .legal-divider {
     .chat-window,
     .notification-toast,
     .shortcuts-hint,
-    #particleCanvas {
+    #particleCanvas,
+    .scroll-progress {
         display: none !important;
     }
     nav {
