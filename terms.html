@@ -2,14 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover" />
     <title>Terms &amp; Conditions | Flynn James Pontino</title>
     <meta name="description" content="Terms and Conditions for using Flynn James Pontino's professional services and website." />
     <link rel="icon" href="https://i.ibb.co/zT4GWZHh/logo-for-my-portfolio.png" type="image/png" />
+    <link rel="apple-touch-icon" href="https://i.ibb.co/zT4GWZHh/logo-for-my-portfolio.png" />
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="assets/css/style.css" />
+    
     <style>
+        /* ===== Legal Page Specific Styles ===== */
         .legal-page {
             max-width: 900px;
             margin: 100px auto 60px;
@@ -18,40 +22,54 @@
             border-radius: 24px;
             border: 1px solid var(--border-dark);
             backdrop-filter: blur(12px);
+            animation: fadeInUp 0.8s var(--transition-bounce) forwards;
+            min-height: 60vh;
         }
+        
         body.light-mode .legal-page {
             background: var(--card-bg-light);
             border-color: var(--border-light);
         }
+        
         .legal-page h1 {
             font-size: 2rem;
             color: var(--green);
             margin-bottom: 10px;
+            font-weight: 800;
         }
+        
         .legal-page .last-updated {
-            color: rgba(255,255,255,0.4);
+            color: rgba(255, 255, 255, 0.4);
             font-size: 0.85rem;
             margin-bottom: 30px;
         }
+        
         body.light-mode .legal-page .last-updated {
-            color: rgba(0,0,0,0.4);
+            color: rgba(0, 0, 0, 0.4);
         }
+        
         .legal-page h2 {
             font-size: 1.2rem;
             color: var(--green);
             margin: 25px 0 10px;
+            font-weight: 700;
         }
-        .legal-page p, .legal-page li {
+        
+        .legal-page p,
+        .legal-page li {
             line-height: 1.8;
             opacity: 0.85;
         }
+        
         .legal-page ul {
             padding-left: 20px;
         }
+        
         .legal-page li {
             margin-bottom: 8px;
         }
-        .back-link {
+        
+        .legal-page .back-link {
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -61,17 +79,68 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-        .back-link:hover {
+        
+        .legal-page .back-link:hover {
             transform: translateX(-5px);
+            color: var(--green-light);
         }
+        
         .legal-divider {
             border: none;
             border-top: 1px solid var(--border-dark);
             margin: 30px 0;
         }
+        
         body.light-mode .legal-divider {
             border-color: var(--border-light);
         }
+        
+        .legal-page .contact-email {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .legal-page .contact-email:hover {
+            text-decoration: underline;
+        }
+        
+        .nav-links-legal a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: clamp(0.75rem, 1.2vw, 0.85rem);
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        body.light-mode .nav-links-legal a {
+            color: var(--text-light);
+        }
+        
+        .nav-links-legal a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0%;
+            height: 2px;
+            background: var(--green);
+            transition: all var(--transition-speed) ease;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px rgba(10, 158, 64, 0.3);
+        }
+        
+        .nav-links-legal a:hover::after {
+            width: 100%;
+        }
+        .nav-links-legal a:hover {
+            color: var(--green);
+        }
+        
         @media (max-width: 768px) {
             .legal-page {
                 margin: 80px 16px 40px;
@@ -79,6 +148,19 @@
             }
             .legal-page h1 {
                 font-size: 1.5rem;
+            }
+            .legal-page h2 {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .legal-page {
+                margin: 70px 12px 30px;
+                padding: 18px;
+            }
+            .legal-page h1 {
+                font-size: 1.3rem;
             }
         }
     </style>
@@ -96,11 +178,15 @@
     <nav>
         <div class="nav-container">
             <div class="logo" id="logoBtn">Flynn James <span>Pontino</span></div>
-            <div class="links">
+            <div class="links nav-links-legal">
                 <a href="index.html">Home</a>
                 <a href="index.html#section-about">About</a>
                 <a href="index.html#section-skills">Skills</a>
                 <a href="index.html#section-services">Services</a>
+                <a href="index.html#section-gallery">Gallery</a>
+                <a href="index.html#section-testimonials">Testimonials</a>
+                <a href="index.html#section-certifications">Certifications</a>
+                <a href="index.html#section-faq">FAQ</a>
                 <a href="index.html#section-contact">Contact</a>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <i class="fas fa-moon" id="themeIcon"></i>
@@ -110,11 +196,15 @@
         </div>
         <div class="dropdown" id="mobileDropdown">
             <div class="cancel" id="cancelBtn"><i class="fas fa-times"></i></div>
-            <div class="links">
+            <div class="links nav-links-legal">
                 <a href="index.html">Home</a>
                 <a href="index.html#section-about">About</a>
                 <a href="index.html#section-skills">Skills</a>
                 <a href="index.html#section-services">Services</a>
+                <a href="index.html#section-gallery">Gallery</a>
+                <a href="index.html#section-testimonials">Testimonials</a>
+                <a href="index.html#section-certifications">Certifications</a>
+                <a href="index.html#section-faq">FAQ</a>
                 <a href="index.html#section-contact">Contact</a>
             </div>
         </div>
@@ -123,7 +213,7 @@
     <!-- TERMS CONTENT -->
     <div class="legal-page">
         <h1>📋 Terms &amp; Conditions</h1>
-        <p class="last-updated">Last Updated: August 2, 2026</p>
+        <p class="last-updated">Last Updated: August 4, 2026</p>
 
         <p>Welcome to the professional portfolio and services website of <strong>Flynn James Pontino</strong> ("I", "me", "my"). By using this website and my services, you agree to comply with and be bound by the following terms and conditions.</p>
 
@@ -136,6 +226,8 @@
             <li>Sales consulting and strategy development</li>
             <li>Team mentorship and training</li>
             <li>Outbound sales process improvement</li>
+            <li>CRM implementation and optimization</li>
+            <li>Sales leadership coaching</li>
         </ul>
 
         <h2>2. User Responsibilities</h2>
@@ -145,22 +237,23 @@
             <li>Not use this website for any unlawful purpose</li>
             <li>Not attempt to gain unauthorized access to any part of this website</li>
             <li>Respect intellectual property rights and not copy content without permission</li>
+            <li>Not engage in any activity that could damage, disable, or impair the website</li>
         </ul>
 
         <h2>3. Intellectual Property</h2>
-        <p>All content on this website, including text, images, graphics, and logos, is the property of Flynn James Pontino unless otherwise stated. You may not reproduce, distribute, or create derivative works without explicit written permission.</p>
+        <p>All content on this website, including text, images, graphics, logos, and design elements, is the property of Flynn James Pontino unless otherwise stated. You may not reproduce, distribute, or create derivative works without explicit written permission.</p>
 
         <h2>4. Confidentiality</h2>
-        <p>Any information shared during consultations or through the contact form will be treated with strict confidentiality. I will not share your information with third parties without your explicit consent, except as required by law.</p>
+        <p>Any information shared during consultations, through the contact form, or via email will be treated with strict confidentiality. I will not share your information with third parties without your explicit consent, except as required by law or to fulfill service obligations.</p>
 
         <h2>5. Limitations of Liability</h2>
         <p>While I strive to provide accurate and valuable information, I make no warranties or representations about the completeness, accuracy, or reliability of the content on this website. My services are provided "as is" and I shall not be liable for any damages arising from the use of my services or website.</p>
 
         <h2>6. Payment Terms</h2>
-        <p>Fees for consulting services will be agreed upon in writing prior to engagement. Payment terms will be specified in the service agreement.</p>
+        <p>Fees for consulting services will be agreed upon in writing prior to engagement. Payment terms will be specified in the service agreement and may include hourly rates, project-based fees, or retainer arrangements.</p>
 
         <h2>7. Termination</h2>
-        <p>I reserve the right to refuse service or terminate consulting agreements at any time with reasonable notice, subject to the terms of the specific service agreement.</p>
+        <p>I reserve the right to refuse service or terminate consulting agreements at any time with reasonable notice, subject to the terms of the specific service agreement. Either party may terminate services with written notice as specified in the agreement.</p>
 
         <h2>8. Governing Law</h2>
         <p>These terms are governed by and construed in accordance with the laws of the Philippines. Any disputes arising from these terms shall be subject to the exclusive jurisdiction of the courts of the Philippines.</p>
@@ -171,8 +264,8 @@
         <h2>10. Contact Information</h2>
         <p>If you have any questions about these terms, please contact me at:</p>
         <p>
-            <strong>Email:</strong> <a href="mailto:va.flynnjames@gmail.com" style="color:var(--green);">va.flynnjames@gmail.com</a><br />
-            <strong>Phone:</strong> <a href="tel:+639306359306" style="color:var(--green);">+63 930 635 9306</a>
+            <strong>Email:</strong> <a href="mailto:va.flynnjames@gmail.com" class="contact-email">va.flynnjames@gmail.com</a><br />
+            <strong>Phone:</strong> <a href="tel:+639306359306" class="contact-email">+63 930 635 9306</a>
         </p>
 
         <hr class="legal-divider" />
@@ -192,11 +285,20 @@
         <button class="hub-toggle" id="hubToggle" aria-label="Toggle actions"><i class="fas fa-plus"></i></button>
     </div>
 
+    <!-- SHORTCUTS HINT -->
+    <div class="shortcuts-hint" id="shortcutsHint">
+        <kbd>Alt</kbd> + <kbd>1</kbd>–<kbd>8</kbd> to navigate &nbsp;·&nbsp; <kbd>Ctrl</kbd> + <kbd>K</kbd> for chat
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script>
-        // Theme Toggle for Terms page
+        // ============================================================
+        // TERMS PAGE SPECIFIC SCRIPTS
+        // ============================================================
+        
+        // Theme Toggle
         let isDarkMode = true;
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
@@ -217,7 +319,10 @@
         let particles = [];
         let mouseX = -1000, mouseY = -1000;
 
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        function resizeCanvas() { 
+            canvas.width = window.innerWidth; 
+            canvas.height = window.innerHeight; 
+        }
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
@@ -236,14 +341,18 @@
             update() {
                 const dx = mouseX - this.x, dy = mouseY - this.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < 150) { const angle = Math.atan2(dy, dx);
+                if (dist < 150) { 
+                    const angle = Math.atan2(dy, dx);
                     this.speedX -= Math.cos(angle) * 0.2;
-                    this.speedY -= Math.sin(angle) * 0.2; }
+                    this.speedY -= Math.sin(angle) * 0.2; 
+                }
                 this.x += this.speedX;
                 this.y += this.speedY;
                 this.life -= this.decay;
-                if (this.y < -20 || this.life <= 0 || this.x < -20 || this.x > canvas.width + 20) { this.reset();
-                    this.y = canvas.height + Math.random() * 50; }
+                if (this.y < -20 || this.life <= 0 || this.x < -20 || this.x > canvas.width + 20) { 
+                    this.reset();
+                    this.y = canvas.height + Math.random() * 50; 
+                }
             }
             draw(ctx) {
                 const alpha = this.life * 0.6;
@@ -263,17 +372,65 @@
         }
         for (let i = 0; i < 70; i++) particles.push(new Particle());
         document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
-        document.addEventListener('touchmove', (e) => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+        document.addEventListener('touchmove', (e) => { 
+            if (e.touches.length > 0) {
+                mouseX = e.touches[0].clientX; 
+                mouseY = e.touches[0].clientY; 
+            }
+        });
 
-        function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function animateParticles() { 
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(ctx); });
-            requestAnimationFrame(animateParticles); }
+            requestAnimationFrame(animateParticles); 
+        }
         animateParticles();
 
         // Mobile Menu
         const mobileDropdown = document.getElementById('mobileDropdown');
         document.getElementById('hamburgerBtn').addEventListener('click', () => mobileDropdown.style.transform = 'translateY(0)');
         document.getElementById('cancelBtn').addEventListener('click', () => mobileDropdown.style.transform = 'translateY(-105%)');
+
+        // Back to Top
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 600) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Action Hub
+        const hubToggle = document.getElementById('hubToggle');
+        const actionHub = document.getElementById('actionHub');
+        hubToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            actionHub.classList.toggle('expanded');
+        });
+        document.addEventListener('click', (e) => {
+            if (!actionHub.contains(e.target)) actionHub.classList.remove('expanded');
+        });
+        document.querySelectorAll('.hub-item[data-action]').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const action = this.dataset.action;
+                if (action === 'cv') window.open('https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing', '_blank');
+                else if (action === 'email') window.location.href = 'mailto:va.flynnjames@gmail.com';
+                else if (action === 'phone') window.location.href = 'tel:+639306359306';
+                actionHub.classList.remove('expanded');
+            });
+        });
+
+        // Logo click to home
+        document.getElementById('logoBtn').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        console.log('✅ Terms & Conditions page loaded successfully');
     </script>
 </body>
 </html>

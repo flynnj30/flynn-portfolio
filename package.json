@@ -1,22 +1,32 @@
 {
-  "name": "flynn-portfolio-server",
-  "version": "1.0.0",
-  "description": "Server-side reCAPTCHA verification for Flynn James Pontino portfolio",
-  "main": "server/verify-recaptcha.js",
+  "name": "flynn-portfolio",
+  "version": "2.0.0",
+  "description": "Professional portfolio website for Flynn James Pontino - Strategic Growth Leader & Sales Development Expert",
+  "main": "index.html",
   "scripts": {
-    "start": "node server/verify-recaptcha.js",
-    "dev": "nodemon server/verify-recaptcha.js"
+    "start": "echo \"No server required - static site ready for deployment\"",
+    "dev": "echo \"No development server required\"",
+    "build": "echo \"No build step required\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^16.6.1",
-    "express": "^4.22.2",
-    "node-fetch": "^2.7.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
+  "keywords": [
+    "portfolio",
+    "sales-development",
+    "b2b-sales",
+    "sales-leader",
+    "pipeline-generation",
+    "sales-consulting",
+    "team-mentorship"
+  ],
+  "author": "Flynn James Pontino",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flynnj30/flynn-portfolio.git"
   },
   "engines": {
     "node": ">=16.0.0"
-  }
+  },
+  "dependencies": {},
+  "devDependencies": {}
 }

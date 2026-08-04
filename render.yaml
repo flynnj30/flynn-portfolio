@@ -3,25 +3,6 @@
 # ============================================================
 
 services:
-  # ===== Backend API Server =====
-  - type: web
-    name: flynn-portfolio-api
-    runtime: node
-    repo: https://github.com/flynnj30/flynn-portfolio.git
-    branch: main
-    buildCommand: npm install
-    startCommand: node server/verify-recaptcha.js
-    
-    envVars:
-      - key: RECAPTCHA_SECRET_KEY
-        value: your_actual_secret_key_here  # ⚠️ REPLACE WITH ACTUAL KEY
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: 3000
-
-    healthCheckPath: /api/health
-
   # ===== Static Frontend =====
   - type: web
     name: flynn-portfolio
