@@ -2,7 +2,7 @@
  * ============================================================
  * FLYNN JAMES PONTINO | PORTFOLIO MAIN SCRIPT
  * Version: 1.0.0
- * Last Updated: 2026-08-02
+ * Last Updated: 2026-08-04
  * ============================================================
  */
 
@@ -58,7 +58,8 @@
         stats: document.querySelectorAll('.stat-item .number'),
         heroSection: document.getElementById('section-home'),
         particleCanvas: document.getElementById('particleCanvas'),
-        scrollProgress: document.getElementById('scrollProgress')
+        scrollProgress: document.getElementById('scrollProgress'),
+        faqItems: document.querySelectorAll('.faq-item')
     };
 
     // ============================================================
@@ -286,14 +287,14 @@
             this.container.addEventListener('scroll', () => {
                 const scrollTop = this.container.scrollTop;
                 const scrollHeight = this.container.scrollHeight - this.container.clientHeight;
-                const progress = (scrollTop / scrollHeight) * 100;
-                this.bar.style.width = progress + '%';
+                const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+                this.bar.style.width = Math.min(progress, 100) + '%';
             });
         }
     }
 
     // ============================================================
-    // SCROLL NAVIGATION with Elegant Transitions
+    // SCROLL NAVIGATION
     // ============================================================
     class ScrollNavigation {
         constructor() {
@@ -478,7 +479,7 @@
     }
 
     // ============================================================
-    // BACK TO TOP with Elegant Animation
+    // BACK TO TOP
     // ============================================================
     class BackToTop {
         constructor() {
@@ -647,7 +648,8 @@
                 gallery: 4,
                 testimonials: 5,
                 certifications: 6,
-                contact: 7
+                faq: 7,
+                contact: 8
             };
             this.init();
         }
@@ -751,7 +753,7 @@
                     DOM.chatWindow.classList.toggle('open');
                     if (DOM.chatWindow.classList.contains('open')) DOM.chatInput.focus();
                 }
-                if (e.altKey && e.key >= '1' && e.key <= '8') {
+                if (e.altKey && e.key >= '1' && e.key <= '9') {
                     e.preventDefault();
                     const nav = new ScrollNavigation();
                     nav.scrollToSection(parseInt(e.key) - 1);
@@ -774,6 +776,43 @@
                 DOM.shortcutsHint.classList.add('visible');
                 setTimeout(() => DOM.shortcutsHint.classList.remove('visible'), 6000);
             }, 3000);
+        }
+    }
+
+    // ============================================================
+    // FAQ ACCORDION
+    // ============================================================
+    class FAQAccordion {
+        constructor() {
+            this.items = DOM.faqItems;
+            this.init();
+        }
+
+        init() {
+            if (!this.items.length) return;
+            
+            this.items.forEach(item => {
+                const question = item.querySelector('.faq-q');
+                if (question) {
+                    question.addEventListener('click', () => {
+                        const isOpen = item.classList.contains('open');
+                        
+                        // Close all items
+                        this.items.forEach(otherItem => {
+                            if (otherItem !== item) {
+                                otherItem.classList.remove('open');
+                            }
+                        });
+                        
+                        // Toggle current item
+                        if (!isOpen) {
+                            item.classList.add('open');
+                        } else {
+                            item.classList.remove('open');
+                        }
+                    });
+                }
+            });
         }
     }
 
@@ -823,7 +862,7 @@
 
             if (!DOM.termsCheckbox || !DOM.termsCheckbox.checked) {
                 DOM.termsCheckbox.parentElement.classList.add('error');
-                Utils.setStatus('error', '⚠️ Please accept the Terms & Conditions and Privacy Policy.');
+                Utils.setStatus('error', ⚠️ Please accept the Terms & Conditions and Privacy Policy.');
                 DOM.termsCheckbox.scrollIntoView({
                     behavior: 'smooth',
                     block: 'center'
@@ -951,6 +990,7 @@
             { name: 'Mobile Menu', init: () => new MobileMenu() },
             { name: 'Keyboard Shortcuts', init: () => new KeyboardShortcuts() },
             { name: 'Shortcuts Hint', init: () => new ShortcutsHint() },
+            { name: 'FAQ Accordion', init: () => new FAQAccordion() },
             { name: 'Contact Form', init: () => new ContactForm() }
         ];
 
@@ -972,6 +1012,7 @@
             templateID: CONFIG.emailjs.templateID
         });
         console.log('📋 Terms & Conditions checkbox enabled');
+        console.log('📋 FAQ Accordion enabled (9 sections)');
         console.log('🌓 Theme: ' + (localStorage.getItem('theme') || 'dark'));
         console.log('🎨 Animations: Enabled');
         console.log('✨ Elegant Transitions: Enabled');
