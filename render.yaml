@@ -1,9 +1,4 @@
-# ============================================================
-# RENDER.COM DEPLOYMENT CONFIGURATION
-# ============================================================
-
 services:
-  # ===== Backend API Service =====
   - type: web
     name: flynn-portfolio-1-api
     runtime: node
@@ -28,7 +23,6 @@ services:
     healthCheckPath: /health
     autoDeploy: true
 
-  # ===== Static Frontend =====
   - type: web
     name: flynn-portfolio-1
     runtime: static
