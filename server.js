@@ -1,4 +1,4 @@
-// server.js - FIXED VERSION (Attendees Removed)
+// server.js - Complete Version with Test Calendar Endpoint
 const express = require('express');
 const cors = require('cors');
 
@@ -14,7 +14,9 @@ const { google } = require('googleapis');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// ============================================================
+// MIDDLEWARE
+// ============================================================
 app.use(cors({ origin: '*', methods: ['GET', 'POST', 'OPTIONS'] }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,17 +27,43 @@ app.use((req, res, next) => {
     next();
 });
 
-// Health check
+// ============================================================
+// BASIC ROUTES
+// ============================================================
 app.get('/health', (req, res) => {
     res.status(200).json({
         status: 'OK',
         timestamp: new Date().toISOString(),
-        service: 'flynn-portfolio-api'
+        service: 'flynn-portfolio-api',
+        env: {
+            hasGoogleEmail: !!process.env.GOOGLE_CLIENT_EMAIL,
+            hasPrivateKey: !!process.env.GOOGLE_PRIVATE_KEY,
+            hasEmailUser: !!process.env.EMAIL_USER,
+            hasEmailPassword: !!process.env.EMAIL_PASSWORD
+        }
     });
 });
 
 app.get('/', (req, res) => {
-    res.json({ name: 'Flynn Portfolio API', version: '1.0.0', status: 'running' });
+    res.json({ 
+        name: 'Flynn Portfolio API', 
+        version: '1.0.0', 
+        status: 'running',
+        endpoints: {
+            health: '/health',
+            test: '/api/test',
+            test_calendar: '/api/test-calendar',
+            booking: '/api/create-booking (POST)'
+        }
+    });
+});
+
+app.get('/api/test', (req, res) => {
+    res.json({ 
+        success: true, 
+        message: 'API is working', 
+        timestamp: new Date().toISOString() 
+    });
 });
 
 // ============================================================
@@ -52,6 +80,8 @@ function initializeCalendar() {
 
         if (!clientEmail || !privateKey) {
             console.log('⚠️ Google Calendar credentials missing');
+            console.log('   GOOGLE_CLIENT_EMAIL:', clientEmail ? '✅ Set' : '❌ Missing');
+            console.log('   GOOGLE_PRIVATE_KEY:', privateKey ? '✅ Set' : '❌ Missing');
             return false;
         }
 
@@ -66,7 +96,7 @@ function initializeCalendar() {
 
         calendar = google.calendar({ version: 'v3', auth });
         calendarInitialized = true;
-        console.log('✅ Google Calendar initialized');
+        console.log('✅ Google Calendar initialized successfully');
         return true;
     } catch (error) {
         console.error('❌ Calendar init error:', error.message);
@@ -77,10 +107,60 @@ function initializeCalendar() {
 initializeCalendar();
 
 // ============================================================
-// CREATE BOOKING - FIXED VERSION
+// TEST CALENDAR ACCESS - DEBUG ENDPOINT
+// ============================================================
+app.get('/api/test-calendar', async (req, res) => {
+    console.log('🔍 Testing Google Calendar access...');
+    
+    try {
+        if (!calendar || !auth || !calendarInitialized) {
+            return res.status(400).json({
+                success: false,
+                message: 'Calendar not initialized',
+                details: {
+                    calendar: !!calendar,
+                    auth: !!auth,
+                    initialized: calendarInitialized
+                }
+            });
+        }
+
+        // Try to list calendars to verify access
+        const response = await calendar.calendarList.list({
+            maxResults: 10
+        });
+
+        console.log('✅ Calendar list retrieved successfully');
+
+        res.json({
+            success: true,
+            message: 'Calendar access verified',
+            calendars: response.data.items.map(c => ({ 
+                id: c.id, 
+                summary: c.summary,
+                accessRole: c.accessRole 
+            }))
+        });
+
+    } catch (error) {
+        console.error('❌ Calendar test failed:', error.message);
+        console.error('❌ Error details:', error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Calendar test failed',
+            error: error.message,
+            details: error.errors || error
+        });
+    }
+});
+
+// ============================================================
+// CREATE BOOKING - MAIN ENDPOINT
 // ============================================================
 app.post('/api/create-booking', async (req, res) => {
     console.log('📝 Booking request received');
+    console.log('📦 Request body:', JSON.stringify(req.body, null, 2));
 
     try {
         const { name, email, phone, subject, message, date, time, timezone } = req.body;
@@ -89,7 +169,7 @@ app.post('/api/create-booking', async (req, res) => {
         if (!name || !email || !subject || !date || !time) {
             return res.status(400).json({
                 success: false,
-                message: 'Missing required fields'
+                message: 'Missing required fields: name, email, subject, date, time'
             });
         }
 
@@ -194,6 +274,7 @@ app.post('/api/create-booking', async (req, res) => {
 
             } catch (error) {
                 console.error('❌ Calendar API Error:', error.message);
+                console.error('❌ Error details:', error);
             }
         } else {
             console.log('⚠️ Calendar not configured - skipping event creation');
@@ -209,7 +290,7 @@ app.post('/api/create-booking', async (req, res) => {
         }
 
         // ============================================================
-        // FORMAT DATE
+        // FORMAT DATE FOR DISPLAY
         // ============================================================
         const displayDate = new Date(date).toLocaleDateString('en-US', {
             weekday: 'long',
@@ -227,7 +308,14 @@ app.post('/api/create-booking', async (req, res) => {
             eventId: eventId || null,
             eventLink: eventLink,
             meetLink: eventLink,
-            message: calendarSuccess ? 'Booking created and added to calendar' : 'Booking created (calendar event failed)'
+            message: calendarSuccess ? 'Booking created and added to calendar' : 'Booking created (calendar event failed)',
+            debug: {
+                calendarConfigured: !!calendar,
+                authConfigured: !!auth,
+                calendarInitialized: calendarInitialized,
+                clientEmail: process.env.GOOGLE_CLIENT_EMAIL ? 'Set' : 'Not set',
+                privateKeySet: !!process.env.GOOGLE_PRIVATE_KEY
+            }
         };
 
         console.log('📤 Response:', JSON.stringify(responseData, null, 2));
@@ -252,6 +340,7 @@ app.post('/api/create-booking', async (req, res) => {
 
     } catch (error) {
         console.error('❌ Booking error:', error);
+        console.error('❌ Stack:', error.stack);
         res.status(500).json({
             success: false,
             message: error.message || 'Failed to create booking'
@@ -285,27 +374,29 @@ async function sendConfirmationEmail(data) {
             to: [data.email, emailUser],
             subject: `✅ Booking Confirmed: Strategy Call with Flynn James Pontino`,
             html: `
-                <h2>🎉 Booking Confirmed!</h2>
-                <p>Hi <strong>${data.name}</strong>,</p>
-                <p>Your strategy call with Flynn James Pontino has been confirmed.</p>
-                
-                <div style="background: #f0f0f0; padding: 16px; border-radius: 8px; margin: 16px 0;">
-                    <h3>📋 Appointment Details</h3>
-                    <p><strong>Date:</strong> ${data.date}</p>
-                    <p><strong>Time:</strong> ${data.time} (${data.timezone})</p>
-                    <p><strong>Subject:</strong> ${data.subject}</p>
-                    ${data.phone ? `<p><strong>Phone:</strong> ${data.phone}</p>` : ''}
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #0a0a0a; color: #e8e8e8; border-radius: 16px;">
+                    <h1 style="color: #0a9e40; text-align: center;">🎉 Booking Confirmed!</h1>
+                    <p>Hi <strong style="color: #0a9e40;">${data.name}</strong>,</p>
+                    <p>Your strategy call with Flynn James Pontino has been confirmed.</p>
+                    
+                    <div style="background: #1a1a1a; padding: 16px; border-radius: 12px; margin: 16px 0; border-left: 4px solid #0a9e40;">
+                        <h3 style="color: #0a9e40; margin-top: 0;">📋 Appointment Details</h3>
+                        <p><strong>Date:</strong> ${data.date}</p>
+                        <p><strong>Time:</strong> ${data.time} (${data.timezone})</p>
+                        <p><strong>Subject:</strong> ${data.subject}</p>
+                        ${data.phone ? `<p><strong>Phone:</strong> ${data.phone}</p>` : ''}
+                    </div>
+                    
+                    <div style="background: #1a1a1a; padding: 16px; border-radius: 12px; margin: 16px 0; border-left: 4px solid #0a9e40;">
+                        <h3 style="color: #0a9e40; margin-top: 0;">🔗 Google Meet Link</h3>
+                        <p><a href="${data.meetLink}" target="_blank" style="background: #0a9e40; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-block;">Join Meeting</a></p>
+                        <p style="font-size: 12px; color: #888; word-break: break-all;">${data.meetLink}</p>
+                        ${data.calendarSuccess ? '<p style="color: #0a9e40; font-size: 12px;">✅ Added to your Google Calendar</p>' : ''}
+                    </div>
+                    
+                    <p>You'll receive reminders 24 hours and 1 hour before the meeting.</p>
+                    <p>Best regards,<br><strong style="color: #0a9e40;">Flynn James Pontino</strong></p>
                 </div>
-                
-                <div style="background: #e8f5e9; padding: 16px; border-radius: 8px; margin: 16px 0;">
-                    <h3>🔗 Google Meet Link</h3>
-                    <p><a href="${data.meetLink}" target="_blank" style="background: #0a9e40; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-block;">Join Meeting</a></p>
-                    <p style="font-size: 12px; color: #666;">${data.meetLink}</p>
-                    ${data.calendarSuccess ? '<p style="color: #0a9e40; font-size: 12px;">✅ Added to your Google Calendar</p>' : ''}
-                </div>
-                
-                <p>You'll receive reminders 24 hours and 1 hour before the meeting.</p>
-                <p>Best regards,<br><strong>Flynn James Pontino</strong></p>
             `,
         };
 
@@ -319,16 +410,36 @@ async function sendConfirmationEmail(data) {
 }
 
 // ============================================================
+// 404 HANDLER
+// ============================================================
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: `Route not found: ${req.method} ${req.path}`,
+        available_endpoints: {
+            root: '/',
+            health: '/health',
+            test: '/api/test',
+            test_calendar: '/api/test-calendar',
+            booking: '/api/create-booking (POST)'
+        }
+    });
+});
+
+// ============================================================
 // START SERVER
 // ============================================================
 app.listen(PORT, '0.0.0.0', () => {
     console.log('='.repeat(60));
-    console.log('🚀 Flynn Portfolio API Server (FIXED)');
+    console.log('🚀 Flynn Portfolio API Server');
     console.log('='.repeat(60));
     console.log(`📡 Port: ${PORT}`);
     console.log(`📅 Calendar: ${calendar && auth ? 'ACTIVE ✅' : 'DISABLED ⚠️'}`);
     console.log(`📧 Email: ${process.env.EMAIL_PASSWORD ? 'CONFIGURED ✅' : 'NOT CONFIGURED ⚠️'}`);
-    console.log('📋 POST /api/create-booking');
-    console.log('📌 Attendees removed - events will be created without invitations');
+    console.log('📋 Available endpoints:');
+    console.log('   GET  /health              - Health check');
+    console.log('   GET  /api/test            - Test API');
+    console.log('   GET  /api/test-calendar   - Test calendar access');
+    console.log('   POST /api/create-booking  - Create booking');
     console.log('='.repeat(60));
 });
