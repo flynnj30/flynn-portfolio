@@ -1965,7 +1965,7 @@
             document.getElementById('closeSuccessBtn').addEventListener('click', closeModal);
 
             // ============================================================
-            // CONFIRM BOOKING - With EmailJS integration
+            // CONFIRM BOOKING - With EmailJS integration and status handling
             // ============================================================
             document.getElementById('bookSubmit').addEventListener('click', function() {
                 if (isProcessing || !meetLink) return;
@@ -1981,7 +1981,7 @@
                 const subject = document.getElementById('book_subject').value || 'General Inquiry';
                 const message = document.getElementById('book_message').value.trim() || 'No additional message';
 
-                // Prepare EmailJS template parameters - ALL variables must match exactly
+                // Prepare EmailJS template parameters
                 const templateParams = {
                     user_name: name,
                     user_email: email,
