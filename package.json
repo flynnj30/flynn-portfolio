@@ -1,21 +1,11 @@
 {
-    "name": "flynn-portfolio-backend",
-    "version": "1.0.0",
-    "description": "Backend for Flynn James Pontino portfolio - Google Calendar integration",
-    "main": "server.js",
-    "scripts": {
-        "start": "node server.js",
-        "dev": "nodemon server.js"
-    },
-    "dependencies": {
-        "express": "^4.18.2",
-        "cors": "^2.8.5",
-        "dotenv": "^16.3.1",
-        "googleapis": "^118.0.0",
-        "nodemailer": "^6.9.4",
-        "node-cron": "^3.0.2"
-    },
-    "devDependencies": {
-        "nodemon": "^3.0.1"
-    }
+  "name": "flynn-portfolio",
+  "version": "2.0.0",
+  "description": "Portfolio for Flynn James Pontino",
+  "scripts": {
+    "start": "echo 'Static site ready'"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
 }

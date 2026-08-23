@@ -1,26 +1,43 @@
-# ============================================================
-# RENDER.COM DEPLOYMENT CONFIGURATION
-# ============================================================
-
 services:
+  # ===== Backend API Service =====
+  - type: web
+    name: flynn-portfolio-api
+    runtime: node
+    repo: https://github.com/flynnj30/flynn-portfolio.git
+    branch: standalone
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: GOOGLE_CLIENT_EMAIL
+        sync: false
+      - key: GOOGLE_PRIVATE_KEY
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
   # ===== Static Frontend =====
   - type: web
     name: flynn-portfolio
     runtime: static
     repo: https://github.com/flynnj30/flynn-portfolio.git
-    branch: main
+    branch: standalone
     buildCommand: echo "No build step required"
     staticPublishPath: .
-    
     envVars:
       - key: NODE_VERSION
         value: 18.17.0
-
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
-
     headers:
       - path: /*
         name: X-Frame-Options
@@ -31,12 +48,5 @@ services:
       - path: /*
         name: X-XSS-Protection
         value: 1; mode=block
-      - path: /*
-        name: Referrer-Policy
-        value: strict-origin-when-cross-origin
-      - path: /*
-        name: Permissions-Policy
-        value: geolocation=(), microphone=(), camera=()
-
     healthCheckPath: /
     autoDeploy: true

@@ -1,4 +1,4 @@
-// server.js - Google Calendar API Integration
+// server.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -6,8 +6,20 @@ const { google } = require('googleapis');
 const nodemailer = require('nodemailer');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
 app.use(cors());
 app.use(express.json());
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'OK', 
+        timestamp: new Date().toISOString(),
+        service: 'flynn-portfolio-api'
+    });
+});
 
 // ============================================================
 // GOOGLE CALENDAR CONFIGURATION
@@ -28,6 +40,28 @@ app.post('/api/create-booking', async (req, res) => {
     try {
         const { name, email, phone, subject, message, date, time, timezone, dateFormatted } = req.body;
 
+        // Validate required fields
+        if (!name || !email || !subject || !date || !time) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing required fields'
+            });
+        }
+
+        // Convert time to 24-hour format
+        function convertTimeTo24Hour(timeStr) {
+            const [time, modifier] = timeStr.split(' ');
+            let [hours, minutes] = time.split(':');
+            
+            if (modifier === 'PM' && hours !== '12') {
+                hours = String(parseInt(hours) + 12);
+            }
+            if (modifier === 'AM' && hours === '12') {
+                hours = '00';
+            }
+            return `${hours.padStart(2, '0')}:${minutes || '00'}`;
+        }
+
         // Parse date and time
         const startDateTime = new Date(`${date}T${convertTimeTo24Hour(time)}:00`);
         const endDateTime = new Date(startDateTime);
@@ -41,6 +75,7 @@ app.post('/api/create-booking', async (req, res) => {
                 Message: ${message || 'No additional message'}
                 Phone: ${phone || 'Not provided'}
                 Timezone: ${timezone}
+                Booked via: Flynn Portfolio Website
             `,
             start: {
                 dateTime: startDateTime.toISOString(),
@@ -52,12 +87,12 @@ app.post('/api/create-booking', async (req, res) => {
             },
             attendees: [
                 { email: email },
-                { email: 'va.flynnjames@gmail.com' }
+                { email: process.env.EMAIL_USER || 'va.flynnjames@gmail.com' }
             ],
             conferenceData: {
                 createRequest: {
                     conferenceSolutionKey: { type: 'hangoutsMeet' },
-                    requestId: `meeting-${Date.now()}`,
+                    requestId: `meeting-${Date.now()}-${Math.random().toString(36).substring(7)}`,
                 },
             },
             reminders: {
@@ -65,6 +100,7 @@ app.post('/api/create-booking', async (req, res) => {
                 overrides: [
                     { method: 'email', minutes: 24 * 60 },
                     { method: 'popup', minutes: 60 },
+                    { method: 'popup', minutes: 10 },
                 ],
             },
         };
@@ -91,17 +127,6 @@ app.post('/api/create-booking', async (req, res) => {
             meetLink: eventLink,
         });
 
-        // Schedule reminders (24h and 1h before)
-        scheduleReminder({
-            name,
-            email,
-            date: dateFormatted,
-            time,
-            timezone,
-            meetLink: eventLink,
-            startDateTime,
-        });
-
         res.json({
             success: true,
             eventId: response.data.id,
@@ -119,85 +144,65 @@ app.post('/api/create-booking', async (req, res) => {
 });
 
 // ============================================================
-// SEND CONFIRMATION EMAIL (Nodemailer)
+// SEND CONFIRMATION EMAIL
 // ============================================================
 async function sendConfirmationEmail(data) {
-    const transporter = nodemailer.createTransporter({
-        service: 'gmail',
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
+    try {
+        const transporter = nodemailer.createTransporter({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER || 'va.flynnjames@gmail.com',
+                pass: process.env.EMAIL_PASSWORD,
+            },
+        });
 
-    const mailOptions = {
-        from: `"Flynn James Pontino" <${process.env.EMAIL_USER}>`,
-        to: [data.email, 'va.flynnjames@gmail.com'],
-        subject: `✅ Booking Confirmed: Strategy Call with Flynn James Pontino`,
-        html: `
-            <h2>🎉 Your booking is confirmed!</h2>
-            <p>Hi ${data.name},</p>
-            <p>Your strategy call with Flynn James Pontino has been scheduled.</p>
-            
-            <h3>📋 Appointment Details:</h3>
-            <ul>
-                <li><strong>Date:</strong> ${data.date}</li>
-                <li><strong>Time:</strong> ${data.time} (${data.timezone})</li>
-                <li><strong>Type:</strong> Strategy Call</li>
-                <li><strong>Subject:</strong> ${data.subject}</li>
-            </ul>
-            
-            <h3>🔗 Google Meet Link:</h3>
-            <p><a href="${data.meetLink}" target="_blank" style="background:#0a9e40;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;">Join Meeting</a></p>
-            <p>Or copy this link: ${data.meetLink}</p>
-            
-            <h3>⏰ Reminders:</h3>
-            <ul>
-                <li>You'll receive a reminder 24 hours before the meeting</li>
-                <li>You'll receive a reminder 1 hour before the meeting</li>
-            </ul>
-            
-            <p style="margin-top:20px;font-size:0.9rem;color:#666;">
-                <em>Need to reschedule? Reply to this email and we'll find another time.</em>
-            </p>
-            <p>Best regards,<br>Flynn James Pontino</p>
-        `,
-    };
+        const mailOptions = {
+            from: `"Flynn James Pontino" <${process.env.EMAIL_USER || 'va.flynnjames@gmail.com'}>`,
+            to: [data.email, process.env.EMAIL_USER || 'va.flynnjames@gmail.com'],
+            subject: `✅ Booking Confirmed: Strategy Call with Flynn James Pontino`,
+            html: `
+                <h2>🎉 Your booking is confirmed!</h2>
+                <p>Hi ${data.name},</p>
+                <p>Your strategy call with Flynn James Pontino has been scheduled.</p>
+                
+                <h3>📋 Appointment Details:</h3>
+                <ul>
+                    <li><strong>Date:</strong> ${data.date}</li>
+                    <li><strong>Time:</strong> ${data.time} (${data.timezone})</li>
+                    <li><strong>Type:</strong> Strategy Call</li>
+                    <li><strong>Subject:</strong> ${data.subject}</li>
+                </ul>
+                
+                <h3>🔗 Google Meet Link:</h3>
+                <p><a href="${data.meetLink}" target="_blank" style="background:#0a9e40;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;">Join Meeting</a></p>
+                <p>Or copy this link: ${data.meetLink}</p>
+                
+                <h3>⏰ Reminders:</h3>
+                <ul>
+                    <li>24 hours before the meeting</li>
+                    <li>1 hour before the meeting</li>
+                </ul>
+                
+                <p style="margin-top:20px;font-size:0.9rem;color:#666;">
+                    <em>Need to reschedule? Reply to this email and we'll find another time.</em>
+                </p>
+                <p>Best regards,<br>Flynn James Pontino</p>
+            `,
+        };
 
-    await transporter.sendMail(mailOptions);
-}
-
-// ============================================================
-// SCHEDULE REMINDERS
-// ============================================================
-function scheduleReminder(data) {
-    const startTime = new Date(data.startDateTime);
-    const now = new Date();
-    
-    // Calculate 24h and 1h before
-    const twentyFourHours = new Date(startTime);
-    twentyFourHours.setHours(twentyFourHours.getHours() - 24);
-    
-    const oneHour = new Date(startTime);
-    oneHour.setHours(oneHour.getHours() - 1);
-
-    // In production, use a job scheduler like node-cron or Bull
-    // For now, log the scheduled reminders
-    console.log(`📧 24h reminder scheduled for ${data.email} at ${twentyFourHours}`);
-    console.log(`📧 1h reminder scheduled for ${data.email} at ${oneHour}`);
-    
-    // Actual implementation would use a queue system
-    // Example with setTimeout (not recommended for production)
-    // scheduleReminderJob(twentyFourHours, data, '24h');
-    // scheduleReminderJob(oneHour, data, '1h');
+        await transporter.sendMail(mailOptions);
+        console.log('✅ Confirmation email sent to:', data.email);
+    } catch (error) {
+        console.error('Email sending error:', error);
+        // Don't fail the booking if email fails
+    }
 }
 
 // ============================================================
 // START SERVER
 // ============================================================
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Booking server running on port ${PORT}`);
-    console.log('✅ Google Calendar integration ready');
-    console.log('✅ Google Meet auto-creation enabled');
+    console.log(`📅 Google Calendar integration: ${auth ? 'ACTIVE' : 'DISABLED'}`);
+    console.log(`🔗 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
