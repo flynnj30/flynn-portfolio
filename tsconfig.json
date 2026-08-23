@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "ES2015",
+    "lib": ["ES2015", "DOM"],
+    "outFile": "./assets/js/main.js",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": false,
+    "sourceMap": false,
+    "noImplicitAny": true,
+    "strictNullChecks": true
+  },
+  "include": ["assets/js/**/*.ts"],
+  "exclude": ["node_modules", "assets/js/main.js"]
+}

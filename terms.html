@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover" />
+    <title>Terms &amp; Conditions | Flynn James Pontino</title>
+    <meta name="description" content="Terms and Conditions for using Flynn James Pontino's professional services and website. Clear, transparent terms for all engagements." />
+    <link rel="icon" href="https://i.ibb.co/zT4GWZHh/logo-for-my-portfolio.png" type="image/png" />
+    <link rel="apple-touch-icon" href="https://i.ibb.co/zT4GWZHh/logo-for-my-portfolio.png" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    
+    <style>
+        /* ===== LEGAL PAGE - REDESIGNED ===== */
+        .legal-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-dark);
+            transition: background var(--transition-speed) ease;
+        }
+        
+        body.light-mode .legal-wrapper {
+            background: var(--bg-light);
+        }
+        
+        /* ===== TOP BAR ===== */
+        .legal-topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 40px;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background var(--transition-speed) ease;
+        }
+        
+        body.light-mode .legal-topbar {
+            background: rgba(245, 245, 245, 0.92);
+            border-bottom-color: var(--border-light);
+        }
+        
+        .legal-topbar .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        body.light-mode .legal-topbar .logo {
+            color: var(--text-light);
+        }
+        
+        .legal-topbar .logo span {
+            color: var(--green);
+        }
+        
+        .legal-topbar .logo:hover {
+            color: var(--green);
+        }
+        
+        .legal-topbar .actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .legal-topbar .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            background: var(--cta-gradient);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .legal-topbar .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(10, 158, 64, 0.4);
+        }
+        
+        .legal-topbar .theme-toggle {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            color: var(--text-dark);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all var(--transition-speed) ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-dark);
+            flex-shrink: 0;
+        }
+        
+        body.light-mode .legal-topbar .theme-toggle {
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-light);
+            border-color: var(--border-light);
+        }
+        
+        .legal-topbar .theme-toggle:hover {
+            background: var(--green);
+            color: #fff;
+            transform: rotate(30deg) scale(1.1);
+            box-shadow: 0 0 30px rgba(10, 158, 64, 0.3);
+        }
+        
+        /* ===== LEGAL CONTENT ===== */
+        .legal-content {
+            flex: 1;
+            max-width: 920px;
+            margin: 100px auto 40px;
+            padding: 0 24px;
+            width: 100%;
+        }
+        
+        .legal-card {
+            background: var(--card-bg-dark);
+            border-radius: 24px;
+            border: 1px solid var(--border-dark);
+            backdrop-filter: blur(12px);
+            padding: 48px 56px;
+            animation: fadeInUp 0.8s var(--transition-bounce) forwards;
+        }
+        
+        body.light-mode .legal-card {
+            background: var(--card-bg-light);
+            border-color: var(--border-light);
+        }
+        
+        /* ===== HEADER ===== */
+        .legal-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .legal-header .icon {
+            font-size: 2.2rem;
+            color: var(--green);
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        
+        .legal-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            line-height: 1.2;
+            margin: 0;
+        }
+        
+        body.light-mode .legal-header h1 {
+            color: var(--text-light);
+        }
+        
+        .legal-header h1 span {
+            color: var(--green);
+        }
+        
+        .legal-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(10, 158, 64, 0.1);
+            color: var(--green);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: 1px solid rgba(10, 158, 64, 0.15);
+            margin-top: 4px;
+        }
+        
+        .legal-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            margin: 12px 0 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-dark);
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+        }
+        
+        body.light-mode .legal-meta {
+            border-bottom-color: var(--border-light);
+        }
+        
+        .legal-meta .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .legal-meta .meta-item i {
+            color: var(--green);
+            font-size: 0.85rem;
+        }
+        
+        /* ===== SECTIONS ===== */
+        .legal-section {
+            margin-bottom: 32px;
+        }
+        
+        .legal-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .legal-section h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--green);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legal-section h2 i {
+            font-size: 1rem;
+            width: 24px;
+            text-align: center;
+            color: var(--green);
+        }
+        
+        .legal-section p {
+            line-height: 1.8;
+            color: var(--text-dark);
+            opacity: 0.85;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        
+        body.light-mode .legal-section p {
+            color: var(--text-light);
+        }
+        
+        .legal-section ul {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .legal-section ul li {
+            line-height: 1.8;
+            color: var(--text-dark);
+            opacity: 0.8;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+            list-style: none;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        body.light-mode .legal-section ul li {
+            color: var(--text-light);
+        }
+        
+        .legal-section ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            opacity: 0.6;
+        }
+        
+        .legal-section .highlight-box {
+            background: rgba(10, 158, 64, 0.04);
+            border-left: 3px solid var(--green);
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 12px 0;
+        }
+        
+        body.light-mode .legal-section .highlight-box {
+            background: rgba(10, 158, 64, 0.06);
+        }
+        
+        .legal-section .highlight-box p {
+            margin-bottom: 0;
+            opacity: 0.9;
+        }
+        
+        /* ===== FOOTER ===== */
+        .legal-footer {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        body.light-mode .legal-footer {
+            border-top-color: var(--border-light);
+        }
+        
+        .legal-footer .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid var(--border-dark);
+        }
+        
+        body.light-mode .legal-footer .back-link {
+            border-color: var(--border-light);
+        }
+        
+        .legal-footer .back-link:hover {
+            transform: translateX(-4px);
+            border-color: var(--green);
+            background: rgba(10, 158, 64, 0.05);
+        }
+        
+        .legal-footer .back-link i {
+            transition: transform 0.3s ease;
+        }
+        
+        .legal-footer .back-link:hover i {
+            transform: translateX(-4px);
+        }
+        
+        .legal-footer .footer-text {
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+            opacity: 0.6;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .legal-topbar {
+                padding: 12px 20px;
+            }
+            .legal-topbar .logo {
+                font-size: 1rem;
+            }
+            .legal-topbar .back-btn span {
+                display: none;
+            }
+            .legal-card {
+                padding: 28px 20px;
+            }
+            .legal-header h1 {
+                font-size: 1.6rem;
+            }
+            .legal-header .icon {
+                font-size: 1.6rem;
+            }
+            .legal-meta {
+                gap: 12px;
+                font-size: 0.75rem;
+            }
+            .legal-section h2 {
+                font-size: 1rem;
+            }
+            .legal-section p,
+            .legal-section ul li {
+                font-size: 0.9rem;
+            }
+            .legal-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .legal-topbar {
+                padding: 10px 16px;
+            }
+            .legal-topbar .logo {
+                font-size: 0.9rem;
+            }
+            .legal-topbar .back-btn {
+                padding: 6px 14px;
+                font-size: 0.75rem;
+            }
+            .legal-card {
+                padding: 20px 16px;
+            }
+            .legal-header h1 {
+                font-size: 1.3rem;
+            }
+            .legal-content {
+                margin: 80px auto 20px;
+                padding: 0 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="legal-wrapper">
+
+        <!-- ===== TOP BAR ===== -->
+        <header class="legal-topbar">
+            <a href="index.html" class="logo">Flynn James <span>Pontino</span></a>
+            <div class="actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+                <a href="index.html#section-contact" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> <span>Back to Portfolio</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- ===== LEGAL CONTENT ===== -->
+        <main class="legal-content">
+            <div class="legal-card">
+
+                <!-- Header -->
+                <div class="legal-header">
+                    <span class="icon"><i class="fas fa-file-contract"></i></span>
+                    <div>
+                        <h1>Terms &amp; <span>Conditions</span></h1>
+                        <span class="legal-badge"><i class="fas fa-check-circle"></i> Last Updated: August 4, 2026</span>
+                    </div>
+                </div>
+
+                <div class="legal-meta">
+                    <span class="meta-item"><i class="fas fa-calendar-alt"></i> Last Updated: August 4, 2026</span>
+                    <span class="meta-item"><i class="fas fa-globe"></i> Effective: August 4, 2026</span>
+                    <span class="meta-item"><i class="fas fa-clock"></i> 6 min read</span>
+                </div>
+
+                <!-- Introduction -->
+                <div class="legal-section">
+                    <p>Welcome to the professional website of <strong>Flynn James Pontino</strong> ("I", "me", "my"). These Terms and Conditions ("Terms") govern your use of my website and the professional services I offer. By accessing this website or engaging my services, you agree to be bound by these Terms.</p>
+                    <div class="highlight-box">
+                        <p>📋 <strong>Please Read Carefully:</strong> These Terms form a legally binding agreement between you and me. If you do not agree with any part of these Terms, please do not use my website or services.</p>
+                    </div>
+                </div>
+
+                <!-- 1. Services Provided -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-briefcase"></i> 1. Services Provided</h2>
+                    <p>I offer professional sales development consulting services including, but not limited to:</p>
+                    <ul>
+                        <li><strong>Pipeline Generation:</strong> Building and optimizing qualified sales pipelines through outbound strategies.</li>
+                        <li><strong>Sales Consulting:</strong> Custom sales strategies, objection handling, and CRM optimization.</li>
+                        <li><strong>Team Mentorship:</strong> Training, coaching, and developing sales teams for peak performance.</li>
+                        <li><strong>Process Improvement:</strong> Streamlining sales processes and implementing best practices.</li>
+                        <li><strong>CRM Implementation:</strong> Setting up and optimizing CRM systems for maximum efficiency.</li>
+                        <li><strong>Sales Leadership Coaching:</strong> Developing sales leaders and building high-performing cultures.</li>
+                    </ul>
+                </div>
+
+                <!-- 2. User Responsibilities -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-user-check"></i> 2. User Responsibilities</h2>
+                    <p>By using this website and my services, you agree to:</p>
+                    <ul>
+                        <li><strong>Accuracy:</strong> Provide accurate, current, and complete information when filling out forms or contacting me.</li>
+                        <li><strong>Lawful Use:</strong> Not use this website for any unlawful purpose or in any way that could damage, disable, or impair the website.</li>
+                        <li><strong>Security:</strong> Not attempt to gain unauthorized access to any part of this website or its systems.</li>
+                        <li><strong>Intellectual Property:</strong> Respect intellectual property rights and not copy, reproduce, or distribute content without permission.</li>
+                        <li><strong>Professional Conduct:</strong> Engage in professional and respectful communication at all times.</li>
+                    </ul>
+                </div>
+
+                <!-- 3. Intellectual Property -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-copyright"></i> 3. Intellectual Property</h2>
+                    <p>All content on this website is the exclusive property of Flynn James Pontino unless otherwise stated. This includes:</p>
+                    <ul>
+                        <li><strong>Text Content:</strong> All written material, including articles, descriptions, and marketing copy.</li>
+                        <li><strong>Visual Content:</strong> Images, graphics, logos, design elements, and icons.</li>
+                        <li><strong>Code:</strong> HTML, CSS, JavaScript, and all underlying code.</li>
+                        <li><strong>Brand Assets:</strong> Brand name, logo, and associated trademarks.</li>
+                    </ul>
+                    <p>You may not reproduce, distribute, modify, create derivative works of, or publicly display any content without explicit written permission.</p>
+                </div>
+
+                <!-- 4. Confidentiality -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-lock"></i> 4. Confidentiality</h2>
+                    <p>I take confidentiality seriously. Any information shared during consultations, through the contact form, or via email will be treated with strict confidence.</p>
+                    <ul>
+                        <li><strong>Scope:</strong> Confidential information includes business plans, strategies, financial data, and any non-public information.</li>
+                        <li><strong>Obligations:</strong> I will not disclose your confidential information to third parties without your explicit consent, except as required by law.</li>
+                        <li><strong>Duration:</strong> Confidentiality obligations continue indefinitely, even after the conclusion of our professional relationship.</li>
+                    </ul>
+                    <div class="highlight-box">
+                        <p>🔒 <strong>My Commitment:</strong> Your trust is my priority. I treat all client information with the utmost care and discretion.</p>
+                    </div>
+                </div>
+
+                <!-- 5. Limitations of Liability -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-exclamation-triangle"></i> 5. Limitations of Liability</h2>
+                    <p>While I strive to provide accurate and valuable services, I make no warranties or representations about the completeness, accuracy, or reliability of the content on this website or the outcomes of my services.</p>
+                    <ul>
+                        <li><strong>"As Is" Basis:</strong> My services are provided "as is" without any warranties, express or implied.</li>
+                        <li><strong>No Guarantee:</strong> I cannot guarantee specific results or outcomes from my services.</li>
+                        <li><strong>Limitation:</strong> I shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from the use of my services or website.</li>
+                        <li><strong>Maximum Liability:</strong> My total liability is limited to the amount paid for services in the preceding 12 months.</li>
+                    </ul>
+                </div>
+
+                <!-- 6. Payment Terms -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-credit-card"></i> 6. Payment Terms</h2>
+                    <p>Fees for consulting services will be agreed upon in writing prior to engagement. Payment terms are as follows:</p>
+                    <ul>
+                        <li><strong>Agreement:</strong> Fees and payment schedules are specified in the service agreement.</li>
+                        <li><strong>Payment Methods:</strong> Payments can be made via bank transfer, PayPal, or other agreed methods.</li>
+                        <li><strong>Invoicing:</strong> Invoices are issued as specified in the agreement, typically upon completion of milestones or on a retainer basis.</li>
+                        <li><strong>Late Payments:</strong> Late payments may incur interest charges as specified in the service agreement.</li>
+                    </ul>
+                </div>
+
+                <!-- 7. Termination -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-times-circle"></i> 7. Termination</h2>
+                    <p>Either party may terminate the engagement under the following conditions:</p>
+                    <ul>
+                        <li><strong>By Client:</strong> You may terminate services with written notice as specified in the service agreement.</li>
+                        <li><strong>By Me:</strong> I reserve the right to terminate services with reasonable notice, subject to the terms of the specific service agreement.</li>
+                        <li><strong>For Cause:</strong> Termination may occur immediately for breach of terms, non-payment, or misconduct.</li>
+                        <li><strong>Effect:</strong> Upon termination, any outstanding fees remain payable, and confidentiality obligations continue.</li>
+                    </ul>
+                </div>
+
+                <!-- 8. Governing Law -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-gavel"></i> 8. Governing Law</h2>
+                    <p>These Terms are governed by and construed in accordance with the laws of the Republic of the Philippines. Any disputes arising from these Terms shall be subject to the exclusive jurisdiction of the courts of the Philippines.</p>
+                </div>
+
+                <!-- 9. Force Majeure -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-bolt"></i> 9. Force Majeure</h2>
+                    <p>Neither party shall be liable for any failure or delay in performance due to circumstances beyond their reasonable control, including but not limited to acts of God, natural disasters, war, terrorism, government actions, or internet outages.</p>
+                </div>
+
+                <!-- 10. Entire Agreement -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-file-signature"></i> 10. Entire Agreement</h2>
+                    <p>These Terms constitute the entire agreement between you and me regarding the use of this website and my services. They supersede all prior agreements, understandings, and representations.</p>
+                </div>
+
+                <!-- 11. Waiver -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-hand-paper"></i> 11. Waiver</h2>
+                    <p>Any failure by me to enforce any provision of these Terms does not constitute a waiver of that provision or the right to enforce it in the future.</p>
+                </div>
+
+                <!-- 12. Severability -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-puzzle-piece"></i> 12. Severability</h2>
+                    <p>If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions will continue in full force and effect.</p>
+                </div>
+
+                <!-- 13. Amendments -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-edit"></i> 13. Amendments</h2>
+                    <p>I reserve the right to update these Terms at any time. Changes will be posted on this page with the updated date. Continued use of the website constitutes acceptance of the updated Terms.</p>
+                </div>
+
+                <!-- 14. Contact Information -->
+                <div class="legal-section">
+                    <h2><i class="fas fa-envelope"></i> 14. Contact Information</h2>
+                    <p>If you have any questions about these Terms, need clarification, or wish to discuss any aspect of our engagement, please contact me:</p>
+                    <div style="margin-top:12px; padding:16px 20px; background:var(--card-bg-dark); border-radius:12px; border:1px solid var(--border-dark); display:flex; flex-wrap:wrap; gap:16px;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-envelope" style="color:var(--green);"></i>
+                            <a href="mailto:va.flynnjames@gmail.com" style="color:var(--text-dark); text-decoration:none; font-weight:500;">va.flynnjames@gmail.com</a>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-phone" style="color:var(--green);"></i>
+                            <a href="tel:+639306359306" style="color:var(--text-dark); text-decoration:none; font-weight:500;">+63 930 635 9306</a>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-map-marker-alt" style="color:var(--green);"></i>
+                            <span style="color:var(--text-dark);">Toledo, Cebu, Philippines</span>
+                        </div>
+                    </div>
+                    <p style="margin-top:12px;">I aim to respond to all inquiries within 24-48 hours during business days.</p>
+                </div>
+
+                <!-- Footer -->
+                <div class="legal-footer">
+                    <a href="index.html#section-contact" class="back-link">
+                        <i class="fas fa-arrow-left"></i> Back to Contact
+                    </a>
+                    <span class="footer-text">© 2026 Flynn James Pontino. All rights reserved.</span>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        // ============================================================
+        // TERMS PAGE SCRIPTS
+        // ============================================================
+        
+        // Theme Toggle
+        let isDarkMode = true;
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('light-mode', !isDarkMode);
+            document.querySelector('.legal-wrapper').classList.toggle('light-mode', !isDarkMode);
+            themeIcon.className = isDarkMode ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+        if (localStorage.getItem('theme') === 'light') toggleTheme();
+
+        // Particles for Terms page
+        const canvas = document.getElementById('particleCanvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let mouseX = -1000, mouseY = -1000;
+
+            function resizeCanvas() { 
+                canvas.width = window.innerWidth; 
+                canvas.height = window.innerHeight; 
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            class Particle {
+                constructor() { this.reset(); }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height + Math.random() * 100;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedX = (Math.random() - 0.5) * 1.2;
+                    this.speedY = -(Math.random() * 1.5 + 0.6);
+                    this.life = 1;
+                    this.decay = Math.random() * 0.003 + 0.001;
+                    this.hue = Math.random() * 40 + 100;
+                }
+                update() {
+                    const dx = mouseX - this.x, dy = mouseY - this.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) { 
+                        const angle = Math.atan2(dy, dx);
+                        this.speedX -= Math.cos(angle) * 0.2;
+                        this.speedY -= Math.sin(angle) * 0.2; 
+                    }
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    this.life -= this.decay;
+                    if (this.y < -20 || this.life <= 0 || this.x < -20 || this.x > canvas.width + 20) { 
+                        this.reset();
+                        this.y = canvas.height + Math.random() * 50; 
+                    }
+                }
+                draw(ctx) {
+                    const alpha = this.life * 0.6;
+                    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 2);
+                    gradient.addColorStop(0, `hsla(${this.hue}, 100%, 50%, ${alpha})`);
+                    gradient.addColorStop(0.6, `hsla(${this.hue}, 100%, 20%, ${alpha * 0.4})`);
+                    gradient.addColorStop(1, 'transparent');
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${this.hue}, 100%, 70%, ${alpha})`;
+                    ctx.fill();
+                }
+            }
+            for (let i = 0; i < 70; i++) particles.push(new Particle());
+            document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+            document.addEventListener('touchmove', (e) => { 
+                if (e.touches.length > 0) {
+                    mouseX = e.touches[0].clientX; 
+                    mouseY = e.touches[0].clientY; 
+                }
+            });
+
+            function animateParticles() { 
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => { p.update(); p.draw(ctx); });
+                requestAnimationFrame(animateParticles); 
+            }
+            animateParticles();
+        }
+
+        console.log('✅ Terms & Conditions page loaded successfully');
+    </script>
+
+    <!-- Particle Canvas -->
+    <canvas id="particleCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0;"></canvas>
+
+</body>
+</html>

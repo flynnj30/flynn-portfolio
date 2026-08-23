@@ -5,6 +5,7 @@
 User-agent: *
 Allow: /
 Disallow: /assets/
+Disallow: /server/
 
 Sitemap: https://flynn-portfolio-1.onrender.com/sitemap.xml
 Crawl-delay: 1
@@ -12,10 +13,12 @@ Crawl-delay: 1
 User-agent: Googlebot
 Allow: /
 Disallow: /assets/
+Disallow: /server/
 
 User-agent: Bingbot
 Allow: /
 Disallow: /assets/
+Disallow: /server/
 
 User-agent: AhrefsBot
 Disallow: /

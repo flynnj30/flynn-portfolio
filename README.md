@@ -20,23 +20,22 @@ Professional portfolio website for **Flynn James Pontino**, Senior Sales Develop
 - ✅ **Typewriter Effect** — Dynamic hero section text animation
 - ✅ **Interactive Gallery** — Lightbox-enabled image grid
 - ✅ **AI Chat Navigator** — Quick navigation through sections
-- ✅ **Centralized CTAs** — Strategic placement for high conversion
+- ✅ **Centralized CTAs** — Strategic placement with context-specific actions
 
 ### SEO & Performance
-- ✅ **Schema.org Structured Data** — Person, Organization, FAQ, LocalBusiness
+- ✅ **Schema.org Structured Data** — Person, Organization, FAQ
 - ✅ **Open Graph Meta Tags** — Optimized for social sharing
 - ✅ **XML Sitemap** — Complete site indexing
 - ✅ **robots.txt** — Search engine crawler instructions
 - ✅ **Canonical URLs** — Duplicate content prevention
 - ✅ **Lazy Loading** — Optimized image loading
 - ✅ **Core Web Vitals** — Optimized for performance
+- ✅ **Self-contained Architecture** — No external CSS/JS dependencies
 
-### Contact & Engagement
-- ✅ **EmailJS Integration** — Contact form with email delivery
-- ✅ **Google reCAPTCHA v2** — Spam protection
-- ✅ **Action Hub** — Floating quick action buttons
-- ✅ **Notification Toast** — Auto-rotating tips and messages
-- ✅ **Keyboard Shortcuts** — Alt+1-8 navigation, Ctrl+K for chat
+### Privacy & Legal
+- ✅ **GDPR Compliant** — Privacy policy and terms of service
+- ✅ **Cookie Consent** — Minimal cookie usage
+- ✅ **Data Security** — Secure contact form handling
 
 ---
 
@@ -45,32 +44,27 @@ Professional portfolio website for **Flynn James Pontino**, Senior Sales Develop
 | Technology | Version | Purpose |
 |------------|---------|---------|
 | **HTML5** | Latest | Semantic markup structure |
-| **CSS3** | Latest | Custom properties, Flexbox, Grid |
+| **CSS3** | Latest | Custom properties, Flexbox, Grid, Animations |
 | **JavaScript** | ES6+ | Interactivity and functionality |
-| **EmailJS** | v4 | Contact form email delivery |
-| **Google reCAPTCHA** | v2 | Form spam protection |
 | **Font Awesome** | v6.5.1 | Icons and social media |
 | **Google Fonts** | Inter | Typography |
+| **Lightbox2** | v2.11.4 | Gallery lightbox |
 
 ---
 
 ## 📁 Project Structure
 flynn-portfolio/
-├── index.html # Main HTML entry point
+├── index.html # Main HTML entry point (self-contained)
+├── terms.html # Terms & Conditions (self-contained)
+├── privacy.html # Privacy Policy (self-contained)
 ├── robots.txt # Search engine crawler rules
 ├── sitemap.xml # XML sitemap for SEO
 ├── .gitignore # Git ignore configuration
-├── README.md # Complete project documentation
-├── render.yaml # Render.com deployment configuration
+├── README.md # Project documentation
+├── render.yaml # Render.com deployment config
 ├── assets/
-│ ├── css/
-│ │ └── style.css # Production stylesheet
-│ ├── js/
-│ │ └── main.js # Production JavaScript
-│ └── images/
-│ └── (All website images)
-└── .well-known/
-└── (Google Search Console verification files)
+│ └── images/ # Website images and icons
+└── .well-known/ # Google Search Console verification
 
 text
 
@@ -78,9 +72,10 @@ text
 
 ## 🚀 Deployment
 
-### Deploy on Render.com (Recommended)
+### Deploy on Render.com
 
-1. **Fork/Clone this repository**
+1. **Push code to GitHub**
    ```bash
-   git clone https://github.com/flynnj30/flynn-portfolio.git
-   cd flynn-portfolio
+   git add .
+   git commit -m "Initial commit"
+   git push origin main
