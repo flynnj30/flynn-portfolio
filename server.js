@@ -1,4 +1,4 @@
-// server.js - DEBUG VERSION with detailed logging
+// server.js - FIXED VERSION (Attendees Removed)
 const express = require('express');
 const cors = require('cors');
 
@@ -25,20 +25,12 @@ app.use((req, res, next) => {
     next();
 });
 
-// ============================================================
-// HEALTH CHECK
-// ============================================================
+// Health check
 app.get('/health', (req, res) => {
     res.status(200).json({
         status: 'OK',
         timestamp: new Date().toISOString(),
-        service: 'flynn-portfolio-api',
-        env: {
-            hasGoogleEmail: !!process.env.GOOGLE_CLIENT_EMAIL,
-            hasPrivateKey: !!process.env.GOOGLE_PRIVATE_KEY,
-            hasEmailUser: !!process.env.EMAIL_USER,
-            hasEmailPassword: !!process.env.EMAIL_PASSWORD
-        }
+        service: 'flynn-portfolio-api'
     });
 });
 
@@ -46,39 +38,24 @@ app.get('/', (req, res) => {
     res.json({ name: 'Flynn Portfolio API', version: '1.0.0', status: 'running' });
 });
 
-app.get('/api/test', (req, res) => {
-    res.json({ success: true, message: 'API is working', timestamp: new Date().toISOString() });
-});
-
 // ============================================================
-// GOOGLE CALENDAR SETUP WITH DEBUG
+// GOOGLE CALENDAR SETUP
 // ============================================================
 let calendar = null;
 let auth = null;
 let calendarInitialized = false;
 
 function initializeCalendar() {
-    console.log('🔧 Initializing Google Calendar...');
-    
     try {
         const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
         let privateKey = process.env.GOOGLE_PRIVATE_KEY;
 
-        console.log('📧 GOOGLE_CLIENT_EMAIL:', clientEmail ? '✅ Set' : '❌ Missing');
-        console.log('🔑 GOOGLE_PRIVATE_KEY:', privateKey ? '✅ Set' : '❌ Missing');
-
         if (!clientEmail || !privateKey) {
-            console.log('⚠️ Credentials missing');
+            console.log('⚠️ Google Calendar credentials missing');
             return false;
         }
 
-        // Log first few characters of private key for debugging
-        const keyPreview = privateKey.substring(0, 50) + '...';
-        console.log('🔑 Private key preview:', keyPreview);
-
-        // Clean up private key
         privateKey = privateKey.replace(/\\n/g, '\n');
-        console.log('🔑 Private key cleaned (contains \\n)');
 
         auth = new google.auth.JWT(
             clientEmail,
@@ -89,74 +66,21 @@ function initializeCalendar() {
 
         calendar = google.calendar({ version: 'v3', auth });
         calendarInitialized = true;
-        console.log('✅ Google Calendar initialized successfully');
+        console.log('✅ Google Calendar initialized');
         return true;
-
     } catch (error) {
         console.error('❌ Calendar init error:', error.message);
-        console.error('❌ Error stack:', error.stack);
         return false;
     }
 }
 
-// Initialize on startup
 initializeCalendar();
 
 // ============================================================
-// TEST CALENDAR ACCESS - DEBUG ENDPOINT
-// ============================================================
-app.get('/api/test-calendar', async (req, res) => {
-    console.log('🔍 Testing Google Calendar access...');
-    
-    try {
-        if (!calendar || !auth || !calendarInitialized) {
-            return res.status(400).json({
-                success: false,
-                message: 'Calendar not initialized',
-                details: {
-                    calendar: !!calendar,
-                    auth: !!auth,
-                    initialized: calendarInitialized
-                }
-            });
-        }
-
-        // Try to list calendars to verify access
-        const response = await calendar.calendarList.list({
-            maxResults: 10
-        });
-
-        console.log('✅ Calendar list retrieved successfully');
-
-        res.json({
-            success: true,
-            message: 'Calendar access verified',
-            calendars: response.data.items.map(c => ({ 
-                id: c.id, 
-                summary: c.summary,
-                accessRole: c.accessRole 
-            }))
-        });
-
-    } catch (error) {
-        console.error('❌ Calendar test failed:', error.message);
-        console.error('❌ Error details:', error);
-
-        res.status(500).json({
-            success: false,
-            message: 'Calendar test failed',
-            error: error.message,
-            details: error.errors || error
-        });
-    }
-});
-
-// ============================================================
-// CREATE BOOKING - WITH DETAILED DEBUG
+// CREATE BOOKING - FIXED VERSION
 // ============================================================
 app.post('/api/create-booking', async (req, res) => {
     console.log('📝 Booking request received');
-    console.log('📦 Request body:', JSON.stringify(req.body, null, 2));
 
     try {
         const { name, email, phone, subject, message, date, time, timezone } = req.body;
@@ -211,26 +135,21 @@ app.post('/api/create-booking', async (req, res) => {
 
         let eventLink = null;
         let eventId = null;
-        let calendarError = null;
         let calendarSuccess = false;
 
         // ============================================================
-        // CREATE CALENDAR EVENT - WITH DETAILED DEBUG
+        // CREATE CALENDAR EVENT - WITHOUT ATTENDEES
         // ============================================================
-        console.log('🔍 Checking calendar status:', {
-            calendar: !!calendar,
-            auth: !!auth,
-            initialized: calendarInitialized
-        });
-
         if (calendar && auth && calendarInitialized) {
             try {
                 const event = {
                     summary: `Strategy Call with ${name}`,
                     description: `
+                        Customer: ${name}
+                        Email: ${email}
+                        Phone: ${phone || 'Not provided'}
                         Subject: ${subject}
                         Message: ${message || 'No additional message'}
-                        Phone: ${phone || 'Not provided'}
                         Timezone: ${timezone}
                         Booked via: Flynn Portfolio Website
                     `,
@@ -242,10 +161,6 @@ app.post('/api/create-booking', async (req, res) => {
                         dateTime: endDateTime.toISOString(),
                         timeZone: timezone,
                     },
-                    attendees: [
-                        { email: email },
-                        { email: 'va.flynnjames@gmail.com' }
-                    ],
                     conferenceData: {
                         createRequest: {
                             conferenceSolutionKey: { type: 'hangoutsMeet' },
@@ -262,7 +177,6 @@ app.post('/api/create-booking', async (req, res) => {
                 };
 
                 console.log('📅 Creating Google Calendar event...');
-                console.log('📅 Event details:', JSON.stringify(event, null, 2));
 
                 const response = await calendar.events.insert({
                     calendarId: 'primary',
@@ -271,41 +185,18 @@ app.post('/api/create-booking', async (req, res) => {
                     sendUpdates: 'all',
                 });
 
-                console.log('✅ Calendar API Response:', JSON.stringify(response.data, null, 2));
-
                 eventLink = response.data.hangoutLink || response.data.htmlLink;
                 eventId = response.data.id;
                 calendarSuccess = true;
                 
                 console.log('✅ Calendar event created successfully!');
                 console.log('🔗 Meet link:', eventLink);
-                console.log('🆔 Event ID:', eventId);
 
             } catch (error) {
                 console.error('❌ Calendar API Error:', error.message);
-                console.error('❌ Error details:', JSON.stringify(error, null, 2));
-                
-                if (error.errors) {
-                    console.error('❌ Errors:', JSON.stringify(error.errors, null, 2));
-                }
-                
-                calendarError = error.message;
-                
-                // Check for specific errors
-                if (error.message.includes('permission') || error.message.includes('access')) {
-                    console.log('⚠️ PERMISSION ERROR: Calendar sharing needs to be configured');
-                    console.log('📧 Add this email to your calendar with "Make changes to events":');
-                    console.log(`   ${process.env.GOOGLE_CLIENT_EMAIL}`);
-                }
-                
-                if (error.message.includes('invalid_grant')) {
-                    console.log('⚠️ INVALID GRANT: Private key may be incorrectly formatted');
-                    console.log('🔑 Check that the private key has \\n for newlines');
-                }
             }
         } else {
             console.log('⚠️ Calendar not configured - skipping event creation');
-            calendarError = 'Google Calendar not configured';
         }
 
         // ============================================================
@@ -328,7 +219,7 @@ app.post('/api/create-booking', async (req, res) => {
         });
 
         // ============================================================
-        // RESPONSE WITH DETAILED STATUS
+        // RESPONSE
         // ============================================================
         const responseData = {
             success: true,
@@ -336,15 +227,7 @@ app.post('/api/create-booking', async (req, res) => {
             eventId: eventId || null,
             eventLink: eventLink,
             meetLink: eventLink,
-            message: calendarSuccess ? 'Booking created and added to calendar' : 'Booking created (calendar event failed)',
-            debug: {
-                calendarConfigured: !!calendar,
-                authConfigured: !!auth,
-                calendarInitialized: calendarInitialized,
-                calendarError: calendarError || null,
-                clientEmail: process.env.GOOGLE_CLIENT_EMAIL ? 'Set' : 'Not set',
-                privateKeySet: !!process.env.GOOGLE_PRIVATE_KEY
-            }
+            message: calendarSuccess ? 'Booking created and added to calendar' : 'Booking created (calendar event failed)'
         };
 
         console.log('📤 Response:', JSON.stringify(responseData, null, 2));
@@ -369,7 +252,6 @@ app.post('/api/create-booking', async (req, res) => {
 
     } catch (error) {
         console.error('❌ Booking error:', error);
-        console.error('❌ Stack:', error.stack);
         res.status(500).json({
             success: false,
             message: error.message || 'Failed to create booking'
@@ -398,10 +280,6 @@ async function sendConfirmationEmail(data) {
             auth: { user: emailUser, pass: emailPass },
         });
 
-        const calendarStatus = data.calendarSuccess ? 
-            '✅ This event has been added to your Google Calendar.' : 
-            '⚠️ Calendar event creation failed. Please add this to your calendar manually.';
-
         const mailOptions = {
             from: `"Flynn James Pontino" <${emailUser}>`,
             to: [data.email, emailUser],
@@ -423,7 +301,7 @@ async function sendConfirmationEmail(data) {
                     <h3>🔗 Google Meet Link</h3>
                     <p><a href="${data.meetLink}" target="_blank" style="background: #0a9e40; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-block;">Join Meeting</a></p>
                     <p style="font-size: 12px; color: #666;">${data.meetLink}</p>
-                    <p style="color: #0a9e40; font-size: 12px;">${calendarStatus}</p>
+                    ${data.calendarSuccess ? '<p style="color: #0a9e40; font-size: 12px;">✅ Added to your Google Calendar</p>' : ''}
                 </div>
                 
                 <p>You'll receive reminders 24 hours and 1 hour before the meeting.</p>
@@ -441,36 +319,16 @@ async function sendConfirmationEmail(data) {
 }
 
 // ============================================================
-// 404 HANDLER
-// ============================================================
-app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        message: `Route not found: ${req.method} ${req.path}`,
-        available_endpoints: {
-            root: '/',
-            health: '/health',
-            test: '/api/test',
-            test_calendar: '/api/test-calendar',
-            booking: '/api/create-booking (POST)'
-        }
-    });
-});
-
-// ============================================================
 // START SERVER
 // ============================================================
 app.listen(PORT, '0.0.0.0', () => {
     console.log('='.repeat(60));
-    console.log('🚀 Flynn Portfolio API Server (DEBUG MODE)');
+    console.log('🚀 Flynn Portfolio API Server (FIXED)');
     console.log('='.repeat(60));
     console.log(`📡 Port: ${PORT}`);
     console.log(`📅 Calendar: ${calendar && auth ? 'ACTIVE ✅' : 'DISABLED ⚠️'}`);
     console.log(`📧 Email: ${process.env.EMAIL_PASSWORD ? 'CONFIGURED ✅' : 'NOT CONFIGURED ⚠️'}`);
-    console.log('📋 Available endpoints:');
-    console.log('   GET  /health              - Health check');
-    console.log('   GET  /api/test            - Test API');
-    console.log('   GET  /api/test-calendar   - Test calendar access');
-    console.log('   POST /api/create-booking  - Create booking');
+    console.log('📋 POST /api/create-booking');
+    console.log('📌 Attendees removed - events will be created without invitations');
     console.log('='.repeat(60));
 });
