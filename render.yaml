@@ -1,10 +1,10 @@
 services:
-  # ===== Backend API Service =====
   - type: web
-    name: flynn-portfolio-api
+    name: flynn-portfolio-1-api
     runtime: node
     repo: https://github.com/flynnj30/flynn-portfolio.git
-    branch: standalone
+    branch: main
+    plan: free
     buildCommand: npm install
     startCommand: node server.js
     envVars:
@@ -23,12 +23,12 @@ services:
     healthCheckPath: /health
     autoDeploy: true
 
-  # ===== Static Frontend =====
   - type: web
-    name: flynn-portfolio
+    name: flynn-portfolio-1
     runtime: static
     repo: https://github.com/flynnj30/flynn-portfolio.git
-    branch: standalone
+    branch: main
+    plan: free
     buildCommand: echo "No build step required"
     staticPublishPath: .
     envVars:

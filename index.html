@@ -1135,15 +1135,15 @@
                     <div class="summary-item"><span class="label"><i class="fas fa-calendar-day icon-sm"></i> Date</span><span class="value" id="summaryDate">—</span></div>
                     <div class="summary-item"><span class="label"><i class="fas fa-clock icon-sm"></i> Time</span><span class="value" id="summaryTime">—</span></div>
                     <div class="summary-item"><span class="label"><i class="fas fa-globe icon-sm"></i> Timezone</span><span class="value" id="summaryTimezone">—</span></div>
-                    <div class="summary-item"><span class="label"><i class="fas fa-video icon-sm"></i> Meet Link</span><span class="value" id="summaryMeetLink">Generating...</span></div>
+                    <div class="summary-item"><span class="label"><i class="fas fa-video icon-sm"></i> Meet Link</span><span class="value" id="summaryMeetLink">Loading...</span></div>
                 </div>
                 
                 <div style="font-size:0.8rem;opacity:0.5;text-align:center;margin:8px 0;">
                     <i class="fas fa-lock" style="color:var(--green);"></i> Your information is secure
                 </div>
                 
-                <button class="btn-submit" id="bookSubmit">
-                    <i class="fas fa-check icon-sm"></i> Confirm Booking
+                <button class="btn-submit" id="bookSubmit" disabled>
+                    <i class="fas fa-spinner fa-spin"></i> Generating Meet Link...
                 </button>
                 <div style="text-align:center;margin-top:8px;">
                     <button class="btn-back" id="step4Back"><i class="fas fa-arrow-left icon-sm"></i> Go back</button>
@@ -1600,10 +1600,31 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // ============================================================
+            // CONFIGURATION
+            // ============================================================
+            const CONFIG = {
+                emailjs: {
+                    publicKey: 'crekfvN6H352DXAfx',
+                    serviceID: 'service_av4pfmh',
+                    templateID: 'template_vcqi0qv'
+                }
+            };
+
+            // Initialize EmailJS
+            try {
+                if (CONFIG.emailjs.publicKey) {
+                    emailjs.init(CONFIG.emailjs.publicKey);
+                    console.log('✅ EmailJS initialized successfully');
+                }
+            } catch (error) {
+                console.warn('⚠️ EmailJS init error:', error);
+            }
+
+            // ============================================================
             // BOOKING MODAL - COMPLETE WORKFLOW
             // ============================================================
             
-            // API Configuration - UPDATED with correct URL
+            // API Configuration
             const API_URL = 'https://flynn-portfolio-1-api.onrender.com/api/create-booking';
             
             // DOM Elements
@@ -1618,7 +1639,8 @@
             let selectedDate = null;
             let selectedTime = null;
             let isProcessing = false;
-            let meetLink = '';
+            let meetLink = null;
+            let bookingData = null;
 
             // ============================================================
             // DATE & TIME GENERATION
@@ -1632,7 +1654,6 @@
                 for (let i = 0; i < 7; i++) {
                     const date = new Date(today);
                     date.setDate(today.getDate() + i);
-                    // Skip weekends
                     if (date.getDay() === 0 || date.getDay() === 6) continue;
                     
                     dates.push({
@@ -1673,7 +1694,6 @@
                     });
                     dateOptions.appendChild(btn);
                 });
-                // Set initial selected date
                 const firstSelected = document.querySelector('.date-option.selected');
                 if (firstSelected) {
                     selectedDate = firstSelected.dataset.date;
@@ -1722,12 +1742,90 @@
                 document.getElementById('summaryDate').textContent = date;
                 document.getElementById('summaryTime').textContent = time;
                 document.getElementById('summaryTimezone').textContent = timezone;
+            }
+
+            // ============================================================
+            // GENERATE MEET LINK - Called when entering Step 4
+            // ============================================================
+            async function generateMeetLink() {
+                const name = document.getElementById('book_name').value.trim();
+                const email = document.getElementById('book_email').value.trim();
+                const phone = document.getElementById('book_phone').value.trim();
+                const subject = document.getElementById('book_subject').value;
+                const message = document.getElementById('book_message').value.trim();
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const dateFormatted = selectedDate ? new Date(selectedDate).toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    month: 'long', 
+                    day: 'numeric',
+                    year: 'numeric'
+                }) : '';
+
+                if (!name || !email || !subject || !selectedDate || !selectedTime) {
+                    return;
+                }
+
+                const submitBtn = document.getElementById('bookSubmit');
+                const meetLinkEl = document.getElementById('summaryMeetLink');
                 
-                // Generate Meet link placeholder
-                if (name !== '—' && email !== '—' && date !== '—' && time !== '—') {
-                    document.getElementById('summaryMeetLink').innerHTML = '<span style="color:var(--green);"><i class="fas fa-spinner fa-spin"></i> Generating...</span>';
-                } else {
-                    document.getElementById('summaryMeetLink').textContent = '—';
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Meet Link...';
+                meetLinkEl.innerHTML = '<span style="color:var(--green);"><i class="fas fa-spinner fa-spin"></i> Creating meeting...</span>';
+
+                bookingData = {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    subject: subject,
+                    message: message,
+                    date: selectedDate,
+                    time: selectedTime,
+                    timezone: timezone,
+                    dateFormatted: dateFormatted
+                };
+
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(bookingData)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Failed to create meeting');
+                    }
+
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        meetLink = data.eventLink;
+                        meetLinkEl.innerHTML = `<a href="${meetLink}" target="_blank" style="color:var(--green);text-decoration:underline;">${meetLink}</a>`;
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-check icon-sm"></i> Confirm Booking';
+                        console.log('✅ Meet link generated:', meetLink);
+                    } else {
+                        throw new Error(data.message || 'Failed to create meeting');
+                    }
+                } catch (error) {
+                    console.error('❌ Meet link generation error:', error);
+                    meetLinkEl.innerHTML = '<span style="color:#ef4444;">⚠️ Failed to generate meet link. Please try again.</span>';
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Try Again';
+                    
+                    // Allow retry
+                    setTimeout(() => {
+                        if (!meetLink) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = '<i class="fas fa-redo"></i> Retry Generating Link';
+                            submitBtn.onclick = function() {
+                                generateMeetLink();
+                            };
+                        }
+                    }, 3000);
                 }
             }
 
@@ -1767,8 +1865,17 @@
                 });
                 selectedDate = document.querySelector('.date-option.selected')?.dataset.date || null;
                 selectedTime = null;
-                meetLink = '';
+                meetLink = null;
+                bookingData = null;
                 isProcessing = false;
+                
+                const submitBtn = document.getElementById('bookSubmit');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Meet Link...';
+                submitBtn.onclick = null;
+                
+                document.getElementById('summaryMeetLink').textContent = 'Loading...';
+                
                 goToStep(1);
                 renderDateOptions();
                 renderTimeOptions();
@@ -1802,7 +1909,6 @@
             // ============================================================
             // STEP NAVIGATION
             // ============================================================
-            // Step 1 → Step 2
             document.getElementById('step1Next').addEventListener('click', function() {
                 const name = document.getElementById('book_name').value.trim();
                 const email = document.getElementById('book_email').value.trim();
@@ -1822,7 +1928,6 @@
                 goToStep(2);
             });
 
-            // Step 2 → Step 3
             document.getElementById('step2Next').addEventListener('click', function() {
                 const subject = document.getElementById('book_subject').value;
                 if (!subject) {
@@ -1835,7 +1940,6 @@
                 updateSummary();
             });
 
-            // Step 3 → Step 4
             document.getElementById('step3Next').addEventListener('click', function() {
                 if (!selectedDate) {
                     alert('Please select a date.');
@@ -1845,10 +1949,10 @@
                     alert('Please select a time.');
                     return;
                 }
-                // Generate Meet link before showing step 4
-                generateMeetLink();
                 goToStep(4);
                 updateSummary();
+                // Generate meet link when entering step 4
+                generateMeetLink();
             });
 
             // Back buttons
@@ -1861,112 +1965,81 @@
             document.getElementById('closeSuccessBtn').addEventListener('click', closeModal);
 
             // ============================================================
-            // GENERATE GOOGLE MEET LINK (via Backend API)
-            // ============================================================
-            function generateMeetLink() {
-                // The actual Meet link will be generated by the backend when creating the event
-                // For now, we show a placeholder
-                const meetingId = Math.random().toString(36).substring(2, 10);
-                meetLink = `https://meet.google.com/${meetingId}`;
-                document.getElementById('summaryMeetLink').innerHTML = `<a href="${meetLink}" target="_blank" style="color:var(--green);text-decoration:underline;">${meetLink}</a>`;
-            }
-
-            // ============================================================
-            // SUBMIT BOOKING - UPDATED with correct API URL
+            // CONFIRM BOOKING - With EmailJS integration and status handling
             // ============================================================
             document.getElementById('bookSubmit').addEventListener('click', function() {
-                if (isProcessing) return;
-
-                const name = document.getElementById('book_name').value.trim();
-                const email = document.getElementById('book_email').value.trim();
-                const phone = document.getElementById('book_phone').value.trim();
-                const subject = document.getElementById('book_subject').value;
-                const message = document.getElementById('book_message').value.trim();
-                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                const dateFormatted = selectedDate ? new Date(selectedDate).toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    month: 'long', 
-                    day: 'numeric',
-                    year: 'numeric'
-                }) : '';
-
-                if (!name || !email || !subject || !selectedDate || !selectedTime) {
-                    alert('Please fill in all required fields.');
-                    return;
-                }
+                if (isProcessing || !meetLink) return;
 
                 isProcessing = true;
                 this.disabled = true;
-                this.innerHTML = '<span class="loading-spinner"></span> Creating your appointment...';
+                this.innerHTML = '<span class="loading-spinner"></span> Confirming...';
 
-                // Prepare data for backend
-                const bookingData = {
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    subject: subject,
-                    message: message,
-                    date: selectedDate,
-                    time: selectedTime,
-                    timezone: timezone,
-                    dateFormatted: dateFormatted
+                // Get all values with fallbacks
+                const name = document.getElementById('book_name').value.trim() || 'Guest';
+                const email = document.getElementById('book_email').value.trim() || 'No email provided';
+                const phone = document.getElementById('book_phone').value.trim() || 'Not provided';
+                const subject = document.getElementById('book_subject').value || 'General Inquiry';
+                const message = document.getElementById('book_message').value.trim() || 'No additional message';
+
+                // Prepare EmailJS template parameters
+                const templateParams = {
+                    user_name: name,
+                    user_email: email,
+                    user_phone: phone,
+                    user_subject: subject,
+                    user_message: message,
+                    booking_date: bookingData.dateFormatted || 'Date not set',
+                    booking_time: bookingData.time || 'Time not set',
+                    booking_timezone: bookingData.timezone || 'Timezone not set',
+                    booking_type: 'Strategy Call',
+                    meet_link: meetLink || 'No meet link generated',
+                    terms_accepted: 'Yes'
                 };
 
-                // Send to backend API (Render.com deployment)
-                fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(bookingData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => { throw new Error(err.message || 'Booking failed'); });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        meetLink = data.eventLink || meetLink;
-                        // Show success
-                        showSuccess(bookingData, meetLink);
-                        isProcessing = false;
-                        this.disabled = false;
-                        this.innerHTML = '<i class="fas fa-check icon-sm"></i> Confirm Booking';
-                    } else {
-                        throw new Error(data.message || 'Booking failed');
-                    }
-                })
-                .catch(error => {
-                    console.error('Booking error:', error);
-                    alert('Failed to create booking: ' + error.message + '. Please try again or email me directly at va.flynnjames@gmail.com');
+                // Log what we're sending for debugging
+                console.log('📧 Sending EmailJS with params:', templateParams);
+
+                // Send via EmailJS
+                emailjs.send(
+                    CONFIG.emailjs.serviceID,
+                    CONFIG.emailjs.templateID,
+                    templateParams
+                ).then(function(response) {
+                    console.log('✅ EmailJS confirmation sent:', response);
+                }).catch(function(error) {
+                    console.error('❌ EmailJS send failed:', error);
+                    console.error('❌ Error details:', error.text || error.message);
+                });
+
+                // Show success
+                setTimeout(() => {
+                    showSuccess(bookingData, meetLink);
                     isProcessing = false;
                     this.disabled = false;
                     this.innerHTML = '<i class="fas fa-check icon-sm"></i> Confirm Booking';
-                });
+                }, 800);
             });
 
             // ============================================================
             // SHOW SUCCESS
             // ============================================================
-            function showSuccess(bookingData, meetLink) {
-                const dateFormatted = new Date(bookingData.date).toLocaleDateString('en-US', { 
+            function showSuccess(data, link) {
+                const dateFormatted = new Date(data.date).toLocaleDateString('en-US', { 
                     weekday: 'long', 
                     month: 'long', 
                     day: 'numeric',
                     year: 'numeric'
                 });
 
-                document.getElementById('successName').textContent = bookingData.name;
-                document.getElementById('successEmail').textContent = bookingData.email;
+                document.getElementById('successName').textContent = data.name;
+                document.getElementById('successEmail').textContent = data.email;
                 document.getElementById('successDate').textContent = dateFormatted;
-                document.getElementById('successTime').textContent = bookingData.time;
-                document.getElementById('successTimezone').textContent = bookingData.timezone;
+                document.getElementById('successTime').textContent = data.time;
+                document.getElementById('successTimezone').textContent = data.timezone;
                 
                 const meetLinkEl = document.getElementById('successMeetLink');
-                meetLinkEl.textContent = meetLink || 'Google Meet link will be sent via email';
-                meetLinkEl.href = meetLink || '#';
+                meetLinkEl.textContent = link || 'Google Meet link will be sent via email';
+                meetLinkEl.href = link || '#';
 
                 goToStep('success');
             }
@@ -2043,10 +2116,8 @@
             renderTimeOptions();
 
             console.log('✅ Booking system initialized');
-            console.log('✅ API URL configured:', API_URL);
-            console.log('✅ Google Calendar/Meet integration ready');
-            console.log('✅ EmailJS configured for confirmations and reminders');
-            console.log('✅ Uniform icons applied throughout');
+            console.log('✅ API URL:', API_URL);
+            console.log('✅ EmailJS configured with template:', CONFIG.emailjs.templateID);
         });
     </script>
 </body>
