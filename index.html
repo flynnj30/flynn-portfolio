@@ -62,6 +62,389 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
 
     <link rel="stylesheet" href="assets/css/style.css" />
+    
+    <style>
+        /* ===== ENHANCED SCROLL ANIMATIONS ===== */
+        
+        /* Slide from Left */
+        @keyframes slideFromLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-80px) scale(0.95);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* Slide from Right */
+        @keyframes slideFromRight {
+            0% {
+                opacity: 0;
+                transform: translateX(80px) scale(0.95);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* Slide from Bottom */
+        @keyframes slideFromBottom {
+            0% {
+                opacity: 0;
+                transform: translateY(60px) scale(0.95);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* Zoom In with Rotation */
+        @keyframes zoomRotateIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.7) rotate(-8deg);
+                filter: blur(6px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                filter: blur(0);
+            }
+        }
+
+        /* Fade In with Glow */
+        @keyframes fadeGlowIn {
+            0% {
+                opacity: 0;
+                filter: blur(8px) brightness(0.5);
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0) brightness(1);
+                transform: scale(1);
+            }
+        }
+
+        /* Text Reveal - Word by Word */
+        @keyframes wordReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) rotateX(20deg);
+                filter: blur(2px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+                filter: blur(0);
+            }
+        }
+
+        /* Staggered Fade Up */
+        @keyframes staggerFadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Flip In */
+        @keyframes flipIn {
+            0% {
+                opacity: 0;
+                transform: perspective(600px) rotateX(-40deg) scale(0.8);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 1;
+                transform: perspective(600px) rotateX(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* ===== ANIMATION CLASSES ===== */
+        .anim-slide-left {
+            opacity: 0;
+            animation: slideFromLeft 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .anim-slide-right {
+            opacity: 0;
+            animation: slideFromRight 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .anim-slide-bottom {
+            opacity: 0;
+            animation: slideFromBottom 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .anim-zoom-rotate {
+            opacity: 0;
+            animation: zoomRotateIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .anim-fade-glow {
+            opacity: 0;
+            animation: fadeGlowIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .anim-flip-in {
+            opacity: 0;
+            animation: flipIn 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        .anim-word-reveal {
+            opacity: 0;
+            animation: wordReveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .anim-stagger > * {
+            opacity: 0;
+            animation: staggerFadeUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .anim-stagger > *:nth-child(1) { animation-delay: 0.05s; }
+        .anim-stagger > *:nth-child(2) { animation-delay: 0.12s; }
+        .anim-stagger > *:nth-child(3) { animation-delay: 0.19s; }
+        .anim-stagger > *:nth-child(4) { animation-delay: 0.26s; }
+        .anim-stagger > *:nth-child(5) { animation-delay: 0.33s; }
+        .anim-stagger > *:nth-child(6) { animation-delay: 0.40s; }
+        .anim-stagger > *:nth-child(7) { animation-delay: 0.47s; }
+        .anim-stagger > *:nth-child(8) { animation-delay: 0.54s; }
+        .anim-stagger > *:nth-child(9) { animation-delay: 0.61s; }
+        .anim-stagger > *:nth-child(10) { animation-delay: 0.68s; }
+
+        /* ===== SECTION TRIGGER CLASSES ===== */
+        .section-triggered .section-title {
+            animation: slideFromLeft 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .section-triggered .about-grid .about-image {
+            animation: zoomRotateIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .section-triggered .about-grid .about-text {
+            animation: slideFromRight 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .section-triggered .services-grid .service-card {
+            animation: staggerFadeUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .section-triggered .services-grid .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .section-triggered .services-grid .service-card:nth-child(2) { animation-delay: 0.25s; }
+        .section-triggered .services-grid .service-card:nth-child(3) { animation-delay: 0.40s; }
+
+        .section-triggered .gallery-grid .gallery-item {
+            opacity: 0;
+            animation: zoomRotateIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .section-triggered .gallery-grid .gallery-item:nth-child(1) { animation-delay: 0.05s; }
+        .section-triggered .gallery-grid .gallery-item:nth-child(2) { animation-delay: 0.12s; }
+        .section-triggered .gallery-grid .gallery-item:nth-child(3) { animation-delay: 0.19s; }
+        .section-triggered .gallery-grid .gallery-item:nth-child(4) { animation-delay: 0.26s; }
+        .section-triggered .gallery-grid .gallery-item:nth-child(5) { animation-delay: 0.33s; }
+        .section-triggered .gallery-grid .gallery-item:nth-child(6) { animation-delay: 0.40s; }
+        .section-triggered .gallery-grid .gallery-item:nth-child(7) { animation-delay: 0.47s; }
+        .section-triggered .gallery-grid .gallery-item:nth-child(8) { animation-delay: 0.54s; }
+
+        .section-triggered .testimonial-grid .testimonial-card {
+            opacity: 0;
+            animation: flipIn 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        .section-triggered .testimonial-grid .testimonial-card:nth-child(1) { animation-delay: 0.1s; }
+        .section-triggered .testimonial-grid .testimonial-card:nth-child(2) { animation-delay: 0.25s; }
+        .section-triggered .testimonial-grid .testimonial-card:nth-child(3) { animation-delay: 0.40s; }
+
+        .section-triggered .cert-grid .cert-card {
+            opacity: 0;
+            animation: slideFromBottom 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .section-triggered .cert-grid .cert-card:nth-child(1) { animation-delay: 0.1s; }
+        .section-triggered .cert-grid .cert-card:nth-child(2) { animation-delay: 0.25s; }
+        .section-triggered .cert-grid .cert-card:nth-child(3) { animation-delay: 0.40s; }
+
+        .section-triggered .faq-container .faq-item {
+            opacity: 0;
+            animation: slideFromRight 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .section-triggered .faq-container .faq-item:nth-child(1) { animation-delay: 0.05s; }
+        .section-triggered .faq-container .faq-item:nth-child(2) { animation-delay: 0.12s; }
+        .section-triggered .faq-container .faq-item:nth-child(3) { animation-delay: 0.19s; }
+        .section-triggered .faq-container .faq-item:nth-child(4) { animation-delay: 0.26s; }
+        .section-triggered .faq-container .faq-item:nth-child(5) { animation-delay: 0.33s; }
+        .section-triggered .faq-container .faq-item:nth-child(6) { animation-delay: 0.40s; }
+
+        .section-triggered .contact-wrapper .contact-info {
+            animation: slideFromLeft 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .section-triggered .contact-wrapper .contact-form-wrapper {
+            animation: slideFromRight 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .section-triggered .skills-wrapper .skill-bar-container {
+            opacity: 0;
+            animation: slideFromRight 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .section-triggered .skills-wrapper .skill-bar-container:nth-child(1) { animation-delay: 0.05s; }
+        .section-triggered .skills-wrapper .skill-bar-container:nth-child(2) { animation-delay: 0.12s; }
+        .section-triggered .skills-wrapper .skill-bar-container:nth-child(3) { animation-delay: 0.19s; }
+        .section-triggered .skills-wrapper .skill-bar-container:nth-child(4) { animation-delay: 0.26s; }
+        .section-triggered .skills-wrapper .skill-bar-container:nth-child(5) { animation-delay: 0.33s; }
+        .section-triggered .skills-wrapper .skill-bar-container:nth-child(6) { animation-delay: 0.40s; }
+
+        /* ===== HERO ENHANCED ANIMATIONS ===== */
+        .hero-triggered .hero-content .greeting {
+            animation: slideFromLeft 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .hero-triggered .hero-content h1 {
+            animation: zoomRotateIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .hero-triggered .hero-content .typewriter {
+            animation: slideFromRight 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        .hero-triggered .hero-content .bio {
+            animation: fadeGlowIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .hero-triggered .hero-content .social-links a {
+            opacity: 0;
+            animation: slideFromBottom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .hero-triggered .hero-content .social-links a:nth-child(1) { animation-delay: 0.1s; }
+        .hero-triggered .hero-content .social-links a:nth-child(2) { animation-delay: 0.2s; }
+        .hero-triggered .hero-content .social-links a:nth-child(3) { animation-delay: 0.3s; }
+        .hero-triggered .hero-content .social-links a:nth-child(4) { animation-delay: 0.4s; }
+
+        .hero-triggered .hero-content .cta-group a {
+            opacity: 0;
+            animation: slideFromBottom 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .hero-triggered .hero-content .cta-group a:nth-child(1) { animation-delay: 0.2s; }
+        .hero-triggered .hero-content .cta-group a:nth-child(2) { animation-delay: 0.35s; }
+        .hero-triggered .hero-content .cta-group a:nth-child(3) { animation-delay: 0.50s; }
+
+        .hero-triggered .hero-content .stats-bar .stat-item {
+            opacity: 0;
+            animation: slideFromBottom 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .hero-triggered .hero-content .stats-bar .stat-item:nth-child(1) { animation-delay: 0.3s; }
+        .hero-triggered .hero-content .stats-bar .stat-item:nth-child(2) { animation-delay: 0.45s; }
+        .hero-triggered .hero-content .stats-bar .stat-item:nth-child(3) { animation-delay: 0.60s; }
+
+        .hero-triggered .hero-image {
+            animation: zoomRotateIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* ===== TRUST STRIP ANIMATION ===== */
+        .trust-triggered .trust-chips .chip {
+            opacity: 0;
+            animation: slideFromBottom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .trust-triggered .trust-chips .chip:nth-child(1) { animation-delay: 0.05s; }
+        .trust-triggered .trust-chips .chip:nth-child(2) { animation-delay: 0.12s; }
+        .trust-triggered .trust-chips .chip:nth-child(3) { animation-delay: 0.19s; }
+        .trust-triggered .trust-chips .chip:nth-child(4) { animation-delay: 0.26s; }
+        .trust-triggered .trust-chips .chip:nth-child(5) { animation-delay: 0.33s; }
+        .trust-triggered .trust-chips .chip:nth-child(6) { animation-delay: 0.40s; }
+
+        /* ===== RESPONSIVE ADJUSTMENTS ===== */
+        @media (max-width: 768px) {
+            .section-triggered .services-grid .service-card {
+                animation-delay: 0s !important;
+            }
+            .section-triggered .testimonial-grid .testimonial-card {
+                animation-delay: 0s !important;
+            }
+            .section-triggered .cert-grid .cert-card {
+                animation-delay: 0s !important;
+            }
+            .section-triggered .gallery-grid .gallery-item {
+                animation-delay: 0s !important;
+            }
+            .section-triggered .faq-container .faq-item {
+                animation-delay: 0s !important;
+            }
+            .section-triggered .skills-wrapper .skill-bar-container {
+                animation-delay: 0s !important;
+            }
+            .hero-triggered .hero-content .social-links a {
+                animation-delay: 0s !important;
+            }
+            .hero-triggered .hero-content .cta-group a {
+                animation-delay: 0s !important;
+            }
+            .hero-triggered .hero-content .stats-bar .stat-item {
+                animation-delay: 0s !important;
+            }
+            .trust-triggered .trust-chips .chip {
+                animation-delay: 0s !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .anim-slide-left,
+            .anim-slide-right,
+            .anim-slide-bottom,
+            .anim-zoom-rotate,
+            .anim-fade-glow,
+            .anim-flip-in,
+            .anim-word-reveal,
+            .anim-stagger > *,
+            .section-triggered .section-title,
+            .section-triggered .about-grid .about-image,
+            .section-triggered .about-grid .about-text,
+            .section-triggered .services-grid .service-card,
+            .section-triggered .gallery-grid .gallery-item,
+            .section-triggered .testimonial-grid .testimonial-card,
+            .section-triggered .cert-grid .cert-card,
+            .section-triggered .faq-container .faq-item,
+            .section-triggered .contact-wrapper .contact-info,
+            .section-triggered .contact-wrapper .contact-form-wrapper,
+            .section-triggered .skills-wrapper .skill-bar-container,
+            .hero-triggered .hero-content .greeting,
+            .hero-triggered .hero-content h1,
+            .hero-triggered .hero-content .typewriter,
+            .hero-triggered .hero-content .bio,
+            .hero-triggered .hero-content .social-links a,
+            .hero-triggered .hero-content .cta-group a,
+            .hero-triggered .hero-content .stats-bar .stat-item,
+            .hero-triggered .hero-image,
+            .trust-triggered .trust-chips .chip {
+                opacity: 1 !important;
+                animation: none !important;
+                transform: none !important;
+                filter: none !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -152,7 +535,8 @@
                         <div class="profile-ring-2"></div>
                         <img src="https://cdn.phototourl.com/free/2026-08-08-c3319d9c-1121-4615-96b4-378472dfc4fa.jpg" alt="Flynn James Pontino - Strategic Growth Leader" loading="eager" width="370" height="370" />
                         <div class="status-badge"><span class="dot"></span> Open to opportunities</div>
-                        <a href="https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing" target="_blank" rel="noopener" class="check-cv-btn"><i class="fas fa-file-pdf"></i> Check My CV</a>
+                        <!-- UPDATED CV URL -->
+                        <a href="https://drive.google.com/file/d/1MIN-epAamM3280J2Qv9LwWoQ1w_b15Fd/view" target="_blank" rel="noopener" class="check-cv-btn"><i class="fas fa-file-pdf"></i> Check My CV</a>
                     </div>
                     <div class="hero-content">
                         <div class="greeting">👋 Welcome to my world</div>
@@ -178,7 +562,8 @@
                             </a>
                         </div>
                         <div class="stats-bar">
-                            <div class="stat-item"><span class="number" data-count="10">0</span><span class="label">Years Experience</span></div>
+                            <!-- UPDATED: Years Experience changed from 10 to 11 -->
+                            <div class="stat-item"><span class="number" data-count="11">0</span><span class="label">Years Experience</span></div>
                             <div class="stat-item"><span class="number" data-count="120">0</span><span class="label">% Quota Attainment</span></div>
                             <div class="stat-item"><span class="number" data-count="150">0</span><span class="label">Calls/Day</span></div>
                         </div>
@@ -220,7 +605,6 @@
                         <div class="quote">"The best sales leaders don't just hit targets — they build teams that can hit any target."</div>
                     </div>
                 </div>
-                <!-- Removed section-cta -->
             </div>
         </section>
 
@@ -285,7 +669,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Removed section-cta -->
             </div>
         </section>
 
@@ -312,7 +695,6 @@
                         <p>Reduce ramp time from 8 to 5 weeks with data-centric training and role-play frameworks.</p>
                     </div>
                 </div>
-                <!-- Removed section-cta -->
             </div>
         </section>
 
@@ -332,7 +714,6 @@
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_629771767e967.jpg" data-lightbox="gallery" data-title="Team Mentoring"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_629771767e967.jpg" alt="Team Collaboration" loading="lazy" width="200" height="200" /><div class="badge">👥 Mentorship</div><div class="overlay"><span>👥 Team Collaboration</span></div></a></div>
                     <div class="gallery-item"><a href="https://images.cdn-files-a.com/uploads/6358148/2000_62977176ba76e.jpg" data-lightbox="gallery" data-title="Strategic Planning"><img src="https://images.cdn-files-a.com/uploads/6358148/2000_62977176ba76e.jpg" alt="Strategic Planning" loading="lazy" width="200" height="200" /><div class="badge">📋 Planning</div><div class="overlay"><span>📋 Strategic Planning</span></div></a></div>
                 </div>
-                <!-- Removed section-cta -->
             </div>
         </section>
 
@@ -362,7 +743,6 @@
                         <span class="result-tag">🏆 120% Quota Attainment</span>
                     </div>
                 </div>
-                <!-- Removed section-cta -->
             </div>
         </section>
 
@@ -395,7 +775,6 @@
                         <span class="cert-badge">🏆 View Award</span>
                     </a>
                 </div>
-                <!-- Removed section-cta -->
             </div>
         </section>
 
@@ -461,7 +840,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Removed section-cta -->
             </div>
         </section>
 
@@ -600,6 +978,66 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
     </script>
     <script src="assets/js/main.js">
+    </script>
+    
+    <!-- ===== ENHANCED SCROLL ANIMATION TRIGGER ===== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Trigger Hero animations immediately
+            const heroSection = document.getElementById('section-home');
+            if (heroSection) {
+                heroSection.classList.add('hero-triggered');
+            }
+
+            // Trigger Trust Strip animations
+            const trustSection = document.getElementById('trust');
+            if (trustSection) {
+                setTimeout(() => {
+                    trustSection.classList.add('trust-triggered');
+                }, 300);
+            }
+
+            // Observer for section animations
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const section = entry.target;
+                        
+                        // Add section-triggered class for animations
+                        if (!section.classList.contains('section-triggered')) {
+                            section.classList.add('section-triggered');
+                        }
+                        
+                        // Trigger hero animations if coming back to home
+                        if (section.id === 'section-home' && !section.classList.contains('hero-triggered')) {
+                            section.classList.add('hero-triggered');
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Observe all section wrappers
+            document.querySelectorAll('.section-wrapper').forEach(section => {
+                sectionObserver.observe(section);
+            });
+
+            // Also trigger animations for elements that might be missed
+            // when sections are already visible on load
+            setTimeout(() => {
+                document.querySelectorAll('.section-wrapper.active').forEach(section => {
+                    section.classList.add('section-triggered');
+                    if (section.id === 'section-home') {
+                        section.classList.add('hero-triggered');
+                    }
+                });
+            }, 100);
+
+            console.log('✅ Enhanced scroll animations activated');
+            console.log('✅ CV URL updated to: https://drive.google.com/file/d/1MIN-epAamM3280J2Qv9LwWoQ1w_b15Fd/view');
+        });
     </script>
 </body>
 </html>

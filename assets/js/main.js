@@ -2,7 +2,7 @@
  * ============================================================
  * FLYNN JAMES PONTINO | PORTFOLIO MAIN SCRIPT
  * Version: 2.0.0
- * Last Updated: 2026-08-04
+ * Last Updated: 2026-08-23
  * ============================================================
  */
 
@@ -22,7 +22,9 @@
         particleCount: 70,
         notificationInterval: 20000,
         animationThreshold: 0.15,
-        staggerDelay: 80
+        staggerDelay: 80,
+        // UPDATED CV URL
+        cvUrl: 'https://drive.google.com/file/d/1MIN-epAamM3280J2Qv9LwWoQ1w_b15Fd/view'
     };
 
     // ============================================================
@@ -849,7 +851,7 @@
                     const action = item.dataset.action;
                     switch (action) {
                         case 'cv':
-                            window.open('https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing', '_blank');
+                            window.open(CONFIG.cvUrl, '_blank');
                             break;
                         case 'email':
                             window.location.href = 'mailto:va.flynnjames@gmail.com';
@@ -925,7 +927,7 @@
             } else if (action === 'hire') {
                 window.location.href = 'mailto:va.flynnjames@gmail.com';
             } else if (action === 'cv') {
-                window.open('https://drive.google.com/file/d/1Vn7IY1x1w8Q296hpnegN0YKGqTtzbGTA/view?usp=sharing', '_blank');
+                window.open(CONFIG.cvUrl, '_blank');
             }
         }
     }
@@ -1342,6 +1344,7 @@
         console.log('🎯 All buttons: Functional');
         console.log('🎨 Animations: 60 FPS Optimized');
         console.log('♿ Accessibility: Reduced Motion Supported');
+        console.log('📄 CV URL: ' + CONFIG.cvUrl);
         console.log('=' .repeat(60));
     });
 
