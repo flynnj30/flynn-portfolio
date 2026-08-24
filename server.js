@@ -1,7 +1,7 @@
 // server.js - COMPLETE FIXED VERSION
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer'); // ✅ FIXED: Proper import
+const nodemailer = require('nodemailer');
 
 try {
     require('dotenv').config();
@@ -153,7 +153,7 @@ app.get('/api/test-calendar', async (req, res) => {
 });
 
 // ============================================================
-// CREATE BOOKING - MAIN ENDPOINT
+// CREATE BOOKING - MAIN ENDPOINT (FIXED)
 // ============================================================
 app.post('/api/create-booking', async (req, res) => {
     console.log('📝 Booking request received');
@@ -215,10 +215,11 @@ app.post('/api/create-booking', async (req, res) => {
         let calendarSuccess = false;
 
         // ============================================================
-        // CREATE CALENDAR EVENT
+        // CREATE CALENDAR EVENT - SIMPLIFIED (NO conferenceData)
         // ============================================================
         if (calendar && auth && calendarInitialized) {
             try {
+                // SIMPLIFIED event - NO conferenceData to avoid errors
                 const event = {
                     summary: `Strategy Call with ${name}`,
                     description: `
@@ -238,56 +239,42 @@ app.post('/api/create-booking', async (req, res) => {
                         dateTime: endDateTime.toISOString(),
                         timeZone: timezone,
                     },
-                    conferenceData: {
-                        createRequest: {
-                            requestId: `meeting-${Date.now()}-${Math.random().toString(36).substring(7)}`,
-                            conferenceSolutionKey: {
-                                type: 'hangoutsMeet'
-                            }
-                        }
-                    },
                     reminders: {
                         useDefault: false,
                         overrides: [
                             { method: 'email', minutes: 24 * 60 },
                             { method: 'popup', minutes: 60 },
+                            { method: 'popup', minutes: 10 },
                         ],
                     },
                 };
 
-                console.log('📅 Creating Google Calendar event...');
+                console.log('📅 Creating Google Calendar event (simplified)...');
 
                 const response = await calendar.events.insert({
                     calendarId: 'primary',
                     resource: event,
-                    conferenceDataVersion: 1,
                     sendUpdates: 'all',
                 });
 
-                eventLink = response.data.hangoutLink || response.data.htmlLink;
+                eventLink = response.data.htmlLink;
                 eventId = response.data.id;
                 calendarSuccess = true;
                 
                 console.log('✅ Calendar event created successfully!');
-                console.log('🔗 Meet link:', eventLink);
+                console.log('🆔 Event ID:', eventId);
+                console.log('🔗 Event link:', eventLink);
 
             } catch (error) {
                 console.error('❌ Calendar API Error:', error.message);
+                console.error('❌ Error details:', error);
                 
-                // Retry without conferenceData if it fails
+                // Try one more time with even simpler event
                 try {
-                    console.log('🔄 Retrying without conferenceData...');
-                    const simpleEvent = {
+                    console.log('🔄 Retrying with minimal event...');
+                    const minimalEvent = {
                         summary: `Strategy Call with ${name}`,
-                        description: `
-                            Customer: ${name}
-                            Email: ${email}
-                            Phone: ${phone || 'Not provided'}
-                            Subject: ${subject}
-                            Message: ${message || 'No additional message'}
-                            Timezone: ${timezone}
-                            Booked via: Flynn Portfolio Website
-                        `,
+                        description: `Customer: ${name} | Email: ${email} | Subject: ${subject}`,
                         start: {
                             dateTime: startDateTime.toISOString(),
                             timeZone: timezone,
@@ -296,27 +283,18 @@ app.post('/api/create-booking', async (req, res) => {
                             dateTime: endDateTime.toISOString(),
                             timeZone: timezone,
                         },
-                        reminders: {
-                            useDefault: false,
-                            overrides: [
-                                { method: 'email', minutes: 24 * 60 },
-                                { method: 'popup', minutes: 60 },
-                            ],
-                        },
                     };
 
-                    const simpleResponse = await calendar.events.insert({
+                    const minimalResponse = await calendar.events.insert({
                         calendarId: 'primary',
-                        resource: simpleEvent,
+                        resource: minimalEvent,
                         sendUpdates: 'all',
                     });
 
-                    // Generate a fallback Meet link
-                    const fallbackMeetId = Math.random().toString(36).substring(2, 10);
-                    eventLink = `https://meet.google.com/${fallbackMeetId}`;
-                    eventId = simpleResponse.data.id;
+                    eventLink = minimalResponse.data.htmlLink;
+                    eventId = minimalResponse.data.id;
                     calendarSuccess = true;
-                    console.log('✅ Calendar event created without conferenceData!');
+                    console.log('✅ Calendar event created with minimal event!');
                     
                 } catch (retryError) {
                     console.error('❌ Retry also failed:', retryError.message);
@@ -327,12 +305,12 @@ app.post('/api/create-booking', async (req, res) => {
         }
 
         // ============================================================
-        // FALLBACK MEET LINK
+        // FALLBACK MEET LINK (if calendar failed)
         // ============================================================
         if (!eventLink) {
             const meetingId = Math.random().toString(36).substring(2, 10);
             eventLink = `https://meet.google.com/${meetingId}`;
-            console.log('⚠️ Using fallback Meet link:', eventLink);
+            console.log('⚠️ Using fallback link');
         }
 
         // ============================================================
@@ -355,7 +333,6 @@ app.post('/api/create-booking', async (req, res) => {
                 time,
                 timezone,
                 calendarSuccess: calendarSuccess
-                // meetLink intentionally NOT included in email
             });
             console.log('✅ Confirmation email sent');
         } catch (emailError) {
@@ -370,7 +347,6 @@ app.post('/api/create-booking', async (req, res) => {
             calendarCreated: calendarSuccess,
             eventId: eventId || null,
             eventLink: eventLink,
-            meetLink: eventLink,
             message: calendarSuccess ? 'Booking created and added to calendar' : 'Booking created (calendar event failed)',
             debug: {
                 calendarConfigured: !!calendar,
@@ -396,11 +372,10 @@ app.post('/api/create-booking', async (req, res) => {
 });
 
 // ============================================================
-// SEND CONFIRMATION EMAIL - FIXED
+// SEND CONFIRMATION EMAIL
 // ============================================================
 async function sendConfirmationEmail(data) {
     try {
-        // ✅ FIXED: Properly check if nodemailer is available
         if (typeof nodemailer === 'undefined' || !nodemailer.createTransporter) {
             console.log('⚠️ Nodemailer not available - skipping email');
             return;
@@ -422,7 +397,6 @@ async function sendConfirmationEmail(data) {
             },
         });
 
-        // Verify connection
         await transporter.verify();
         console.log('✅ Email transporter verified');
 
@@ -461,14 +435,6 @@ async function sendConfirmationEmail(data) {
                         <p style="font-style: italic;">"${data.message}"</p>
                     </div>
                     ` : ''}
-                    
-                    <div style="background: #1a1a1a; padding: 16px; border-radius: 12px; margin: 16px 0; border-left: 4px solid #888;">
-                        <h3 style="color: #888; margin-top: 0;">⚡ QUICK ACTIONS</h3>
-                        <p>
-                            <a href="mailto:${data.email}" style="background: #0a9e40; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; display: inline-block; margin-right: 8px;">📧 Email Customer</a>
-                            <a href="tel:${data.phone || ''}" style="background: #3b82f6; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; display: inline-block;">📞 Call Customer</a>
-                        </p>
-                    </div>
                     
                     <p style="text-align: center; color: #555; font-size: 12px; margin-top: 16px;">
                         <strong style="color: #0a9e40;">Flynn James Pontino</strong> · Senior SDR
