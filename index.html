@@ -7,7 +7,7 @@
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
 
     <title>Flynn James Pontino | Generate $1.8M+ Pipeline with a Senior SDR</title>
-    <meta name="description" content="Senior SDR with 11+ years experience. I generate $1.8M+ pipeline, book 30+ qualified meetings monthly, and hit 120%+ quota. Book a free 15-min strategy call." />
+    <meta name="description" content="Senior SDR with 11+ years experience. I generate $1.8M+ pipeline, book 30+ qualified meetings monthly, and hit 120%+ quota." />
     <meta name="keywords" content="Sales Development Representative, SDR, B2B Outbound Sales, Pipeline Generation, Cold Calling Expert, Sales Consulting" />
     <link rel="canonical" href="https://flynnpontino.com/" />
 
@@ -46,8 +46,486 @@
     
     <style>
         /* ============================================================
-           HIGH-CONVERTING PORTFOLIO STYLES
+           BOOKING STYLES
            ============================================================ */
+
+        /* ===== BOOKING MODAL ===== */
+        .booking-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .booking-modal-overlay.active {
+            display: flex;
+        }
+        .booking-modal {
+            background: var(--bg-dark);
+            border-radius: 24px;
+            max-width: 620px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 40px 32px;
+            border: 1px solid var(--border-dark);
+            position: relative;
+            animation: slideFromBottom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        body.light-mode .booking-modal {
+            background: var(--bg-light);
+            border-color: var(--border-light);
+        }
+        .booking-modal .close-modal {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 4px 8px;
+        }
+        body.light-mode .booking-modal .close-modal {
+            color: var(--text-light);
+        }
+        .booking-modal .close-modal:hover {
+            transform: rotate(90deg);
+            color: var(--green);
+        }
+        .booking-modal .step-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .booking-modal .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border-dark);
+            transition: all 0.3s ease;
+        }
+        .booking-modal .step-dot.active {
+            background: var(--green);
+            transform: scale(1.3);
+            box-shadow: 0 0 20px rgba(10, 158, 64, 0.3);
+        }
+        .booking-modal .step-dot.done {
+            background: var(--green);
+            opacity: 0.4;
+        }
+        .booking-modal .step-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-dark);
+        }
+        body.light-mode .booking-modal .step-title {
+            color: var(--text-light);
+        }
+        .booking-modal .step-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.6;
+            margin-bottom: 20px;
+        }
+        .booking-modal .step-content {
+            display: none;
+        }
+        .booking-modal .step-content.active {
+            display: block;
+            animation: fadeGlowIn 0.4s ease forwards;
+        }
+        .booking-modal .form-group {
+            margin-bottom: 16px;
+        }
+        .booking-modal .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            opacity: 0.8;
+        }
+        .booking-modal .form-group input,
+        .booking-modal .form-group select,
+        .booking-modal .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            color: var(--text-dark);
+            font-family: var(--font-family);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        body.light-mode .booking-modal .form-group input,
+        body.light-mode .booking-modal .form-group select,
+        body.light-mode .booking-modal .form-group textarea {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-light);
+        }
+        .booking-modal .form-group input:focus,
+        .booking-modal .form-group select:focus,
+        .booking-modal .form-group textarea:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(10, 158, 64, 0.15);
+        }
+        .booking-modal .form-group select option {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+        body.light-mode .booking-modal .form-group select option {
+            background: var(--bg-light);
+            color: var(--text-light);
+        }
+        .booking-modal .btn-next,
+        .booking-modal .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--cta-gradient);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            box-shadow: 0 0 20px rgba(10, 158, 64, 0.15);
+        }
+        .booking-modal .btn-next:hover,
+        .booking-modal .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(10, 158, 64, 0.3);
+        }
+        .booking-modal .btn-next:disabled,
+        .booking-modal .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .booking-modal .btn-back {
+            background: transparent;
+            border: none;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 10px 0;
+            transition: all 0.3s ease;
+            opacity: 0.6;
+        }
+        body.light-mode .booking-modal .btn-back {
+            color: var(--text-light);
+        }
+        .booking-modal .btn-back:hover {
+            opacity: 1;
+            color: var(--green);
+        }
+        .booking-modal .booking-summary {
+            background: rgba(10, 158, 64, 0.05);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 12px 0;
+            border: 1px solid rgba(10, 158, 64, 0.1);
+        }
+        .booking-modal .booking-summary .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+        .booking-modal .booking-summary .summary-item .label {
+            opacity: 0.6;
+        }
+        .booking-modal .booking-summary .summary-item .value {
+            font-weight: 600;
+        }
+        .booking-modal .success-message {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .booking-modal .success-message .icon {
+            font-size: 4rem;
+            color: var(--green);
+            margin-bottom: 12px;
+        }
+        .booking-modal .success-message h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        .booking-modal .success-message p {
+            opacity: 0.7;
+            line-height: 1.6;
+        }
+        .booking-modal .success-message .meet-details {
+            background: rgba(10, 158, 64, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        .booking-modal .success-message .meet-details .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .booking-modal .success-message .meet-details .detail-row:last-child {
+            border-bottom: none;
+        }
+        .booking-modal .success-message .meet-details .detail-row .dlabel {
+            opacity: 0.6;
+        }
+        .booking-modal .success-message .meet-details .detail-row .dvalue {
+            font-weight: 600;
+            text-align: right;
+        }
+        .booking-modal .time-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+        .booking-modal .time-option {
+            padding: 10px 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-dark);
+            background: transparent;
+            color: var(--text-dark);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        body.light-mode .booking-modal .time-option {
+            color: var(--text-light);
+            border-color: var(--border-light);
+        }
+        .booking-modal .time-option:hover:not(.unavailable):not(.booked) {
+            border-color: var(--green);
+            background: rgba(10, 158, 64, 0.05);
+        }
+        .booking-modal .time-option.selected {
+            border-color: var(--green);
+            background: rgba(10, 158, 64, 0.1);
+            color: var(--green);
+        }
+        .booking-modal .time-option.unavailable {
+            opacity: 0.3;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        .booking-modal .time-option.booked {
+            opacity: 0.2;
+            cursor: not-allowed;
+            text-decoration: line-through;
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        .booking-modal .date-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .booking-modal .date-option {
+            padding: 10px 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-dark);
+            background: transparent;
+            color: var(--text-dark);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        body.light-mode .booking-modal .date-option {
+            color: var(--text-light);
+            border-color: var(--border-light);
+        }
+        .booking-modal .date-option:hover:not(.unavailable) {
+            border-color: var(--green);
+            background: rgba(10, 158, 64, 0.05);
+        }
+        .booking-modal .date-option.selected {
+            border-color: var(--green);
+            background: rgba(10, 158, 64, 0.1);
+            color: var(--green);
+        }
+        .booking-modal .date-option.unavailable {
+            opacity: 0.3;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        .booking-modal .date-option .day {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .booking-modal .date-option .month {
+            font-size: 0.65rem;
+            opacity: 0.6;
+        }
+        .booking-modal .timezone-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            color: var(--text-dark);
+            font-family: var(--font-family);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            outline: none;
+            cursor: pointer;
+        }
+        body.light-mode .booking-modal .timezone-select {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-light);
+        }
+        .booking-modal .timezone-select:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(10, 158, 64, 0.15);
+        }
+        .booking-modal .timezone-select option {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+        body.light-mode .booking-modal .timezone-select option {
+            background: var(--bg-light);
+            color: var(--text-light);
+        }
+        .booking-modal .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .booking-modal .availability-loading {
+            text-align: center;
+            padding: 20px;
+            opacity: 0.6;
+        }
+
+        /* ===== TIME ZONE DISPLAY - Enhanced ===== */
+        .timezone-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            padding: 10px 14px;
+            background: rgba(10, 158, 64, 0.06);
+            border-radius: 10px;
+            border: 1px solid rgba(10, 158, 64, 0.08);
+            margin: 8px 0 12px 0;
+            font-size: 0.8rem;
+            color: var(--text-dark);
+            align-items: center;
+        }
+        body.light-mode .timezone-info {
+            background: rgba(10, 158, 64, 0.04);
+        }
+        .timezone-info .tz-label {
+            opacity: 0.6;
+        }
+        .timezone-info .tz-value {
+            font-weight: 600;
+            color: var(--green);
+        }
+        .timezone-info .tz-badge {
+            background: rgba(10, 158, 64, 0.12);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: var(--green);
+        }
+        .timezone-info .tz-conversion {
+            margin-left: auto;
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        .timezone-info .tz-conversion strong {
+            color: var(--green);
+            opacity: 1;
+        }
+
+        /* ===== TIME ZONE DETECTION BANNER ===== */
+        .tz-detected {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(10, 158, 64, 0.08);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--green);
+            margin-bottom: 4px;
+            border: 1px solid rgba(10, 158, 64, 0.12);
+        }
+        .tz-detected i {
+            font-size: 0.9rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            .booking-modal .time-options {
+                grid-template-columns: 1fr 1fr;
+            }
+            .booking-modal .date-options {
+                grid-template-columns: 1fr 1fr;
+            }
+            .booking-modal {
+                padding: 28px 20px;
+            }
+            .booking-modal .success-message .meet-details .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+            }
+            .booking-modal .success-message .meet-details .detail-row .dvalue {
+                text-align: left;
+            }
+            .timezone-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .timezone-info .tz-conversion {
+                margin-left: 0;
+            }
+        }
+
+        /* ===== UNIFORM ICONS ===== */
+        .fa-solid, .fa-regular, .fa-brands, .fas, .far, .fab {
+            font-size: 1rem;
+            width: 1.2em;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .icon-lg {
+            font-size: 1.5rem;
+        }
+        .icon-xl {
+            font-size: 2rem;
+        }
+        .icon-sm {
+            font-size: 0.8rem;
+        }
 
         /* ===== RESULT BANNER ===== */
         .result-banner {
@@ -555,391 +1033,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* ===== BOOKING MODAL ===== */
-        .booking-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .booking-modal-overlay.active {
-            display: flex;
-        }
-        .booking-modal {
-            background: var(--bg-dark);
-            border-radius: 24px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 40px 32px;
-            border: 1px solid var(--border-dark);
-            position: relative;
-            animation: slideFromBottom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-        body.light-mode .booking-modal {
-            background: var(--bg-light);
-            border-color: var(--border-light);
-        }
-        .booking-modal .close-modal {
-            position: absolute;
-            top: 16px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: var(--text-dark);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 4px 8px;
-        }
-        body.light-mode .booking-modal .close-modal {
-            color: var(--text-light);
-        }
-        .booking-modal .close-modal:hover {
-            transform: rotate(90deg);
-            color: var(--green);
-        }
-        .booking-modal .step-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-        .booking-modal .step-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--border-dark);
-            transition: all 0.3s ease;
-        }
-        .booking-modal .step-dot.active {
-            background: var(--green);
-            transform: scale(1.3);
-            box-shadow: 0 0 20px rgba(10, 158, 64, 0.3);
-        }
-        .booking-modal .step-dot.done {
-            background: var(--green);
-            opacity: 0.4;
-        }
-        .booking-modal .step-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: var(--text-dark);
-        }
-        body.light-mode .booking-modal .step-title {
-            color: var(--text-light);
-        }
-        .booking-modal .step-subtitle {
-            font-size: 0.9rem;
-            opacity: 0.6;
-            margin-bottom: 20px;
-        }
-        .booking-modal .step-content {
-            display: none;
-        }
-        .booking-modal .step-content.active {
-            display: block;
-            animation: fadeGlowIn 0.4s ease forwards;
-        }
-        .booking-modal .form-group {
-            margin-bottom: 16px;
-        }
-        .booking-modal .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-            opacity: 0.8;
-        }
-        .booking-modal .form-group input,
-        .booking-modal .form-group select,
-        .booking-modal .form-group textarea {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-dark);
-            border-radius: 12px;
-            color: var(--text-dark);
-            font-family: var(--font-family);
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-        body.light-mode .booking-modal .form-group input,
-        body.light-mode .booking-modal .form-group select,
-        body.light-mode .booking-modal .form-group textarea {
-            background: rgba(0, 0, 0, 0.04);
-            color: var(--text-light);
-        }
-        .booking-modal .form-group input:focus,
-        .booking-modal .form-group select:focus,
-        .booking-modal .form-group textarea:focus {
-            border-color: var(--green);
-            box-shadow: 0 0 0 3px rgba(10, 158, 64, 0.15);
-        }
-        .booking-modal .form-group select option {
-            background: var(--bg-dark);
-            color: var(--text-dark);
-        }
-        body.light-mode .booking-modal .form-group select option {
-            background: var(--bg-light);
-            color: var(--text-light);
-        }
-        .booking-modal .btn-next,
-        .booking-modal .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: var(--cta-gradient);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 8px;
-            box-shadow: 0 0 20px rgba(10, 158, 64, 0.15);
-        }
-        .booking-modal .btn-next:hover,
-        .booking-modal .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(10, 158, 64, 0.3);
-        }
-        .booking-modal .btn-next:disabled,
-        .booking-modal .btn-submit:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-        .booking-modal .btn-back {
-            background: transparent;
-            border: none;
-            color: var(--text-dark);
-            font-size: 0.9rem;
-            cursor: pointer;
-            padding: 10px 0;
-            transition: all 0.3s ease;
-            opacity: 0.6;
-        }
-        body.light-mode .booking-modal .btn-back {
-            color: var(--text-light);
-        }
-        .booking-modal .btn-back:hover {
-            opacity: 1;
-            color: var(--green);
-        }
-        .booking-modal .booking-summary {
-            background: rgba(10, 158, 64, 0.05);
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin: 12px 0;
-            border: 1px solid rgba(10, 158, 64, 0.1);
-        }
-        .booking-modal .booking-summary .summary-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            font-size: 0.9rem;
-        }
-        .booking-modal .booking-summary .summary-item .label {
-            opacity: 0.6;
-        }
-        .booking-modal .booking-summary .summary-item .value {
-            font-weight: 600;
-        }
-        .booking-modal .booking-summary .summary-item .value .meet-link {
-            color: var(--green);
-            text-decoration: underline;
-            font-size: 0.8rem;
-            word-break: break-all;
-        }
-        .booking-modal .success-message {
-            text-align: center;
-            padding: 20px 0;
-        }
-        .booking-modal .success-message .icon {
-            font-size: 4rem;
-            color: var(--green);
-            margin-bottom: 12px;
-        }
-        .booking-modal .success-message h3 {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-        .booking-modal .success-message p {
-            opacity: 0.7;
-            line-height: 1.6;
-        }
-        .booking-modal .success-message .meet-details {
-            background: rgba(10, 158, 64, 0.05);
-            border-radius: 12px;
-            padding: 16px;
-            margin: 12px 0;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-        .booking-modal .success-message .meet-details .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .booking-modal .success-message .meet-details .detail-row:last-child {
-            border-bottom: none;
-        }
-        .booking-modal .success-message .meet-details .detail-row .dlabel {
-            opacity: 0.6;
-        }
-        .booking-modal .success-message .meet-details .detail-row .dvalue {
-            font-weight: 600;
-            text-align: right;
-        }
-        .booking-modal .success-message .meet-details .detail-row .dvalue a {
-            color: var(--green);
-            text-decoration: underline;
-        }
-        .booking-modal .time-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-        }
-        .booking-modal .time-option {
-            padding: 10px 8px;
-            border-radius: 10px;
-            border: 1px solid var(--border-dark);
-            background: transparent;
-            color: var(--text-dark);
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-        body.light-mode .booking-modal .time-option {
-            color: var(--text-light);
-            border-color: var(--border-light);
-        }
-        .booking-modal .time-option:hover {
-            border-color: var(--green);
-            background: rgba(10, 158, 64, 0.05);
-        }
-        .booking-modal .time-option.selected {
-            border-color: var(--green);
-            background: rgba(10, 158, 64, 0.1);
-            color: var(--green);
-        }
-        .booking-modal .date-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        .booking-modal .date-option {
-            padding: 10px 8px;
-            border-radius: 10px;
-            border: 1px solid var(--border-dark);
-            background: transparent;
-            color: var(--text-dark);
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-        body.light-mode .booking-modal .date-option {
-            color: var(--text-light);
-            border-color: var(--border-light);
-        }
-        .booking-modal .date-option:hover {
-            border-color: var(--green);
-            background: rgba(10, 158, 64, 0.05);
-        }
-        .booking-modal .date-option.selected {
-            border-color: var(--green);
-            background: rgba(10, 158, 64, 0.1);
-            color: var(--green);
-        }
-        .booking-modal .date-option .day {
-            font-weight: 700;
-            font-size: 0.9rem;
-        }
-        .booking-modal .date-option .month {
-            font-size: 0.65rem;
-            opacity: 0.6;
-        }
-        .booking-modal .timezone-display {
-            font-size: 0.8rem;
-            opacity: 0.6;
-            text-align: center;
-            margin: 8px 0;
-            padding: 6px 12px;
-            background: rgba(10, 158, 64, 0.05);
-            border-radius: 8px;
-            border: 1px solid rgba(10, 158, 64, 0.08);
-        }
-        .booking-modal .timezone-display i {
-            color: var(--green);
-            margin-right: 6px;
-        }
-        .booking-modal .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 0.8s ease-in-out infinite;
-            margin-right: 8px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 480px) {
-            .booking-modal .time-options {
-                grid-template-columns: 1fr 1fr;
-            }
-            .booking-modal .date-options {
-                grid-template-columns: 1fr 1fr;
-            }
-            .booking-modal {
-                padding: 28px 20px;
-            }
-            .booking-modal .success-message .meet-details .detail-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 2px;
-            }
-            .booking-modal .success-message .meet-details .detail-row .dvalue {
-                text-align: left;
-            }
-        }
-
-        /* ===== UNIFORM ICONS ===== */
-        .fa-solid, .fa-regular, .fa-brands, .fas, .far, .fab {
-            font-size: 1rem;
-            width: 1.2em;
-            text-align: center;
-            vertical-align: middle;
-        }
-        .icon-lg {
-            font-size: 1.5rem;
-        }
-        .icon-xl {
-            font-size: 2rem;
-        }
-        .icon-sm {
-            font-size: 0.8rem;
-        }
     </style>
 </head>
 <body>
@@ -1092,10 +1185,58 @@
                 </div>
             </div>
 
-            <!-- Step 3: When -->
+            <!-- Step 3: Date, Time Zone & Time -->
             <div class="step-content" data-step="3">
                 <h2 class="step-title"><i class="fas fa-calendar-alt icon-sm" style="color:var(--green);"></i> Let's find a time</h2>
-                <p class="step-subtitle">Choose a date and time that works for you.</p>
+                <p class="step-subtitle">Choose your time zone, then select a date and time that works for you.</p>
+                
+                <!-- ===== TIME ZONE DETECTION ===== -->
+                <div class="tz-detected" id="tzDetected">
+                    <i class="fas fa-satellite-dish"></i>
+                    <span>Detected: <strong id="detectedTimezone">Loading...</strong></span>
+                    <span style="margin-left:auto;font-size:0.65rem;opacity:0.6;">(auto-detected from your browser)</span>
+                </div>
+                
+                <!-- Time Zone Dropdown -->
+                <div class="form-group">
+                    <label for="book_timezone"><i class="fas fa-globe icon-sm" style="color:var(--green);"></i> Your Time Zone <span class="required">*</span></label>
+                    <select id="book_timezone" class="timezone-select">
+                        <option value="Pacific/Midway">(UTC-11:00) Midway</option>
+                        <option value="Pacific/Honolulu">(UTC-10:00) Hawaii</option>
+                        <option value="America/Anchorage">(UTC-09:00) Alaska</option>
+                        <option value="America/Los_Angeles">(UTC-08:00) Los Angeles</option>
+                        <option value="America/Denver">(UTC-07:00) Denver</option>
+                        <option value="America/Chicago">(UTC-06:00) Chicago</option>
+                        <option value="America/New_York">(UTC-05:00) New York</option>
+                        <option value="America/Caracas">(UTC-04:00) Caracas</option>
+                        <option value="America/Argentina/Buenos_Aires">(UTC-03:00) Buenos Aires</option>
+                        <option value="America/Sao_Paulo">(UTC-02:00) Sao Paulo</option>
+                        <option value="Atlantic/Azores">(UTC-01:00) Azores</option>
+                        <option value="Europe/London">(UTC+00:00) London</option>
+                        <option value="Europe/Paris">(UTC+01:00) Paris</option>
+                        <option value="Europe/Athens">(UTC+02:00) Athens</option>
+                        <option value="Europe/Moscow">(UTC+03:00) Moscow</option>
+                        <option value="Asia/Dubai">(UTC+04:00) Dubai</option>
+                        <option value="Asia/Karachi">(UTC+05:00) Karachi</option>
+                        <option value="Asia/Dhaka">(UTC+06:00) Dhaka</option>
+                        <option value="Asia/Bangkok">(UTC+07:00) Bangkok</option>
+                        <option value="Asia/Manila" selected>(UTC+08:00) Manila</option>
+                        <option value="Asia/Tokyo">(UTC+09:00) Tokyo</option>
+                        <option value="Australia/Sydney">(UTC+10:00) Sydney</option>
+                        <option value="Pacific/Noumea">(UTC+11:00) Noumea</option>
+                        <option value="Pacific/Auckland">(UTC+12:00) Auckland</option>
+                    </select>
+                </div>
+                
+                <!-- ===== TIME ZONE INFO ===== -->
+                <div class="timezone-info" id="timezoneInfo">
+                    <span class="tz-label"><i class="fas fa-clock"></i> Your local time:</span>
+                    <span class="tz-value" id="localTimeDisplay">--:-- --</span>
+                    <span class="tz-badge" id="tzBadge">🌍</span>
+                    <span class="tz-conversion" id="tzConversion">
+                        Meeting time in your time zone: <strong id="meetingTimeDisplay">--:-- --</strong>
+                    </span>
+                </div>
                 
                 <div class="form-group">
                     <label><i class="fas fa-calendar-day icon-sm" style="color:var(--green);"></i> Select a date</label>
@@ -1107,12 +1248,8 @@
                 <div class="form-group">
                     <label><i class="fas fa-clock icon-sm" style="color:var(--green);"></i> Select a time</label>
                     <div class="time-options" id="timeOptions">
-                        <!-- Times will be populated by JavaScript -->
+                        <div class="availability-loading">Select a date to see available times</div>
                     </div>
-                </div>
-                
-                <div class="timezone-display">
-                    <i class="fas fa-globe"></i> All times in <span id="timezoneDisplay">Your Local Timezone</span>
                 </div>
                 
                 <button class="btn-next" id="step3Next">Review Booking <i class="fas fa-arrow-right icon-sm"></i></button>
@@ -1135,15 +1272,14 @@
                     <div class="summary-item"><span class="label"><i class="fas fa-calendar-day icon-sm"></i> Date</span><span class="value" id="summaryDate">—</span></div>
                     <div class="summary-item"><span class="label"><i class="fas fa-clock icon-sm"></i> Time</span><span class="value" id="summaryTime">—</span></div>
                     <div class="summary-item"><span class="label"><i class="fas fa-globe icon-sm"></i> Timezone</span><span class="value" id="summaryTimezone">—</span></div>
-                    <div class="summary-item"><span class="label"><i class="fas fa-video icon-sm"></i> Meet Link</span><span class="value" id="summaryMeetLink">Loading...</span></div>
                 </div>
                 
                 <div style="font-size:0.8rem;opacity:0.5;text-align:center;margin:8px 0;">
                     <i class="fas fa-lock" style="color:var(--green);"></i> Your information is secure
                 </div>
                 
-                <button class="btn-submit" id="bookSubmit" disabled>
-                    <i class="fas fa-spinner fa-spin"></i> Generating Meet Link...
+                <button class="btn-submit" id="bookSubmit">
+                    <i class="fas fa-check icon-sm"></i> Confirm Booking
                 </button>
                 <div style="text-align:center;margin-top:8px;">
                     <button class="btn-back" id="step4Back"><i class="fas fa-arrow-left icon-sm"></i> Go back</button>
@@ -1163,14 +1299,10 @@
                         <div class="detail-row"><span class="dlabel"><i class="fas fa-calendar-day icon-sm"></i> Date</span><span class="dvalue" id="successDate">—</span></div>
                         <div class="detail-row"><span class="dlabel"><i class="fas fa-clock icon-sm"></i> Time</span><span class="dvalue" id="successTime">—</span></div>
                         <div class="detail-row"><span class="dlabel"><i class="fas fa-globe icon-sm"></i> Timezone</span><span class="dvalue" id="successTimezone">—</span></div>
-                        <div class="detail-row"><span class="dlabel"><i class="fas fa-video icon-sm"></i> Google Meet</span><span class="dvalue"><a href="#" id="successMeetLink" target="_blank">Join Meeting</a></span></div>
                     </div>
                     
                     <p style="margin-top:12px;font-size:0.9rem;opacity:0.6;">
                         <i class="fas fa-envelope icon-sm"></i> A confirmation email with all details has been sent to your email.
-                    </p>
-                    <p style="font-size:0.85rem;opacity:0.5;">
-                        <i class="fas fa-bell icon-sm"></i> You'll receive reminders 24 hours and 1 hour before the meeting.
                     </p>
                     <button class="btn-next" id="closeSuccessBtn" style="margin-top:16px;max-width:200px;margin-left:auto;margin-right:auto;">
                         <i class="fas fa-check icon-sm"></i> Done
@@ -1633,27 +1765,114 @@
             const closeBtn = document.getElementById('closeBookingModal');
             const dateOptions = document.getElementById('dateOptions');
             const timeOptions = document.getElementById('timeOptions');
-            const timezoneDisplay = document.getElementById('timezoneDisplay');
+            const timezoneSelect = document.getElementById('book_timezone');
+            const detectedTzEl = document.getElementById('detectedTimezone');
+            const localTimeDisplay = document.getElementById('localTimeDisplay');
+            const meetingTimeDisplay = document.getElementById('meetingTimeDisplay');
+            const tzBadge = document.getElementById('tzBadge');
 
             // State
             let selectedDate = null;
             let selectedTime = null;
+            let selectedTimezone = timezoneSelect ? timezoneSelect.value : 'Asia/Manila';
             let isProcessing = false;
-            let meetLink = null;
             let bookingData = null;
+            let detectedTimezone = '';
 
             // ============================================================
-            // DATE & TIME GENERATION
+            // TIME ZONE HELPERS
+            // ============================================================
+            function getTimeZoneOffset(timezone) {
+                try {
+                    const now = new Date();
+                    const tzString = now.toLocaleString('en-US', { timeZone: timezone, timeZoneName: 'short' });
+                    const offset = now.toLocaleString('en-US', { timeZone: timezone, timeZoneName: 'longOffset' });
+                    return offset || tzString;
+                } catch (e) {
+                    return 'Unknown';
+                }
+            }
+
+            function getCurrentTimeInTimezone(timezone) {
+                try {
+                    return new Date().toLocaleString('en-US', {
+                        timeZone: timezone,
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+                } catch (e) {
+                    return '--:-- --';
+                }
+            }
+
+            function getTimeInTimezone(dateStr, timeStr, timezone) {
+                try {
+                    const [hours, minutes] = timeStr.split(':');
+                    const date = new Date(dateStr + 'T' + timeStr + ':00');
+                    return date.toLocaleString('en-US', {
+                        timeZone: timezone,
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+                } catch (e) {
+                    return '--:-- --';
+                }
+            }
+
+            function detectUserTimezone() {
+                try {
+                    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    if (tz) {
+                        detectedTimezone = tz;
+                        detectedTzEl.textContent = tz.replace(/_/g, ' ');
+                        // Try to select the detected timezone in dropdown
+                        const option = timezoneSelect.querySelector(`option[value="${tz}"]`);
+                        if (option) {
+                            timezoneSelect.value = tz;
+                            selectedTimezone = tz;
+                        }
+                        return tz;
+                    }
+                } catch (e) {
+                    console.log('⚠️ Could not detect timezone');
+                }
+                return 'Asia/Manila';
+            }
+
+            function updateTimeDisplay() {
+                const tz = timezoneSelect ? timezoneSelect.value : 'Asia/Manila';
+                localTimeDisplay.textContent = getCurrentTimeInTimezone(tz);
+                
+                // Update badge
+                const tzShort = tz.split('/').pop() || 'Global';
+                tzBadge.textContent = `🌍 ${tzShort}`;
+                
+                // Update meeting time if a time is selected
+                if (selectedDate && selectedTime) {
+                    const meetingTz = 'Asia/Manila'; // Your calendar timezone
+                    const meetingTime = getTimeInTimezone(selectedDate, selectedTime, meetingTz);
+                    meetingTimeDisplay.textContent = meetingTime + ' (Manila)';
+                } else {
+                    meetingTimeDisplay.textContent = '--:-- --';
+                }
+            }
+
+            // ============================================================
+            // DATE & TIME GENERATION - No same-day bookings
             // ============================================================
             function generateDates() {
                 const dates = [];
                 const today = new Date();
-                const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                timezoneDisplay.textContent = userTimezone;
+                // Start from tomorrow (next day)
+                const startDate = new Date(today);
+                startDate.setDate(today.getDate() + 1);
 
-                for (let i = 0; i < 7; i++) {
-                    const date = new Date(today);
-                    date.setDate(today.getDate() + i);
+                for (let i = 0; i < 14; i++) {
+                    const date = new Date(startDate);
+                    date.setDate(startDate.getDate() + i);
+                    // Skip weekends (Saturday and Sunday)
                     if (date.getDay() === 0 || date.getDay() === 6) continue;
                     
                     dates.push({
@@ -1663,18 +1882,28 @@
                             month: 'short', 
                             day: 'numeric' 
                         }),
-                        value: date.toISOString().split('T')[0]
+                        value: date.toISOString().split('T')[0],
+                        dayName: date.toLocaleDateString('en-US', { weekday: 'short' }),
+                        monthDay: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                     });
                 }
                 return dates;
             }
 
             function generateTimes() {
+                // Business hours: 9:00 AM to 6:00 PM (30-minute slots)
                 const times = [];
-                const slots = ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
-                slots.forEach(time => {
-                    times.push({ display: time, value: time });
-                });
+                for (let hour = 9; hour <= 17; hour++) {
+                    for (let min = 0; min < 60; min += 30) {
+                        if (hour === 17 && min === 30) break;
+                        const hour12 = hour > 12 ? hour - 12 : hour;
+                        const ampm = hour >= 12 ? 'PM' : 'AM';
+                        const minStr = min === 0 ? '00' : '30';
+                        const display = `${hour12}:${minStr} ${ampm}`;
+                        const value = `${String(hour).padStart(2, '0')}:${minStr}`;
+                        times.push({ display, value, hour, minute: min });
+                    }
+                }
                 return times;
             }
 
@@ -1685,37 +1914,97 @@
                     const btn = document.createElement('button');
                     btn.className = 'date-option' + (index === 0 ? ' selected' : '');
                     btn.dataset.date = d.value;
-                    btn.innerHTML = `<span class="day">${d.date.toLocaleDateString('en-US', { weekday: 'short' })}</span><br><span class="month">${d.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>`;
+                    btn.innerHTML = `<span class="day">${d.dayName}</span><br><span class="month">${d.monthDay}</span>`;
                     btn.addEventListener('click', function() {
                         document.querySelectorAll('.date-option').forEach(b => b.classList.remove('selected'));
                         this.classList.add('selected');
                         selectedDate = this.dataset.date;
-                        updateSummary();
+                        renderTimeOptions(selectedDate);
+                        updateTimeDisplay();
                     });
                     dateOptions.appendChild(btn);
                 });
+                // Set initial selected date
                 const firstSelected = document.querySelector('.date-option.selected');
                 if (firstSelected) {
                     selectedDate = firstSelected.dataset.date;
+                    renderTimeOptions(selectedDate);
+                    updateTimeDisplay();
                 }
             }
 
-            function renderTimeOptions() {
+            // ============================================================
+            // AVAILABILITY CHECK - No expired/unavailable times
+            // ============================================================
+            function renderTimeOptions(dateStr) {
                 const times = generateTimes();
+                const now = new Date();
+                const selectedDateObj = new Date(dateStr + 'T00:00:00');
+                const isToday = isSameDay(selectedDateObj, now);
+
+                // Simulate booked times (in production, this would come from your backend)
+                const bookedTimes = ['10:30', '14:00', '15:30'];
+
+                const isPast = selectedDateObj < new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
                 timeOptions.innerHTML = '';
+                
+                if (isPast) {
+                    timeOptions.innerHTML = '<div class="availability-loading">⚠️ This date is in the past. Please select a future date.</div>';
+                    return;
+                }
+
+                let hasAvailable = false;
+
                 times.forEach(t => {
                     const btn = document.createElement('button');
                     btn.className = 'time-option';
                     btn.dataset.time = t.value;
                     btn.textContent = t.display;
-                    btn.addEventListener('click', function() {
-                        document.querySelectorAll('.time-option').forEach(b => b.classList.remove('selected'));
-                        this.classList.add('selected');
-                        selectedTime = this.dataset.time;
-                        updateSummary();
-                    });
+
+                    const isBooked = bookedTimes.includes(t.value);
+
+                    let isExpired = false;
+                    if (isToday) {
+                        const timeParts = t.value.split(':');
+                        const timeHour = parseInt(timeParts[0]);
+                        const timeMin = parseInt(timeParts[1]);
+                        const currentHour = now.getHours();
+                        const currentMin = now.getMinutes();
+                        if (timeHour < currentHour || (timeHour === currentHour && timeMin <= currentMin)) {
+                            isExpired = true;
+                        }
+                    }
+
+                    if (isBooked) {
+                        btn.classList.add('booked');
+                        btn.title = 'This time slot is already booked';
+                    } else if (isExpired) {
+                        btn.classList.add('unavailable');
+                        btn.title = 'This time has already passed';
+                    } else {
+                        hasAvailable = true;
+                        btn.addEventListener('click', function() {
+                            document.querySelectorAll('.time-option').forEach(b => b.classList.remove('selected'));
+                            this.classList.add('selected');
+                            selectedTime = this.dataset.time;
+                            updateSummary();
+                            updateTimeDisplay();
+                        });
+                    }
+
                     timeOptions.appendChild(btn);
                 });
+
+                if (!hasAvailable) {
+                    timeOptions.innerHTML = '<div class="availability-loading">⚠️ No available time slots on this date. Please select another date.</div>';
+                }
+            }
+
+            function isSameDay(date1, date2) {
+                return date1.getFullYear() === date2.getFullYear() &&
+                       date1.getMonth() === date2.getMonth() &&
+                       date1.getDate() === date2.getDate();
             }
 
             // ============================================================
@@ -1733,7 +2022,7 @@
                     year: 'numeric'
                 }) : '—';
                 const time = selectedTime || '—';
-                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const timezone = timezoneSelect ? timezoneSelect.value : 'Asia/Manila';
 
                 document.getElementById('summaryName').textContent = name;
                 document.getElementById('summaryEmail').textContent = email;
@@ -1742,91 +2031,6 @@
                 document.getElementById('summaryDate').textContent = date;
                 document.getElementById('summaryTime').textContent = time;
                 document.getElementById('summaryTimezone').textContent = timezone;
-            }
-
-            // ============================================================
-            // GENERATE MEET LINK - Called when entering Step 4
-            // ============================================================
-            async function generateMeetLink() {
-                const name = document.getElementById('book_name').value.trim();
-                const email = document.getElementById('book_email').value.trim();
-                const phone = document.getElementById('book_phone').value.trim();
-                const subject = document.getElementById('book_subject').value;
-                const message = document.getElementById('book_message').value.trim();
-                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                const dateFormatted = selectedDate ? new Date(selectedDate).toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    month: 'long', 
-                    day: 'numeric',
-                    year: 'numeric'
-                }) : '';
-
-                if (!name || !email || !subject || !selectedDate || !selectedTime) {
-                    return;
-                }
-
-                const submitBtn = document.getElementById('bookSubmit');
-                const meetLinkEl = document.getElementById('summaryMeetLink');
-                
-                // Show loading state
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Meet Link...';
-                meetLinkEl.innerHTML = '<span style="color:var(--green);"><i class="fas fa-spinner fa-spin"></i> Creating meeting...</span>';
-
-                bookingData = {
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    subject: subject,
-                    message: message,
-                    date: selectedDate,
-                    time: selectedTime,
-                    timezone: timezone,
-                    dateFormatted: dateFormatted
-                };
-
-                try {
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(bookingData)
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || 'Failed to create meeting');
-                    }
-
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        meetLink = data.eventLink;
-                        meetLinkEl.innerHTML = `<a href="${meetLink}" target="_blank" style="color:var(--green);text-decoration:underline;">${meetLink}</a>`;
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<i class="fas fa-check icon-sm"></i> Confirm Booking';
-                        console.log('✅ Meet link generated:', meetLink);
-                    } else {
-                        throw new Error(data.message || 'Failed to create meeting');
-                    }
-                } catch (error) {
-                    console.error('❌ Meet link generation error:', error);
-                    meetLinkEl.innerHTML = '<span style="color:#ef4444;">⚠️ Failed to generate meet link. Please try again.</span>';
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Try Again';
-                    
-                    // Allow retry
-                    setTimeout(() => {
-                        if (!meetLink) {
-                            submitBtn.disabled = false;
-                            submitBtn.innerHTML = '<i class="fas fa-redo"></i> Retry Generating Link';
-                            submitBtn.onclick = function() {
-                                generateMeetLink();
-                            };
-                        }
-                    }, 3000);
-                }
             }
 
             // ============================================================
@@ -1865,20 +2069,15 @@
                 });
                 selectedDate = document.querySelector('.date-option.selected')?.dataset.date || null;
                 selectedTime = null;
-                meetLink = null;
                 bookingData = null;
                 isProcessing = false;
                 
-                const submitBtn = document.getElementById('bookSubmit');
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Meet Link...';
-                submitBtn.onclick = null;
-                
-                document.getElementById('summaryMeetLink').textContent = 'Loading...';
+                // Detect timezone
+                detectUserTimezone();
+                updateTimeDisplay();
                 
                 goToStep(1);
                 renderDateOptions();
-                renderTimeOptions();
             }
 
             function openModal() {
@@ -1938,6 +2137,7 @@
                 document.getElementById('book_subject').style.borderColor = '';
                 goToStep(3);
                 updateSummary();
+                updateTimeDisplay();
             });
 
             document.getElementById('step3Next').addEventListener('click', function() {
@@ -1949,10 +2149,9 @@
                     alert('Please select a time.');
                     return;
                 }
+                selectedTimezone = timezoneSelect ? timezoneSelect.value : 'Asia/Manila';
                 goToStep(4);
                 updateSummary();
-                // Generate meet link when entering step 4
-                generateMeetLink();
             });
 
             // Back buttons
@@ -1964,67 +2163,120 @@
             // Close success
             document.getElementById('closeSuccessBtn').addEventListener('click', closeModal);
 
+            // Timezone change - re-render times and update display
+            if (timezoneSelect) {
+                timezoneSelect.addEventListener('change', function() {
+                    selectedTimezone = this.value;
+                    updateTimeDisplay();
+                    if (selectedDate) {
+                        renderTimeOptions(selectedDate);
+                    }
+                    updateSummary();
+                });
+            }
+
             // ============================================================
-            // CONFIRM BOOKING - Updated: NO meet_link in EmailJS
+            // CONFIRM BOOKING - No meet link
             // ============================================================
             document.getElementById('bookSubmit').addEventListener('click', function() {
-                if (isProcessing || !meetLink) return;
+                if (isProcessing) return;
 
-                isProcessing = true;
-                this.disabled = true;
-                this.innerHTML = '<span class="loading-spinner"></span> Confirming...';
-
-                // Get all values with fallbacks
                 const name = document.getElementById('book_name').value.trim() || 'Guest';
                 const email = document.getElementById('book_email').value.trim() || 'No email provided';
                 const phone = document.getElementById('book_phone').value.trim() || 'Not provided';
                 const subject = document.getElementById('book_subject').value || 'General Inquiry';
                 const message = document.getElementById('book_message').value.trim() || 'No additional message';
+                const timezone = timezoneSelect ? timezoneSelect.value : 'Asia/Manila';
+                const dateFormatted = selectedDate ? new Date(selectedDate).toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    month: 'long', 
+                    day: 'numeric',
+                    year: 'numeric'
+                }) : '';
 
-                // Prepare EmailJS template parameters - NO meet_link
-                // The Google Meet link is NOT sent to EmailJS to avoid variable corruption
-                const templateParams = {
-                    user_name: name,
-                    user_email: email,
-                    user_phone: phone,
-                    user_subject: subject,
-                    user_message: message,
-                    booking_date: bookingData.dateFormatted || 'Date not set',
-                    booking_time: bookingData.time || 'Time not set',
-                    booking_timezone: bookingData.timezone || 'Timezone not set',
-                    booking_type: 'Strategy Call',
-                    terms_accepted: 'Yes'
-                    // meet_link is REMOVED - will NOT be sent to EmailJS
+                if (!selectedDate || !selectedTime) {
+                    alert('Please select a date and time.');
+                    return;
+                }
+
+                isProcessing = true;
+                this.disabled = true;
+                this.innerHTML = '<span class="loading-spinner"></span> Confirming booking...';
+
+                bookingData = {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    subject: subject,
+                    message: message,
+                    date: selectedDate,
+                    time: selectedTime,
+                    timezone: timezone,
+                    dateFormatted: dateFormatted
                 };
 
-                // Log what we're sending for debugging
-                console.log('📧 Sending EmailJS with params:', templateParams);
+                // Send to backend API
+                fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bookingData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw new Error(err.message || 'Booking failed'); });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Send EmailJS confirmation
+                        const templateParams = {
+                            user_name: name,
+                            user_email: email,
+                            user_phone: phone,
+                            user_subject: subject,
+                            user_message: message,
+                            booking_date: dateFormatted || 'Date not set',
+                            booking_time: selectedTime || 'Time not set',
+                            booking_timezone: timezone || 'Timezone not set',
+                            booking_type: 'Strategy Call',
+                            terms_accepted: 'Yes'
+                        };
 
-                // Send via EmailJS
-                emailjs.send(
-                    CONFIG.emailjs.serviceID,
-                    CONFIG.emailjs.templateID,
-                    templateParams
-                ).then(function(response) {
-                    console.log('✅ EmailJS confirmation sent:', response);
-                }).catch(function(error) {
-                    console.error('❌ EmailJS send failed:', error);
-                    console.error('❌ Error details:', error.text || error.message);
-                });
+                        emailjs.send(
+                            CONFIG.emailjs.serviceID,
+                            CONFIG.emailjs.templateID,
+                            templateParams
+                        ).then(function(response) {
+                            console.log('✅ EmailJS confirmation sent:', response);
+                        }).catch(function(error) {
+                            console.error('❌ EmailJS send failed:', error);
+                        });
 
-                // Show success
-                setTimeout(() => {
-                    showSuccess(bookingData, meetLink);
+                        // Show success
+                        showSuccess(bookingData);
+                        isProcessing = false;
+                        this.disabled = false;
+                        this.innerHTML = '<i class="fas fa-check icon-sm"></i> Confirm Booking';
+                    } else {
+                        throw new Error(data.message || 'Booking failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Booking error:', error);
+                    alert('Failed to create booking: ' + error.message + '. Please try again or email me directly at va.flynnjames@gmail.com');
                     isProcessing = false;
                     this.disabled = false;
                     this.innerHTML = '<i class="fas fa-check icon-sm"></i> Confirm Booking';
-                }, 800);
+                });
             });
 
             // ============================================================
-            // SHOW SUCCESS
+            // SHOW SUCCESS - No meet link
             // ============================================================
-            function showSuccess(data, link) {
+            function showSuccess(data) {
                 const dateFormatted = new Date(data.date).toLocaleDateString('en-US', { 
                     weekday: 'long', 
                     month: 'long', 
@@ -2037,10 +2289,6 @@
                 document.getElementById('successDate').textContent = dateFormatted;
                 document.getElementById('successTime').textContent = data.time;
                 document.getElementById('successTimezone').textContent = data.timezone;
-                
-                const meetLinkEl = document.getElementById('successMeetLink');
-                meetLinkEl.textContent = link || 'Google Meet link will be sent via email';
-                meetLinkEl.href = link || '#';
 
                 goToStep('success');
             }
@@ -2063,6 +2311,15 @@
                     answer.style.maxHeight = '0';
                 }
             });
+
+            // ============================================================
+            // TIME ZONE DETECTION - Run on load
+            // ============================================================
+            detectUserTimezone();
+            updateTimeDisplay();
+
+            // Update time display every 30 seconds
+            setInterval(updateTimeDisplay, 30000);
 
             // ============================================================
             // HERO ANIMATIONS
@@ -2114,12 +2371,13 @@
 
             // Initialize date and time options
             renderDateOptions();
-            renderTimeOptions();
 
-            console.log('✅ Booking system initialized');
+            console.log('✅ Booking system initialized (Enhanced Time Zone)');
+            console.log('✅ Detected timezone:', detectedTimezone);
             console.log('✅ API URL:', API_URL);
-            console.log('✅ EmailJS configured with template:', CONFIG.emailjs.templateID);
-            console.log('✅ meet_link removed from EmailJS to prevent variable corruption');
+            console.log('✅ No same-day bookings (starts tomorrow)');
+            console.log('✅ Real-time time zone display active');
+            console.log('✅ meet_link removed from EmailJS');
         });
     </script>
 </body>
