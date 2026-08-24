@@ -1,8 +1,8 @@
 /**
  * ============================================================
  * FLYNN JAMES PONTINO | PORTFOLIO MAIN SCRIPT
- * Version: 2.0.0
- * Last Updated: 2026-08-23
+ * Version: 2.1.0
+ * Last Updated: 2026-08-24
  * ============================================================
  */
 
@@ -23,7 +23,6 @@
         notificationInterval: 20000,
         animationThreshold: 0.15,
         staggerDelay: 80,
-        // UPDATED CV URL
         cvUrl: 'https://drive.google.com/file/d/1MIN-epAamM3280J2Qv9LwWoQ1w_b15Fd/view'
     };
 
@@ -327,6 +326,7 @@
         constructor() {
             this.revealElements = document.querySelectorAll('.reveal, .reveal-fade-up, .reveal-slide-left, .reveal-slide-right, .reveal-scale, .reveal-blur');
             this.staggerElements = document.querySelectorAll('.stagger-children');
+            this.enhancedElements = document.querySelectorAll('.stagger-reveal, .scale-reveal, .slide-left, .slide-right, .flip-in, .glow-reveal, .bounce-in, .rotate-reveal');
             this.init();
         }
 
@@ -335,6 +335,7 @@
             if (prefersReducedMotion) {
                 this.revealElements.forEach(el => el.classList.add('visible'));
                 this.staggerElements.forEach(el => el.classList.add('visible'));
+                this.enhancedElements.forEach(el => el.classList.add('visible'));
                 return;
             }
 
@@ -345,13 +346,23 @@
         }
 
         checkVisibility() {
+            // Original reveal elements
             this.revealElements.forEach(el => {
                 if (Utils.isInViewport(el, CONFIG.animationThreshold) && !el.classList.contains('visible')) {
                     el.classList.add('visible');
                 }
             });
+            
+            // Stagger children
             this.staggerElements.forEach(el => {
                 if (Utils.isInViewport(el, CONFIG.animationThreshold) && !el.classList.contains('visible')) {
+                    el.classList.add('visible');
+                }
+            });
+            
+            // Enhanced elements
+            this.enhancedElements.forEach(el => {
+                if (Utils.isInViewport(el, 0.12) && !el.classList.contains('visible')) {
                     el.classList.add('visible');
                 }
             });
@@ -399,7 +410,7 @@
     }
 
     // ============================================================
-    // COUNT UP ANIMATION
+    // COUNT UP ANIMATION - Enhanced
     // ============================================================
     class CountUp {
         constructor() {
@@ -438,32 +449,34 @@
             this.stats.forEach((stat, index) => {
                 const target = parseInt(stat.dataset.count);
                 let current = 0;
-                const duration = 1500;
+                const duration = 1800;
                 const startTime = performance.now();
-
-                const updateNumber = (timestamp) => {
-                    const progress = Math.min((timestamp - startTime) / duration, 1);
-                    const eased = 1 - Math.pow(1 - progress, 3);
-                    current = Math.floor(eased * target);
-
-                    if (current < target) {
-                        stat.textContent = current;
-                        requestAnimationFrame(updateNumber);
-                    } else {
-                        stat.textContent = target + (target === 120 || target === 150 ? '%' : '+');
-                        stat.classList.add('counted');
-                    }
-                };
+                const delay = index * 150;
 
                 setTimeout(() => {
+                    const updateNumber = (timestamp) => {
+                        const progress = Math.min((timestamp - startTime) / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        current = Math.floor(eased * target);
+
+                        if (current < target) {
+                            stat.textContent = current;
+                            requestAnimationFrame(updateNumber);
+                        } else {
+                            stat.textContent = target + (target === 120 || target === 150 ? '%' : '+');
+                            stat.classList.add('counted');
+                            // Bounce animation via class
+                            stat.style.animation = 'countUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+                        }
+                    };
                     requestAnimationFrame(updateNumber);
-                }, index * 200);
+                }, delay);
             });
         }
     }
 
     // ============================================================
-    // SKILL BARS ANIMATION
+    // SKILL BARS ANIMATION - Enhanced
     // ============================================================
     class SkillBars {
         constructor() {
@@ -487,9 +500,11 @@
                     if (entry.isIntersecting) {
                         const bar = entry.target;
                         const width = bar.dataset.width || 0;
+                        const index = Array.from(this.bars).indexOf(bar);
                         setTimeout(() => {
                             bar.style.setProperty('--skill-width', width + '%');
                             bar.classList.add('animated');
+                            bar.style.transition = `width 1.5s cubic-bezier(0.22, 1, 0.36, 1) ${index * 0.1}s`;
                         }, 200);
                         observer.unobserve(bar);
                     }
@@ -516,6 +531,40 @@
                 });
                 card.addEventListener('mouseleave', function() {
                     this.style.transition = 'all 0.6s var(--transition-smooth)';
+                });
+            });
+        }
+    }
+
+    // ============================================================
+    // 3D TILT ON CARDS
+    // ============================================================
+    class Tilt3D {
+        constructor() {
+            this.cards = document.querySelectorAll('.service-card, .case-card, .testimonial-card, .cert-card');
+            this.init();
+        }
+
+        init() {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
+
+            this.cards.forEach(card => {
+                card.addEventListener('mousemove', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    this.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                    this.style.transition = 'transform 0.1s ease';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)';
+                    this.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
                 });
             });
         }
@@ -589,6 +638,7 @@
             this.setupHeroBlur();
             this.setupNavScroll();
             this.setupElegantHomeTransition();
+            this.setupHeroParallax();
         }
 
         updateActiveSection(index) {
@@ -711,6 +761,29 @@
                 }
             });
         }
+
+        setupHeroParallax() {
+            const heroSection = document.getElementById('section-home');
+            if (!heroSection) return;
+
+            const heroContent = heroSection.querySelector('.hero-content');
+            const heroImage = heroSection.querySelector('.hero-image');
+            
+            const parallaxScroll = Utils.throttle(() => {
+                const scrollY = DOM.scrollContainer.scrollTop;
+                const rate = 0.08;
+                
+                if (heroContent && scrollY < window.innerHeight) {
+                    heroContent.style.transform = `translateY(${scrollY * rate}px)`;
+                    heroContent.style.opacity = 1 - (scrollY / (window.innerHeight * 0.8));
+                }
+                if (heroImage && scrollY < window.innerHeight) {
+                    heroImage.style.transform = `translateY(${-scrollY * rate * 0.5}px) scale(${1 - scrollY * 0.0003})`;
+                }
+            }, 16);
+            
+            this.scrollContainer.addEventListener('scroll', parallaxScroll);
+        }
     }
 
     // ============================================================
@@ -771,13 +844,41 @@
             }
             
             setTimeout(() => {
-                if (DOM.scrollContainer.scrollTop > 10) {
-                    DOM.scrollContainer.scrollTo({
+                if (this.scrollContainer.scrollTop > 10) {
+                    this.scrollContainer.scrollTo({
                         top: 0,
                         behavior: 'smooth'
                     });
                 }
             }, 50);
+        }
+    }
+
+    // ============================================================
+    // SCROLL INDICATOR
+    // ============================================================
+    class ScrollIndicator {
+        constructor() {
+            this.init();
+        }
+
+        init() {
+            const homeSection = document.getElementById('section-home');
+            if (!homeSection) return;
+
+            const indicator = document.createElement('div');
+            indicator.className = 'scroll-indicator';
+            indicator.innerHTML = `
+                <span>Scroll to explore</span>
+                <div class="scroll-mouse">
+                    <div class="scroll-wheel"></div>
+                </div>
+            `;
+            
+            const heroContent = homeSection.querySelector('.hero-content');
+            if (heroContent && !homeSection.querySelector('.scroll-indicator')) {
+                heroContent.appendChild(indicator);
+            }
         }
     }
 
@@ -1292,6 +1393,8 @@
             { name: 'Trust Strip', init: () => new TrustStrip() },
             { name: 'Count Up', init: () => new CountUp() },
             { name: 'Skill Bars', init: () => new SkillBars() },
+            { name: 'Tilt 3D', init: () => new Tilt3D() },
+            { name: 'Scroll Indicator', init: () => new ScrollIndicator() },
             { name: 'FAQ', init: () => new FAQ() },
             { name: 'Scroll Navigation', init: () => new ScrollNavigation() },
             { name: 'Back to Top', init: () => new BackToTop() },
@@ -1336,6 +1439,8 @@
         console.log('🌀 Parallax: Enabled');
         console.log('📊 Skill Bars: Enabled');
         console.log('❓ FAQ Section: Enabled');
+        console.log('🎭 3D Tilt: Enabled');
+        console.log('📜 Scroll Indicator: Enabled');
         console.log('=' .repeat(60));
         console.log('🚀 Portfolio is ready to use!');
         console.log('📱 Responsive: Yes');
