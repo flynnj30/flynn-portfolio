@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover" />
+    <title>High-Volume Cold Calling | Flynn James Pontino</title>
+    <meta name="description" content="150+ dials daily, expert objection handling, and C-level decision-maker outreach. Book qualified meetings that convert." />
+    <link rel="icon" href="https://i.ibb.co/zT4GWZHh/logo-for-my-portfolio.png" type="image/png" />
+    <link rel="apple-touch-icon" href="https://i.ibb.co/zT4GWZHh/logo-for-my-portfolio.png" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    
+    <style>
+        .service-page {
+            min-height: 100vh;
+            background: var(--bg-dark);
+            transition: background var(--transition-speed) ease;
+        }
+        body.light-mode .service-page {
+            background: var(--bg-light);
+        }
+
+        .service-topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 40px;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background var(--transition-speed) ease;
+        }
+        body.light-mode .service-topbar {
+            background: rgba(245, 245, 245, 0.92);
+            border-bottom-color: var(--border-light);
+        }
+        .service-topbar .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        body.light-mode .service-topbar .logo {
+            color: var(--text-light);
+        }
+        .service-topbar .logo span {
+            color: var(--green);
+        }
+        .service-topbar .logo:hover {
+            color: var(--green);
+        }
+        .service-topbar .actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .service-topbar .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            background: var(--cta-gradient);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .service-topbar .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(10, 158, 64, 0.4);
+        }
+        .service-topbar .theme-toggle {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            color: var(--text-dark);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all var(--transition-speed) ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-dark);
+            flex-shrink: 0;
+        }
+        body.light-mode .service-topbar .theme-toggle {
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-light);
+            border-color: var(--border-light);
+        }
+        .service-topbar .theme-toggle:hover {
+            background: var(--green);
+            color: #fff;
+            transform: rotate(30deg) scale(1.1);
+            box-shadow: 0 0 30px rgba(10, 158, 64, 0.3);
+        }
+
+        .service-content {
+            max-width: 1100px;
+            margin: 100px auto 60px;
+            padding: 0 24px;
+            width: 100%;
+        }
+        .service-hero {
+            text-align: center;
+            padding: 40px 20px 30px;
+            animation: fadeInUp 0.8s var(--transition-bounce) forwards;
+        }
+        .service-hero .badge {
+            display: inline-block;
+            background: rgba(10, 158, 64, 0.12);
+            color: var(--green);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            border: 1px solid rgba(10, 158, 64, 0.15);
+        }
+        .service-hero h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            color: var(--text-dark);
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+        body.light-mode .service-hero h1 {
+            color: var(--text-light);
+        }
+        .service-hero h1 span {
+            color: var(--green);
+            background: linear-gradient(135deg, var(--green), var(--green-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .service-hero .subtitle {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            opacity: 0.7;
+            max-width: 700px;
+            margin: 0 auto 20px;
+            line-height: 1.7;
+        }
+        .service-hero .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 50px;
+            padding: 20px 24px;
+            background: var(--card-bg-dark);
+            border-radius: 16px;
+            border: 1px solid var(--border-dark);
+            margin: 20px auto 0;
+            max-width: 700px;
+        }
+        body.light-mode .service-hero .stats-row {
+            background: var(--card-bg-light);
+            border-color: var(--border-light);
+        }
+        .service-hero .stats-row .stat {
+            text-align: center;
+        }
+        .service-hero .stats-row .stat .number {
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-weight: 800;
+            color: var(--green);
+            display: block;
+        }
+        .service-hero .stats-row .stat .label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .service-visual {
+            margin: 30px 0 40px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--card-bg-dark);
+            border: 1px solid var(--border-dark);
+            position: relative;
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        body.light-mode .service-visual {
+            background: var(--card-bg-light);
+            border-color: var(--border-light);
+        }
+        .service-visual .visual-placeholder {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, rgba(10, 158, 64, 0.05), rgba(6, 182, 212, 0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .service-visual .visual-placeholder .big-icon {
+            font-size: 4rem;
+            color: var(--green);
+            opacity: 0.6;
+        }
+        .service-visual .visual-placeholder .label {
+            font-size: 0.9rem;
+            opacity: 0.4;
+        }
+        .service-visual .visual-placeholder .call-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            height: 80px;
+            margin-top: 10px;
+        }
+        .service-visual .visual-placeholder .call-bars span {
+            width: 24px;
+            background: var(--green);
+            border-radius: 4px 4px 0 0;
+            opacity: 0.4;
+            transition: height 0.3s ease;
+        }
+        .service-visual .visual-placeholder .call-bars span:nth-child(1) { height: 30px; }
+        .service-visual .visual-placeholder .call-bars span:nth-child(2) { height: 55px; }
+        .service-visual .visual-placeholder .call-bars span:nth-child(3) { height: 70px; }
+        .service-visual .visual-placeholder .call-bars span:nth-child(4) { height: 85px; }
+        .service-visual .visual-placeholder .call-bars span:nth-child(5) { height: 65px; }
+        .service-visual .visual-placeholder .call-bars span:nth-child(6) { height: 45px; }
+        .service-visual .visual-placeholder .call-bars span:nth-child(7) { height: 75px; }
+        .service-visual .visual-placeholder .call-bars span:nth-child(8) { height: 50px; }
+
+        .service-section {
+            margin: 40px 0;
+        }
+        .service-section h2 {
+            font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+            font-weight: 800;
+            color: var(--green);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .service-section h2 i {
+            font-size: 1.3rem;
+        }
+        .service-section p {
+            line-height: 1.8;
+            opacity: 0.85;
+            margin-bottom: 12px;
+            font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+        }
+        .service-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .service-section ul li {
+            padding: 8px 0 8px 28px;
+            position: relative;
+            line-height: 1.6;
+            opacity: 0.85;
+            font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+        }
+        .service-section ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--green);
+            font-weight: 700;
+        }
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin: 20px 0;
+        }
+        .service-grid .card {
+            background: var(--card-bg-dark);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border-dark);
+            transition: all 0.4s ease;
+        }
+        body.light-mode .service-grid .card {
+            background: var(--card-bg-light);
+            border-color: var(--border-light);
+        }
+        .service-grid .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--green);
+        }
+        .service-grid .card .card-icon {
+            font-size: 2rem;
+            color: var(--green);
+            margin-bottom: 10px;
+        }
+        .service-grid .card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .service-grid .card p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .service-cta {
+            text-align: center;
+            padding: 40px 24px;
+            background: var(--card-bg-dark);
+            border-radius: 20px;
+            border: 1px solid var(--border-dark);
+            margin: 40px 0 20px;
+        }
+        body.light-mode .service-cta {
+            background: var(--card-bg-light);
+            border-color: var(--border-light);
+        }
+        .service-cta h2 {
+            font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .service-cta p {
+            opacity: 0.7;
+            margin-bottom: 20px;
+            font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+        }
+        .service-cta .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+        .service-cta .btn-primary {
+            background: var(--cta-gradient);
+            border: none;
+            padding: 16px 40px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 60px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.4s var(--transition-bounce);
+            box-shadow: 0 4px 30px rgba(10, 158, 64, 0.5);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .service-cta .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 45px rgba(10, 158, 64, 0.6);
+        }
+        .service-cta .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--border-dark);
+            padding: 14px 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 60px;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        body.light-mode .service-cta .btn-secondary {
+            border-color: var(--border-light);
+            color: var(--text-light);
+        }
+        .service-cta .btn-secondary:hover {
+            border-color: var(--green);
+            color: var(--green);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .service-topbar {
+                padding: 12px 20px;
+            }
+            .service-topbar .logo {
+                font-size: 1rem;
+            }
+            .service-topbar .back-btn span {
+                display: none;
+            }
+            .service-content {
+                margin: 80px auto 40px;
+                padding: 0 16px;
+            }
+            .service-hero .stats-row {
+                gap: 20px;
+                padding: 16px;
+            }
+            .service-visual .visual-placeholder {
+                height: 200px;
+            }
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+            .service-cta {
+                padding: 24px 16px;
+            }
+            .service-cta .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            .service-cta .btn-primary,
+            .service-cta .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+            .service-visual .visual-placeholder .call-bars span {
+                width: 18px;
+            }
+        }
+        @media (max-width: 480px) {
+            .service-hero .stats-row .stat .number {
+                font-size: 1.4rem;
+            }
+            .service-visual .visual-placeholder .call-bars span {
+                width: 12px;
+            }
+            .service-visual .visual-placeholder {
+                height: 160px;
+            }
+            .service-visual .visual-placeholder .big-icon {
+                font-size: 2.5rem;
+            }
+            .service-hero {
+                padding: 20px 10px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="service-page">
+
+        <header class="service-topbar">
+            <a href="index.html" class="logo">Flynn James <span>Pontino</span></a>
+            <div class="actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+                <a href="index.html#section-contact" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> <span>Back to Portfolio</span>
+                </a>
+            </div>
+        </header>
+
+        <main class="service-content">
+
+            <section class="service-hero">
+                <div class="badge"><i class="fas fa-phone"></i> High-Volume</div>
+                <h1>High-Volume <span>Cold Calling</span></h1>
+                <p class="subtitle">150+ dials daily with expert objection handling. I reach C-level decision-makers and book meetings that actually convert.</p>
+                <div class="stats-row">
+                    <div class="stat"><span class="number">150+</span><span class="label">Dials/Day</span></div>
+                    <div class="stat"><span class="number">30+</span><span class="label">Qualified Meetings/Month</span></div>
+                    <div class="stat"><span class="number">22%</span><span class="label">Demo Conversion Rate</span></div>
+                </div>
+            </section>
+
+            <section class="service-visual reveal">
+                <div class="visual-placeholder">
+                    <div class="big-icon"><i class="fas fa-phone-volume"></i></div>
+                    <div class="label">📞 Cold Calling Activity Dashboard</div>
+                    <div class="call-bars">
+                        <span></span><span></span><span></span><span></span>
+                        <span></span><span></span><span></span><span></span>
+                    </div>
+                    <div style="font-size:0.7rem;opacity:0.3;margin-top:4px;">150+ dials · 30+ connects · 10+ qualified conversations</div>
+                </div>
+            </section>
+
+            <section class="service-section reveal">
+                <h2><i class="fas fa-bullhorn"></i> What Is High-Volume Cold Calling?</h2>
+                <p>High-volume cold calling is the disciplined, data-driven practice of making a large number of outbound calls to targeted prospects. It's not just about volume—it's about strategic targeting, refined messaging, and expert objection handling to convert conversations into qualified opportunities.</p>
+                <p>I bring 11+ years of experience making 150+ dials daily, reaching C-level decision-makers, and booking meetings that consistently convert.</p>
+            </section>
+
+            <section class="service-section reveal">
+                <h2><i class="fas fa-cogs"></i> My Methodology</h2>
+                <div class="service-grid">
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-crosshairs"></i></div>
+                        <h4>1. Strategic Targeting</h4>
+                        <p>I identify and prioritize high-value prospects based on your ICP and ideal decision-maker profile.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-comments"></i></div>
+                        <h4>2. Script &amp; Objection Mastery</h4>
+                        <p>I use proven scripts and objection-handling frameworks to navigate any conversation with confidence.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-filter"></i></div>
+                        <h4>3. BANT Qualification</h4>
+                        <p>Every call is focused on qualifying prospects using Budget, Authority, Need, and Timeline.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-sync-alt"></i></div>
+                        <h4>4. Continuous Optimization</h4>
+                        <p>I track and analyze call data to refine messaging, improve connect rates, and increase conversion.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="service-section reveal">
+                <h2><i class="fas fa-trophy"></i> What You Get</h2>
+                <ul>
+                    <li><strong>150+ Dials Daily</strong> — High-volume outreach that generates momentum.</li>
+                    <li><strong>30+ Qualified Meetings</strong> — Every month, consistently.</li>
+                    <li><strong>Expert Objection Handling</strong> — Turning "no" into "tell me more."</li>
+                    <li><strong>C-Level Access</strong> — Reaching the decision-makers who matter.</li>
+                    <li><strong>BANT-Qualified Leads</strong> — Sales-ready opportunities for your closers.</li>
+                    <li><strong>Data-Driven Insights</strong> — Weekly call analytics and performance reports.</li>
+                </ul>
+            </section>
+
+            <section class="service-cta reveal">
+                <h2>Ready to Start Calling?</h2>
+                <p>Let's talk about how I can help you book 30+ qualified meetings monthly.</p>
+                <div class="btn-group">
+                    <a href="index.html#section-contact" class="btn-primary"><i class="fas fa-calendar-check"></i> Book a Free Strategy Call</a>
+                    <a href="index.html#section-services" class="btn-secondary"><i class="fas fa-arrow-left"></i> Back to Services</a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        let isDarkMode = true;
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('light-mode', !isDarkMode);
+            document.querySelector('.service-page').classList.toggle('light-mode', !isDarkMode);
+            themeIcon.className = isDarkMode ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+        if (localStorage.getItem('theme') === 'light') toggleTheme();
+
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reveals.forEach(el => observer.observe(el));
+
+        console.log('✅ High-Volume Cold Calling page loaded');
+    </script>
+</body>
+</html>
