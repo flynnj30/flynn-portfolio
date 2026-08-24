@@ -1965,7 +1965,7 @@
             document.getElementById('closeSuccessBtn').addEventListener('click', closeModal);
 
             // ============================================================
-            // CONFIRM BOOKING - With EmailJS integration and status handling
+            // CONFIRM BOOKING - Updated: NO meet_link in EmailJS
             // ============================================================
             document.getElementById('bookSubmit').addEventListener('click', function() {
                 if (isProcessing || !meetLink) return;
@@ -1981,7 +1981,8 @@
                 const subject = document.getElementById('book_subject').value || 'General Inquiry';
                 const message = document.getElementById('book_message').value.trim() || 'No additional message';
 
-                // Prepare EmailJS template parameters
+                // Prepare EmailJS template parameters - NO meet_link
+                // The Google Meet link is NOT sent to EmailJS to avoid variable corruption
                 const templateParams = {
                     user_name: name,
                     user_email: email,
@@ -1992,8 +1993,8 @@
                     booking_time: bookingData.time || 'Time not set',
                     booking_timezone: bookingData.timezone || 'Timezone not set',
                     booking_type: 'Strategy Call',
-                    meet_link: meetLink || 'No meet link generated',
                     terms_accepted: 'Yes'
+                    // meet_link is REMOVED - will NOT be sent to EmailJS
                 };
 
                 // Log what we're sending for debugging
@@ -2118,6 +2119,7 @@
             console.log('✅ Booking system initialized');
             console.log('✅ API URL:', API_URL);
             console.log('✅ EmailJS configured with template:', CONFIG.emailjs.templateID);
+            console.log('✅ meet_link removed from EmailJS to prevent variable corruption');
         });
     </script>
 </body>

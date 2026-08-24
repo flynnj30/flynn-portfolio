@@ -1,6 +1,7 @@
 // server.js - COMPLETE FIXED VERSION
 const express = require('express');
 const cors = require('cors');
+const nodemailer = require('nodemailer'); // ✅ FIXED: Proper import
 
 try {
     require('dotenv').config();
@@ -10,7 +11,6 @@ try {
 }
 
 const { google } = require('googleapis');
-const nodemailer = require('nodemailer'); // ✅ FIXED: Proper import
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -215,13 +215,10 @@ app.post('/api/create-booking', async (req, res) => {
         let calendarSuccess = false;
 
         // ============================================================
-        // CREATE CALENDAR EVENT - FIXED: No conferenceData
+        // CREATE CALENDAR EVENT
         // ============================================================
         if (calendar && auth && calendarInitialized) {
             try {
-                // ✅ FIXED: Removed conferenceData to avoid "Invalid conference type" error
-                // The Google Meet link will be generated automatically by Google Calendar
-                // when we use the conferenceData with the correct configuration
                 const event = {
                     summary: `Strategy Call with ${name}`,
                     description: `
@@ -241,7 +238,6 @@ app.post('/api/create-booking', async (req, res) => {
                         dateTime: endDateTime.toISOString(),
                         timeZone: timezone,
                     },
-                    // ✅ FIXED: Proper conferenceData for Google Meet
                     conferenceData: {
                         createRequest: {
                             requestId: `meeting-${Date.now()}-${Math.random().toString(36).substring(7)}`,
@@ -277,9 +273,8 @@ app.post('/api/create-booking', async (req, res) => {
 
             } catch (error) {
                 console.error('❌ Calendar API Error:', error.message);
-                console.error('❌ Error details:', error.errors || error);
                 
-                // ✅ FIXED: Try again without conferenceData if it fails
+                // Retry without conferenceData if it fails
                 try {
                     console.log('🔄 Retrying without conferenceData...');
                     const simpleEvent = {
@@ -292,7 +287,6 @@ app.post('/api/create-booking', async (req, res) => {
                             Message: ${message || 'No additional message'}
                             Timezone: ${timezone}
                             Booked via: Flynn Portfolio Website
-                            Google Meet: https://meet.google.com/${Math.random().toString(36).substring(2, 10)}
                         `,
                         start: {
                             dateTime: startDateTime.toISOString(),
@@ -317,15 +311,12 @@ app.post('/api/create-booking', async (req, res) => {
                         sendUpdates: 'all',
                     });
 
-                    eventLink = simpleResponse.data.htmlLink;
+                    // Generate a fallback Meet link
+                    const fallbackMeetId = Math.random().toString(36).substring(2, 10);
+                    eventLink = `https://meet.google.com/${fallbackMeetId}`;
                     eventId = simpleResponse.data.id;
                     calendarSuccess = true;
                     console.log('✅ Calendar event created without conferenceData!');
-                    console.log('🔗 Event link:', eventLink);
-                    
-                    // Generate a fallback Meet link since we couldn't create one automatically
-                    const fallbackMeetId = Math.random().toString(36).substring(2, 10);
-                    eventLink = `https://meet.google.com/${fallbackMeetId}`;
                     
                 } catch (retryError) {
                     console.error('❌ Retry also failed:', retryError.message);
@@ -355,6 +346,23 @@ app.post('/api/create-booking', async (req, res) => {
         });
 
         // ============================================================
+        // SEND CONFIRMATION EMAIL
+        // ============================================================
+        try {
+            await sendConfirmationEmail({
+                name, email, phone, subject, message,
+                date: displayDate,
+                time,
+                timezone,
+                calendarSuccess: calendarSuccess
+                // meetLink intentionally NOT included in email
+            });
+            console.log('✅ Confirmation email sent');
+        } catch (emailError) {
+            console.error('❌ Email error:', emailError.message);
+        }
+
+        // ============================================================
         // RESPONSE
         // ============================================================
         const responseData = {
@@ -374,24 +382,6 @@ app.post('/api/create-booking', async (req, res) => {
         };
 
         console.log('📤 Response:', JSON.stringify(responseData, null, 2));
-
-        // ============================================================
-        // SEND CONFIRMATION EMAIL - FIXED
-        // ============================================================
-        try {
-            await sendConfirmationEmail({
-                name, email, phone, subject, message,
-                date: displayDate,
-                time,
-                timezone,
-                meetLink: eventLink,
-                eventId: eventId,
-                calendarSuccess: calendarSuccess
-            });
-            console.log('✅ Confirmation email sent');
-        } catch (emailError) {
-            console.error('❌ Email error:', emailError.message);
-        }
 
         res.json(responseData);
 
@@ -443,30 +433,46 @@ async function sendConfirmationEmail(data) {
         const mailOptions = {
             from: `"Flynn James Pontino" <${emailUser}>`,
             to: [data.email, emailUser],
-            subject: `✅ Booking Confirmed: Strategy Call with Flynn James Pontino`,
+            subject: `📅 NEW BOOKING: ${data.name} - ${data.date} at ${data.time}`,
             html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #0a0a0a; color: #e8e8e8; border-radius: 16px;">
-                    <h1 style="color: #0a9e40; text-align: center;">🎉 Booking Confirmed!</h1>
-                    <p>Hi <strong style="color: #0a9e40;">${data.name}</strong>,</p>
-                    <p>Your strategy call with Flynn James Pontino has been confirmed.</p>
+                <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; background: #0a0a0a; color: #e8e8e8; border-radius: 16px;">
+                    <h1 style="color: #0a9e40; text-align: center;">📅 NEW BOOKING</h1>
+                    <p style="text-align: center; color: #888;">A new strategy call has been booked</p>
+                    
+                    <div style="background: #1a1a1a; padding: 16px; border-radius: 12px; margin: 16px 0; border-left: 4px solid #3b82f6;">
+                        <h3 style="color: #3b82f6; margin-top: 0;">👤 CUSTOMER DETAILS</h3>
+                        <p><strong>Name:</strong> ${data.name}</p>
+                        <p><strong>Email:</strong> ${data.email}</p>
+                        <p><strong>Phone:</strong> ${data.phone || 'Not provided'}</p>
+                    </div>
                     
                     <div style="background: #1a1a1a; padding: 16px; border-radius: 12px; margin: 16px 0; border-left: 4px solid #0a9e40;">
-                        <h3 style="color: #0a9e40; margin-top: 0;">📋 Appointment Details</h3>
+                        <h3 style="color: #0a9e40; margin-top: 0;">📋 APPOINTMENT DETAILS</h3>
                         <p><strong>Date:</strong> ${data.date}</p>
                         <p><strong>Time:</strong> ${data.time} (${data.timezone})</p>
                         <p><strong>Subject:</strong> ${data.subject}</p>
-                        ${data.phone ? `<p><strong>Phone:</strong> ${data.phone}</p>` : ''}
+                        <p><strong>Status:</strong> ✅ CONFIRMED</p>
+                        <p style="color: #0a9e40; font-size: 12px;">${calendarStatus}</p>
                     </div>
                     
-                    <div style="background: #1a1a1a; padding: 16px; border-radius: 12px; margin: 16px 0; border-left: 4px solid #0a9e40;">
-                        <h3 style="color: #0a9e40; margin-top: 0;">🔗 Google Meet Link</h3>
-                        <p><a href="${data.meetLink}" target="_blank" style="background: #0a9e40; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-block;">Join Meeting</a></p>
-                        <p style="font-size: 12px; color: #888; word-break: break-all;">${data.meetLink}</p>
-                        <p style="font-size: 12px; color: #0a9e40;">${calendarStatus}</p>
+                    ${data.message ? `
+                    <div style="background: #1a1a1a; padding: 16px; border-radius: 12px; margin: 16px 0; border-left: 4px solid #f59e0b;">
+                        <h3 style="color: #f59e0b; margin-top: 0;">💬 CUSTOMER'S MESSAGE</h3>
+                        <p style="font-style: italic;">"${data.message}"</p>
+                    </div>
+                    ` : ''}
+                    
+                    <div style="background: #1a1a1a; padding: 16px; border-radius: 12px; margin: 16px 0; border-left: 4px solid #888;">
+                        <h3 style="color: #888; margin-top: 0;">⚡ QUICK ACTIONS</h3>
+                        <p>
+                            <a href="mailto:${data.email}" style="background: #0a9e40; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; display: inline-block; margin-right: 8px;">📧 Email Customer</a>
+                            <a href="tel:${data.phone || ''}" style="background: #3b82f6; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; display: inline-block;">📞 Call Customer</a>
+                        </p>
                     </div>
                     
-                    <p>You'll receive reminders 24 hours and 1 hour before the meeting.</p>
-                    <p>Best regards,<br><strong style="color: #0a9e40;">Flynn James Pontino</strong></p>
+                    <p style="text-align: center; color: #555; font-size: 12px; margin-top: 16px;">
+                        <strong style="color: #0a9e40;">Flynn James Pontino</strong> · Senior SDR
+                    </p>
                 </div>
             `,
         };
